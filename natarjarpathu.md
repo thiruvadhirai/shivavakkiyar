@@ -1,4 +1,5 @@
 ---
+layout: default
 custom_heading: "Natarajar Pathu"
 title: "Natarajar Pathu"
 ---
