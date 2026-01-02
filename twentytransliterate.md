@@ -4,8 +4,6 @@ table, th, td {
 }
 </style>
 
-
-
 # Shivakkiyam in Tamil, Transliteration
 
 | Tamil | Transliteration |
