@@ -1,27 +1,3 @@
-<style> 
-.markdown-body h1:first-of-type {
-    font-size: 10pt;
-    text-align: center;
-}
-/* Apply to all tables on the page */
-    table {
-        border-collapse: collapse; /* Optional: cleaner borders */
-    }
-
-    /* Set default font size for table cells */
-    table td, table th {
-        font-size: 8pt; /* 6pt font size */
-        padding: 4px;   /* Optional: spacing for readability */
-        border: 1px solid #ccc; /* Optional: border styling */
-    }
-
-    .footer {
-        display: none;
-    }
-
-</style>
-
-
 | Tamil | Transliteration |
 |-------|----------------|
 | 1. ஓடி ஓடி ஓடி ஓடி உட்கலந்த ஜோதியை<br>நாடி நாடி நாடி நாடி நாட்களும் கழிந்துபோய்<br>வாடி வாடி வாடி வாடி மாண்டுபோன மாந்தர்கள்<br>கோடி கோடி கோடி கோடி எண்ணிறந்த கோடியே (ஓம்) | 1. Oodi oodi oodi oodi utkalandha jothiyai<br>Naadi naadi naadi naadi naadhalum kazhindhupoi<br>Vaadi vaadi vaadi vaadi maandupona maandhargal<br>Kodi kodi kodi kodi ennirandha kodhiye (Om) |
