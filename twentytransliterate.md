@@ -1,6 +1,7 @@
 <style> 
 .markdown-body h1:first-of-type {
-    display: none;
+    font-size: 10pt;
+    text-align: center;
 }
 /* Apply to all tables on the page */
     table {
