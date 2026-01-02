@@ -1,6 +1,6 @@
 ---
 custom_heading: "Shivavakkiyam"
-title: "Shivavakkiyamu"
+title: "Shivavakkiyam"
 ---
 
 | Tamil | Transliteration |
