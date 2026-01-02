@@ -1,9 +1,4 @@
-<style>
-body, table, th, td {
-  font-size: 6pt;
-}
-</style>
-
+<div style="font-size:6pt">
 | Tamil | Transliteration |
 |-------|----------------|
 | 1. ஓடி ஓடி ஓடி ஓடி உட்கலந்த ஜோதியை<br>நாடி நாடி நாடி நாடி நாட்களும் கழிந்துபோய்<br>வாடி வாடி வாடி வாடி மாண்டுபோன மாந்தர்கள்<br>கோடி கோடி கோடி கோடி எண்ணிறந்த கோடியே (ஓம்) | 1. Oodi oodi oodi oodi utkalandha jothiyai<br>Naadi naadi naadi naadi naadhalum kazhindhupoi<br>Vaadi vaadi vaadi vaadi maandupona maandhargal<br>Kodi kodi kodi kodi ennirandha kodhiye (Om) |
@@ -26,3 +21,4 @@ body, table, th, td {
 | 18. அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br>அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br>அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br>அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம் (ஓம்)<br>அஞ்சல் | 18. anjezhuthu mantiram anjezhuthu mantiram<br>anjezhuthu mantiram anjezhuthu mantiram<br>anjezhuthu mantiram anjezhuthu mantiram<br>anjezhuthu mantiram anjezhuthu mantiram (ōm) 
 | 19. அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br>அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br>அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br>அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம் (ஓம்)<br>அஞ்சல் | 19. anjezhuthu mantiram anjezhuthu mantiram<br>anjezhuthu mantiram anjezhuthu mantiram<br>anjezhuthu mantiram anjezhuthu mantiram<br>anjezhuthu mantiram anjezhuthu mantiram (ōm)
 | 20. ஓம்நம சிவாயமே உணர்ந்துமெய் தெளிந்துபின்<br>ஓம்நம சிவாயமே உணர்ந்துமெய் உணர்ந்தபின்<br>ஓம்நம சிவாயமே உட்கலந்து நிற்குமே (ஓம்) | ōmna ma civāyamē uṇarndumey teḷindupin<br>ōmna ma civāyamē uṇarndumey uṇarndapin<br>ōmna ma civāyamē uṭkalaṇdu nirkumē (ōm) |
+</div>
