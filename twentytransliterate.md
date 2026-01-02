@@ -2,6 +2,18 @@
 .markdown-body h1:first-of-type {
     display: none;
 }
+/* Apply to all tables on the page */
+    table {
+        border-collapse: collapse; /* Optional: cleaner borders */
+    }
+
+    /* Set default font size for table cells */
+    table td, table th {
+        font-size: 6pt; /* 6pt font size */
+        padding: 4px;   /* Optional: spacing for readability */
+        border: 1px solid #ccc; /* Optional: border styling */
+    }
+
 </style>
 
 
