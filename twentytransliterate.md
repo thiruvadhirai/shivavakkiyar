@@ -9,7 +9,7 @@
 
     /* Set default font size for table cells */
     table td, table th {
-        font-size: 6pt; /* 6pt font size */
+        font-size: 8pt; /* 6pt font size */
         padding: 4px;   /* Optional: spacing for readability */
         border: 1px solid #ccc; /* Optional: border styling */
     }
