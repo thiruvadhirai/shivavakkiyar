@@ -9,6 +9,8 @@
   Load the theme's main stylesheet
   {%- endcomment -%}
   <link rel="stylesheet" href="{{ '/assets/main.css' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/custom.css' | relative_url }}">
+
 
   {%- comment -%}
   Include any extra head content from the theme (SEO tags, etc.)
@@ -27,9 +29,7 @@
       {%- comment -%}
       Custom H1 — controlled via front matter
       {%- endcomment -%}
-      {% if page.custom_heading %}
-        <h1>{{ page.custom_heading }}</h1>
-      {% endif %}
+     <h1>{{ page.custom_heading | default: page.title }}</h1>
 
       {{ content }}
     </div>
