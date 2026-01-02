@@ -1,29 +1,8 @@
 ---
+custom_heading: "Natarajar Pathu"
 title: "Natarajar Pathu"
 ---
 
-<style> 
-.markdown-body h1:first-of-type {
-    font-size: 10pt;
-    text-align: center;
-}
-/* Apply to all tables on the page */
-    table {
-        border-collapse: collapse; /* Optional: cleaner borders */
-    }
-
-    /* Set default font size for table cells */
-    table td, table th {
-        font-size: 8pt; /* 6pt font size */
-        padding: 4px;   /* Optional: spacing for readability */
-        border: 1px solid #ccc; /* Optional: border styling */
-    }
-
-    .footer {
-        display: none;
-    }
-
-</style>
 
 | Tamil | Transliteration |
 |-------|----------------|
