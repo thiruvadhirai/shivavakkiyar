@@ -1,3 +1,8 @@
+---
+custom_heading: "Shivavakkiyam"
+title: "Shivavakkiyamu"
+---
+
 | Tamil | Transliteration |
 |-------|----------------|
 | 1. ஓடி ஓடி ஓடி ஓடி உட்கலந்த ஜோதியை<br>நாடி நாடி நாடி நாடி நாட்களும் கழிந்துபோய்<br>வாடி வாடி வாடி வாடி மாண்டுபோன மாந்தர்கள்<br>கோடி கோடி கோடி கோடி எண்ணிறந்த கோடியே (ஓம்) | 1. Oodi oodi oodi oodi utkalandha jothiyai<br>Naadi naadi naadi naadi naadhalum kazhindhupoi<br>Vaadi vaadi vaadi vaadi maandupona maandhargal<br>Kodi kodi kodi kodi ennirandha kodhiye (Om) |
