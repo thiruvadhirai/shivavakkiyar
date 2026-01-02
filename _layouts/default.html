@@ -11,29 +11,13 @@
 
   <!-- Your custom CSS -->
   <link rel="stylesheet" href="{{ '/assets/css/custom.css' | relative_url }}">
-
-  {%- comment -%}
-  Primer supports an optional custom head include:
-  _includes/head-custom.html
-  {%- endcomment -%}
-  {% include head-custom.html %}
 </head>
 
 <body>
 
-  {%- comment -%}
-  Primer masthead (navigation/header)
-  {%- endcomment -%}
-  {% include masthead.html %}
-
   <main class="container-lg px-3 my-5 markdown-body" aria-label="Content">
     <div class="wrapper">
 
-      {%- comment -%}
-      Your custom heading — controlled via front matter:
-      custom_heading: "My Heading"
-      Falls back to page.title if not provided.
-      {%- endcomment -%}
       <h1 class="custom-heading">
         {{ page.custom_heading | default: page.title }}
       </h1>
@@ -42,15 +26,6 @@
     </div>
   </main>
 
-  {%- comment -%}
-  Primer footer
-  {%- endcomment -%}
   {% include footer.html %}
-
-  {%- comment -%}
-  Optional custom footer include:
-  _includes/footer-custom.html
-  {%- endcomment -%}
-  {% include footer-custom.html %}
 </body>
 </html>
