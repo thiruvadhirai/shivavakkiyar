@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: 'en' }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ page.title | default: site.title }}</title>
+
+  {%- comment -%}
+  Load the theme's main stylesheet
+  {%- endcomment -%}
+  <link rel="stylesheet" href="{{ '/assets/main.css' | relative_url }}">
+
+  {%- comment -%}
+  Include any extra head content from the theme (SEO tags, etc.)
+  {%- endcomment -%}
+  {%- if site.theme -%}
+    {% include head.html %}
+  {%- endif -%}
+</head>
+<body>
+  {%- if site.theme -%}
+    {% include header.html %}
+  {%- endif -%}
+
+  <main class="page-content" aria-label="Content">
+    <div class="wrapper">
+      {%- comment -%}
+      Custom H1 — controlled via front matter
+      {%- endcomment -%}
+      {% if page.custom_heading %}
+        <h1>{{ page.custom_heading }}</h1>
+      {% endif %}
+
+      {{ content }}
+    </div>
+  </main>
+
+  {%- if site.theme -%}
+    {% include footer.html %}
+  {%- endif -%}
+</body>
+</html>
