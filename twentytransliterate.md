@@ -1,12 +1,10 @@
 <style>
-header {
-  display: none;
-}
-
 table, th, td {
   font-size: 50%;
 }
 </style>
+
+
 
 # Shivakkiyam in Tamil, Transliteration
 
