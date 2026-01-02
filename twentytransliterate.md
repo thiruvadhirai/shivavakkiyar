@@ -14,6 +14,10 @@
         border: 1px solid #ccc; /* Optional: border styling */
     }
 
+    .footer {
+        display: none;
+    }
+
 </style>
 
 
