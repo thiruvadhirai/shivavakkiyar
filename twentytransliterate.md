@@ -1,3 +1,14 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+header {
+  display: none;
+}
+
+
+
 <style>
 table, th, td {
   font-size: 50%;
