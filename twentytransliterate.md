@@ -1,4 +1,8 @@
-
+<style>
+header {
+  display: none;
+}
+</style>
 
 | Tamil | Transliteration |
 |-------|----------------|
