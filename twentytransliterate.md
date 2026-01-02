@@ -1,15 +1,8 @@
----
----
-
-@import "{{ site.theme }}";
-
+<style>
 header {
   display: none;
 }
 
-
-
-<style>
 table, th, td {
   font-size: 50%;
 }
