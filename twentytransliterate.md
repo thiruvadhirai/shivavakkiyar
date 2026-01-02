@@ -1,5 +1,8 @@
-
-
+<style>
+body, table, th, td {
+  font-size: 6pt;
+}
+</style>
 
 | Tamil | Transliteration |
 |-------|----------------|
@@ -22,4 +25,4 @@
 | 17. அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br>அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br>அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br>அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம் (ஓம்)<br>அஞ்சல் | 17. anjezhuthu mantiram anjezhuthu mantiram<br>anjezhuthu mantiram anjezhuthu mantiram<br>anjezhuthu mantiram anjezhuthu mantiram<br>anjezhuthu mantiram anjezhuthu mantiram (ōm)
 | 18. அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br>அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br>அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br>அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம் (ஓம்)<br>அஞ்சல் | 18. anjezhuthu mantiram anjezhuthu mantiram<br>anjezhuthu mantiram anjezhuthu mantiram<br>anjezhuthu mantiram anjezhuthu mantiram<br>anjezhuthu mantiram anjezhuthu mantiram (ōm) 
 | 19. அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br>அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br>அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br>அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம் (ஓம்)<br>அஞ்சல் | 19. anjezhuthu mantiram anjezhuthu mantiram<br>anjezhuthu mantiram anjezhuthu mantiram<br>anjezhuthu mantiram anjezhuthu mantiram<br>anjezhuthu mantiram anjezhuthu mantiram (ōm)
-| 20. ஓம்நம சிவாயமே உணர்ந்துமெய் தெளிந்துபின்<br>ஓம்நம சிவாயமே உணர்ந்துமெய் உணர்ந்தபின்<br>ஓம்நம சிவாயமே உட்கலந்து நிற்குமே (ஓம்) | ōmna ma civāyamē uṇarndumey teḷindupin<br>ōmna ma civāyamē uṇarndumey uṇarndapin<br>ōmna ma civāyamē uṭkalaṇdu nirkumē (ōm) | 
+| 20. ஓம்நம சிவாயமே உணர்ந்துமெய் தெளிந்துபின்<br>ஓம்நம சிவாயமே உணர்ந்துமெய் உணர்ந்தபின்<br>ஓம்நம சிவாயமே உட்கலந்து நிற்குமே (ஓம்) | ōmna ma civāyamē uṇarndumey teḷindupin<br>ōmna ma civāyamē uṇarndumey uṇarndapin<br>ōmna ma civāyamē uṭkalaṇdu nirkumē (ōm) |
