@@ -18,6 +18,12 @@ table td, table th {
     display: none;
 }
 
-.translit-large {
-    font-size: 9pt;
+.translit-l12b {
+    font-size: 12pt;
+    font-weight: bold;
+}
+
+.translit-l10b {
+    font-size: 10pt;
+    font-weight: bold;
 }
