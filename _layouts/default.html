@@ -29,7 +29,7 @@
       {%- comment -%}
       Custom H1 — controlled via front matter
       {%- endcomment -%}
-     <h1>{{ page.custom_heading | default: page.title }}</h1>
+     <h1 class="custom-heading">{{ page.custom_heading | default: page.title }}</h1>
 
       {{ content }}
     </div>
