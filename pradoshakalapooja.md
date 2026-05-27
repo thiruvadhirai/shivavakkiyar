@@ -7,4 +7,6 @@ title: "Pradosha Kala pooja"
 * [Natarajar Pathu](natarajarpathu.md)
 * [Nindra Thiruthandagam](nindrathiruthandagam.md)
 * [Thiruneetru pathigam](thiruneetrupathigam.md)
-* [Arathi] (arathi.md)
+* [நந்தி அஷ்டோத்திரம் - Nandhi Ashtotharam](nandhi-astothram.md)
+* [சிவ அஷ்டோத்திரம் - Shiva Ashtotharam](siva-astothram.md)
+* [Arathi](arathi.md)
