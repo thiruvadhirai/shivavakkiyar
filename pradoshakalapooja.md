@@ -13,4 +13,5 @@ title: "Pradosha Kala pooja"
 * [Thiruneetru pathigam](thiruneetrupathigam.md)
 * [நந்தி அஷ்டோத்திரம் - Nandhi Ashtotharam](nandhi-astothram.md)
 * [சிவ அஷ்டோத்திரம் - Shiva Ashtotharam](siva-astothram.md)
+* [மந்த்ர புஷ்பம் - Mantra Pushpam](mantrapushpam.md)
 * [Arathi](arathi.md)
