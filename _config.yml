@@ -1,0 +1,12 @@
+title: Saivaism - Ancient Tamil Spiritual Texts
+description: Classical Tamil poems and spiritual teachings
+theme: primer
+markdown: kramdown
+permalink: /:basename/
+
+# Include files that should be processed
+include:
+  - license.md
+
+# Ensure markdown files are served as pages
+future: false
