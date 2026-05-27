@@ -10,3 +10,11 @@ include:
 
 # Ensure markdown files are served as pages
 future: false
+
+# Apply default layout to all .md files
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
