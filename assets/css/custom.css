@@ -1,65 +1,121 @@
-/* Base styling */
-html, body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    font-size: 16px;
-    line-height: 1.6;
+/* Burger menu and sidebar styles */
+header {
+    background-color: #f6f8fa !important;
+    border-bottom: 1px solid #e1e4e8;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 0;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
     color: #24292e;
 }
 
-main {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
+.burger-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    color: #24292e;
+    line-height: 1;
+    flex-shrink: 0;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    margin-top: 24px;
-    margin-bottom: 16px;
-    font-weight: 600;
-    line-height: 1.25;
+.burger-btn:hover {
+    color: #0366d6;
 }
 
-h1 { font-size: 32px; }
-h2 { font-size: 24px; }
-h3 { font-size: 20px; }
-h4 { font-size: 16px; }
-h5 { font-size: 14px; }
-h6 { font-size: 12px; }
-
-p {
-    margin: 0 0 16px 0;
+/* Sidebar Navigation */
+.nav-sidebar {
+    position: fixed;
+    left: -280px;
+    top: 0;
+    width: 280px;
+    height: 100vh;
+    background-color: #fff;
+    border-right: 1px solid #e1e4e8;
+    z-index: 999;
+    transition: left 0.3s ease-in-out;
+    overflow-y: auto;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
 }
 
-a {
+.nav-sidebar.open {
+    left: 0;
+}
+
+.nav-close {
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    padding: 12px 16px;
+    color: #24292e;
+    line-height: 1;
+    width: 100%;
+    text-align: right;
+}
+
+.nav-close:hover {
+    color: #0366d6;
+}
+
+.nav-sidebar nav {
+    padding: 16px 0;
+}
+
+.nav-sidebar a {
+    display: block;
+    padding: 12px 16px;
     color: #0366d6;
     text-decoration: none;
+    border-left: 3px solid transparent;
+    transition: background-color 0.2s, border-left-color 0.2s;
 }
 
-a:hover {
-    text-decoration: underline;
+.nav-sidebar a:hover {
+    background-color: #f6f8fa;
+    border-left-color: #0366d6;
 }
 
-.custom-heading {
-    font-size: 10pt;
-    text-align: center;
+/* Overlay */
+.nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease-in-out;
 }
-/* Apply to all tables on the page */
+
+.nav-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Table styling */
 table {
-    border-collapse: collapse; /* Optional: cleaner borders */
+    border-collapse: collapse;
 }
 
-/* Set default font size for table cells */
 table td, table th {
-    font-size: 8pt; /* 6pt font size */
-    font-weight: bold; /* Normal weight */
-    padding: 4px;   /* Optional: spacing for readability */
-    border: 1px solid #ccc; /* Optional: border styling */
+    font-size: 8pt;
+    font-weight: bold;
+    padding: 4px;
+    border: 1px solid #ccc;
 }
 
-.footer {
-    display: none;
-}
-
+/* Custom text classes */
 .translit-l12b {
     font-size: 12pt;
     font-weight: bold;
@@ -68,4 +124,16 @@ table td, table th {
 .translit-l10b {
     font-size: 10pt;
     font-weight: bold;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 16px;
+    }
+
+    .nav-sidebar {
+        width: 250px;
+        left: -250px;
+    }
 }

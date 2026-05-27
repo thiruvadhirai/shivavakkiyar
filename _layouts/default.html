@@ -6,7 +6,10 @@
 
   <title>{{ page.title | default: site.title }}</title>
 
-  <!-- Custom CSS -->
+  <!-- Cayman theme stylesheet -->
+  <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
+
+  <!-- Custom CSS for burger menu and overrides -->
   <link rel="stylesheet" href="{{ '/assets/css/custom.css' | relative_url }}">
 
   <style>
@@ -118,7 +121,7 @@
       pointer-events: auto;
     }
 
-    /* Main content */
+    /* Main content adjustments */
     main {
       margin-top: 0;
     }
@@ -158,26 +161,18 @@
   <!-- Overlay -->
   <div class="nav-overlay" id="nav-overlay"></div>
 
-  <!-- Main content area using Primer-like classes -->
-  <main class="container-lg px-3 my-5 markdown-body" aria-label="Content">
+  <!-- Main content area -->
+  <main class="page-content" aria-label="Content">
     <div class="wrapper">
-
-      <!-- Custom heading driven by front matter -->
-      <h1 class="custom-heading">
-        {{ page.custom_heading | default: page.title }}
-      </h1>
-
       {{ content }}
     </div>
   </main>
 
-  <!-- Simple footer (self-contained, no includes) -->
-  <footer class="px-3 py-3 border-top">
-    <div class="container-lg">
-      <p class="text-small text-gray">
-        <a href="{{ '/license' | relative_url }}">Ancient Religious Texts licensed under Creative Commons (CC0)</a>
-      </p>
-    </div>
+  <!-- Footer -->
+  <footer class="site-footer">
+    <span class="site-footer-credits">
+      <a href="{{ '/license' | relative_url }}">Licensed under Creative Commons (CC0)</a>
+    </span>
   </footer>
 
   <script>
