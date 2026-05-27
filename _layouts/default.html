@@ -13,6 +13,22 @@
   <link rel="stylesheet" href="{{ '/assets/css/custom.css' | relative_url }}">
 
   <style>
+    /* Accessibility: Skip to main content link */
+    .skip-to-main {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: #0366d6;
+      color: white;
+      padding: 8px;
+      text-decoration: none;
+      z-index: 100;
+    }
+
+    .skip-to-main:focus {
+      top: 0;
+    }
+
     /* Burger Menu & Sidebar */
     body {
       margin: 0;
@@ -30,16 +46,26 @@
 
     .burger-btn {
       background: none;
-      border: none;
+      border: 2px solid transparent;
       font-size: 24px;
       cursor: pointer;
-      padding: 0;
+      padding: 4px 8px;
       color: #24292e;
       line-height: 1;
+      border-radius: 4px;
+      transition: border-color 0.2s;
     }
 
-    .burger-btn:hover {
+    .burger-btn:hover,
+    .burger-btn:focus {
       color: #0366d6;
+      border-color: #0366d6;
+      outline: none;
+    }
+
+    .burger-btn:focus-visible {
+      outline: 2px solid #0366d6;
+      outline-offset: 2px;
     }
 
     header h1 {
@@ -70,7 +96,7 @@
 
     .nav-close {
       background: none;
-      border: none;
+      border: 2px solid transparent;
       font-size: 28px;
       cursor: pointer;
       padding: 12px 16px;
@@ -78,10 +104,20 @@
       line-height: 1;
       width: 100%;
       text-align: right;
+      border-radius: 4px;
+      transition: border-color 0.2s;
     }
 
-    .nav-close:hover {
+    .nav-close:hover,
+    .nav-close:focus {
       color: #0366d6;
+      border-color: #0366d6;
+      outline: none;
+    }
+
+    .nav-close:focus-visible {
+      outline: 2px solid #0366d6;
+      outline-offset: -4px;
     }
 
     .nav-sidebar nav {
@@ -97,9 +133,16 @@
       transition: background-color 0.2s, border-left-color 0.2s;
     }
 
-    .nav-sidebar a:hover {
+    .nav-sidebar a:hover,
+    .nav-sidebar a:focus {
       background-color: #f6f8fa;
       border-left-color: #0366d6;
+      outline: none;
+    }
+
+    .nav-sidebar a:focus-visible {
+      outline: 2px solid #0366d6;
+      outline-offset: -2px;
     }
 
     /* Overlay */
@@ -137,20 +180,31 @@
         left: -250px;
       }
     }
+
+    /* Reduced motion support */
+    @media (prefers-reduced-motion: reduce) {
+      .nav-sidebar,
+      .nav-overlay {
+        transition: none;
+      }
+    }
   </style>
 </head>
 
 <body>
 
+  <!-- Accessibility: Skip to main content link -->
+  <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
   <!-- Header with Burger Menu -->
-  <header>
-    <button class="burger-btn" id="burger-btn" aria-label="Toggle navigation">☰</button>
+  <header role="banner">
+    <button class="burger-btn" id="burger-btn" aria-label="Open navigation menu" aria-expanded="false" aria-controls="nav-sidebar">☰</button>
     <h1>{{ site.title | default: 'Home' }}</h1>
   </header>
 
   <!-- Sidebar Navigation -->
-  <nav class="nav-sidebar" id="nav-sidebar">
-    <button class="nav-close" id="nav-close" aria-label="Close navigation">×</button>
+  <nav class="nav-sidebar" id="nav-sidebar" aria-label="Main navigation">
+    <button class="nav-close" id="nav-close" aria-label="Close navigation menu">×</button>
     <nav>
       {% for item in site.data.nav %}
         <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
@@ -159,17 +213,17 @@
   </nav>
 
   <!-- Overlay -->
-  <div class="nav-overlay" id="nav-overlay"></div>
+  <div class="nav-overlay" id="nav-overlay" aria-hidden="true"></div>
 
   <!-- Main content area -->
-  <main class="page-content" aria-label="Content">
+  <main class="page-content" id="main-content" aria-label="Content">
     <div class="wrapper">
       {{ content }}
     </div>
   </main>
 
   <!-- Footer -->
-  <footer class="site-footer">
+  <footer class="site-footer" role="contentinfo">
     <span class="site-footer-credits">
       <a href="{{ '/license' | relative_url }}">Licensed under Creative Commons (CC0)</a>
     </span>
@@ -180,28 +234,60 @@
     const navClose = document.getElementById('nav-close');
     const navSidebar = document.getElementById('nav-sidebar');
     const navOverlay = document.getElementById('nav-overlay');
+    let isNavOpen = false;
 
-    burgerBtn.addEventListener('click', () => {
+    function openNav() {
       navSidebar.classList.add('open');
       navOverlay.classList.add('open');
-    });
+      isNavOpen = true;
+      burgerBtn.setAttribute('aria-expanded', 'true');
+      // Move focus to close button
+      navClose.focus();
+    }
 
-    navClose.addEventListener('click', () => {
+    function closeNav() {
       navSidebar.classList.remove('open');
       navOverlay.classList.remove('open');
+      isNavOpen = false;
+      burgerBtn.setAttribute('aria-expanded', 'false');
+      // Return focus to burger button
+      burgerBtn.focus();
+    }
+
+    burgerBtn.addEventListener('click', () => {
+      isNavOpen ? closeNav() : openNav();
     });
 
-    navOverlay.addEventListener('click', () => {
-      navSidebar.classList.remove('open');
-      navOverlay.classList.remove('open');
-    });
+    navClose.addEventListener('click', closeNav);
+    navOverlay.addEventListener('click', closeNav);
 
     // Close sidebar when a link is clicked
     document.querySelectorAll('.nav-sidebar a').forEach(link => {
-      link.addEventListener('click', () => {
-        navSidebar.classList.remove('open');
-        navOverlay.classList.remove('open');
-      });
+      link.addEventListener('click', closeNav);
+    });
+
+    // Keyboard accessibility: ESC to close, Tab management
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isNavOpen) {
+        closeNav();
+      }
+    });
+
+    // Trap focus within sidebar when open
+    document.addEventListener('keydown', (e) => {
+      if (!isNavOpen || e.key !== 'Tab') return;
+
+      const focusableElements = navSidebar.querySelectorAll('button, a');
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      if (e.shiftKey && document.activeElement === firstElement) {
+        e.preventDefault();
+        lastElement.focus();
+      } else if (!e.shiftKey && document.activeElement === lastElement) {
+        e.preventDefault();
+        firstElement.focus();
+      }
     });
   </script>
 

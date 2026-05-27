@@ -137,3 +137,28 @@ table td, table th {
         left: -250px;
     }
 }
+
+/* Accessibility: Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Accessibility: High contrast mode support */
+@media (prefers-contrast: more) {
+    .burger-btn,
+    .nav-close,
+    .nav-sidebar a {
+        border-width: 2px;
+    }
+}
+
+/* Accessibility: Focus visible for all interactive elements */
+button:focus-visible,
+a:focus-visible {
+    outline: 2px solid #0366d6;
+    outline-offset: 2px;
+}
