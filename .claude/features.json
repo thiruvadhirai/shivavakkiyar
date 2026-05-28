@@ -186,13 +186,15 @@
     },
     "developer-tools-automation": {
       "name": "Developer Tools & Automation Scripts",
-      "status": "in-development",
+      "status": "in-progress",
       "description": "Infrastructure for managing Claude-generated utility scripts, preventing duplication and loss of work",
       "implementation": [
         "scripts/ (folder for utility scripts)",
         "scripts/README-scripts.md (documentation)",
+        "scripts/get-version.py (reads VERSION, outputs multiple formats)",
         "ITERATION_LOG.md (git-controlled iteration history)",
-        ".claude/ITERATION_WORKFLOW.md (clarification workflow)"
+        ".claude/ITERATION_WORKFLOW.md (clarification workflow)",
+        ".git/hooks/post-commit (safer version auto-incrementing)"
       ],
       "purpose": [
         "Prevent Claude from recreating scripts in future sessions",
@@ -201,6 +203,14 @@
         "Maintain institutional memory of design decisions"
       ],
       "scripts": {
+        "get-version.py": {
+          "purpose": "Read VERSION file and output in different formats (plain, JSON, YAML, HTML)",
+          "usage": "python3 scripts/get-version.py [--json|--yaml|--html]",
+          "when": "Called by Jekyll templates, CI/CD, version display",
+          "version": "1.0",
+          "status": "active",
+          "outputs": ["plain text (default)", "JSON", "YAML", "HTML badge"]
+        },
         "generate-features.py": {
           "purpose": "Auto-generate features.json from FEATURES.md",
           "usage": "python3 scripts/generate-features.py",
