@@ -308,7 +308,7 @@
 
         // Tithi
         document.getElementById('result-tithi-name').textContent = p.tithi.name;
-        document.getElementById('result-tithi-phase').textContent = p.tithi.phase.toUpperCase();
+        document.getElementById('result-tithi-phase').textContent = p.tithi.phase?.toUpperCase?.() || '';
         document.getElementById('result-tithi-progress').style.width = p.tithi.percent + '%';
         document.getElementById('result-tithi-percent').textContent = p.tithi.percent + '% complete';
 
