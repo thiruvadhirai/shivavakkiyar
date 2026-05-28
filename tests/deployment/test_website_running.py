@@ -29,7 +29,7 @@ class WebsiteDeploymentTest:
         self.pages = {
             "/panchanga/": "Panchanga Calculator",
             "/pradoshakalapooja/": "Pradosha",
-            "/": "Home"
+            "/": "Index of"
         }
 
     def wait_for_server(self):
