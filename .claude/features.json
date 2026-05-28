@@ -1,0 +1,264 @@
+{
+  "project": {
+    "name": "Panchanga Calculator",
+    "version": "1.0.0-beta.7",
+    "description": "Hindu calendar (panchanga) calculator for Jekyll GitHub Pages site"
+  },
+  "features": {
+    "panchanga-calculator-core": {
+      "name": "Panchanga Calculator - Core Calculations",
+      "status": "complete",
+      "description": "Astronomical calculations using Drik Ayanamsa system for Hindu calendar",
+      "implementation": [
+        "assets/js/panchanga-calculator.js"
+      ],
+      "unitTests": [
+        "tests/panchanga-calculator.test.js (15/15 passing)"
+      ],
+      "integrationTests": [
+        "tests/panchanga-calculator-integration.test.js (70/70 passing)"
+      ],
+      "e2eTests": [
+        "tests/e2e.spec.js (Panchanga Calculator Page tests)"
+      ],
+      "calculations": [
+        "Drik Ayanamsa (precession correction)",
+        "Tithi (lunar day, 1-30)",
+        "Nakshatra (constellation, 1-27)",
+        "Yoga (auspicious combination, 1-27)",
+        "Karana (half-tithi, 1-60)",
+        "Hora (planetary hour)",
+        "Rahu Kalam (inauspicious period)",
+        "Abhijit Muhurta (auspicious period)",
+        "Pradosha finder (next 3 occurrences)"
+      ]
+    },
+    "location-management": {
+      "name": "Location Management & Geocoding",
+      "status": "complete",
+      "description": "User location input, Nominatim geocoding, localStorage caching (30-day expiry)",
+      "implementation": [
+        "assets/js/location-manager.js"
+      ],
+      "unitTests": [
+        "tests/panchanga-calculator.test.js (geocoding tests)"
+      ],
+      "e2eTests": [
+        "tests/e2e.spec.js (Location input test)"
+      ],
+      "features": [
+        "Manual location input (NO auto-detect)",
+        "City, State, Country, ZIP code support",
+        "Nominatim API integration",
+        "Location search with autocomplete",
+        "Recently used locations dropdown",
+        "localStorage caching (30-day expiry)",
+        "Global location support"
+      ],
+      "cacheKeys": [
+        "panchanga_location (selected location, 30-day expiry)",
+        "panchanga_geocoding_cache (search results, indefinite)"
+      ]
+    },
+    "panchanga-widget-full": {
+      "name": "Full Panchanga Calculator Widget",
+      "status": "implemented-with-issues",
+      "description": "Complete interactive widget for dedicated panchanga calculator page",
+      "implementation": [
+        "_includes/panchanga-widget-full.html",
+        "assets/css/panchanga.css",
+        "_layouts/default.html (includes scripts)"
+      ],
+      "unitTests": [
+        "tests/widget-issues.test.js (null check tests)"
+      ],
+      "e2eTests": [
+        "tests/e2e.spec.js (Panchanga Calculator Page tests 1-8)"
+      ],
+      "features": [
+        "Location search with autocomplete",
+        "Date picker (any date)",
+        "Calculate button",
+        "Results display (all panchanga elements)",
+        "Error handling for invalid locations",
+        "Version display"
+      ],
+      "knownIssues": [
+        {
+          "issue": "Null check crash on calculate",
+          "location": "panchanga-widget-full.html line 311",
+          "code": "p.tithi.phase.toUpperCase()",
+          "error": "Cannot read properties of undefined (reading 'toUpperCase')",
+          "status": "needs-fixing",
+          "fix": "Use optional chaining: p?.tithi?.phase?.toUpperCase?.()",
+          "impact": "Widget crashes when tithi is undefined"
+        }
+      ]
+    },
+    "panchanga-widget-simple": {
+      "name": "Simplified Pradosha Widget",
+      "status": "implemented-with-issues",
+      "description": "Simplified widget for Pradosha page showing next 3 Pradosha dates",
+      "implementation": [
+        "_includes/panchanga-widget-simple.html",
+        "assets/css/panchanga.css"
+      ],
+      "unitTests": [
+        "tests/widget-issues.test.js"
+      ],
+      "e2eTests": [
+        "tests/e2e.spec.js (Pradosha Calculator Widget tests)"
+      ],
+      "features": [
+        "Manual location input with autocomplete",
+        "Recently used locations dropdown",
+        "Next 3 Pradosha dates display",
+        "3-hour Pradosha time window",
+        "Expandable full panchanga details"
+      ],
+      "knownIssues": [
+        {
+          "issue": "Null check crash on display",
+          "location": "panchanga-widget-simple.html line 344",
+          "code": "p.tithi.phase.toUpperCase()",
+          "error": "Cannot read properties of undefined (reading 'toUpperCase')",
+          "status": "needs-fixing",
+          "fix": "Use optional chaining: p?.tithi?.phase?.toUpperCase?.()",
+          "impact": "Widget crashes when displaying results"
+        }
+      ]
+    },
+    "panchanga-page": {
+      "name": "Panchanga Calculator Page",
+      "status": "complete",
+      "description": "Dedicated page hosting the full panchanga calculator widget",
+      "implementation": [
+        "panchanga.md",
+        "_includes/panchanga-widget-full.html"
+      ],
+      "content": [
+        "Feature overview",
+        "Component descriptions",
+        "Usage instructions",
+        "Data sources and references"
+      ],
+      "ignoreInTesting": true,
+      "note": "Documentation page - test the widget, not the page content"
+    },
+    "pradosha-page": {
+      "name": "Pradosha Kalam Page",
+      "status": "needs-update",
+      "description": "Page about Pradosha worship - needs simple widget integration",
+      "implementation": [
+        "pradoshakalapooja.md",
+        "_includes/panchanga-widget-simple.html (needs integration)"
+      ],
+      "ignoreInTesting": true,
+      "pendingWork": "Add {% include panchanga-widget-simple.html %} to page",
+      "note": "Documentation page - test the widget separately"
+    },
+    "development-workflow": {
+      "name": "Development Workflow & Git Management",
+      "status": "complete",
+      "description": "Feature branch workflow, testing enforcement, version management",
+      "implementation": [
+        ".claude/WORKFLOW.md",
+        ".claude/DEVELOPMENT.md",
+        ".claude/config.json",
+        ".claude/SKILLS.md",
+        ".claude/features.json",
+        ".claude/architecture.md",
+        ".claude/file-impacts.md",
+        "scripts/feature-workflow.sh",
+        "scripts/push-to-github.sh",
+        ".gitignore"
+      ],
+      "documentation": [
+        "Mandatory feature branch pattern (feature/*)",
+        "Tests required before every commit",
+        "Automatic version incrementing",
+        "Git management policy",
+        "Development setup guide",
+        "Workflow enforcement rules",
+        "Feature inventory tracking",
+        "File impact analysis"
+      ]
+    },
+    "testing-infrastructure": {
+      "name": "Testing Infrastructure",
+      "status": "complete",
+      "description": "Unit, integration, E2E tests with Playwright and code coverage",
+      "implementation": [
+        "package.json (test scripts)",
+        "tests/panchanga-calculator.test.js (unit: 15/15 passing)",
+        "tests/panchanga-calculator-integration.test.js (integration: 70/70 passing)",
+        "tests/e2e.spec.js (E2E: 15 tests ready)",
+        "tests/playwright.config.js (Playwright config)",
+        "Dockerfile.test (containerized test environment)"
+      ],
+      "scripts": {
+        "npm test": "Run all unit and integration tests",
+        "npm run test:unit": "Unit tests only",
+        "npm run test:integration": "Integration tests only",
+        "npm run test:e2e": "E2E tests with Playwright",
+        "npm run test:coverage": "E2E tests with code coverage (C8)"
+      },
+      "browsers": [
+        "Chromium (headless)",
+        "Firefox (headless)",
+        "Mobile Chrome (Pixel 5 emulation)"
+      ],
+      "testCoverage": {
+        "unit": "15/15 passing (100%)",
+        "integration": "70/70 passing (100%)",
+        "e2e": "15 tests ready (browser setup pending)"
+      }
+    }
+  },
+  "pageIgnoreList": [
+    {
+      "file": "panchanga.md",
+      "reason": "Documentation page - test the widget via E2E tests, not the markdown content"
+    },
+    {
+      "file": "pradoshakalapooja.md",
+      "reason": "Documentation page - test the widget via E2E tests, not the markdown content"
+    },
+    {
+      "file": "all other .md files",
+      "reason": "Content pages (mantras, poems, documentation) - not interactive components"
+    }
+  ],
+  "issues": {
+    "critical": [
+      {
+        "id": "widget-null-check-full",
+        "feature": "panchanga-widget-full",
+        "severity": "critical",
+        "status": "needs-fixing",
+        "location": "panchanga-widget-full.html:311",
+        "issue": "Null check crash when displaying tithi phase",
+        "fix": "Add optional chaining: p?.tithi?.phase?.toUpperCase?.()",
+        "impact": "Widget crashes in production when calculation returns undefined"
+      },
+      {
+        "id": "widget-null-check-simple",
+        "feature": "panchanga-widget-simple",
+        "severity": "critical",
+        "status": "needs-fixing",
+        "location": "panchanga-widget-simple.html:344",
+        "issue": "Null check crash when displaying tithi phase",
+        "fix": "Add optional chaining: p?.tithi?.phase?.toUpperCase?.()",
+        "impact": "Widget crashes in production when calculation returns undefined"
+      }
+    ]
+  },
+  "nextSteps": [
+    "Fix widget null check issues (2 files)",
+    "Run E2E tests in dev container (setup browser binaries)",
+    "Test widgets in browser: http://localhost:5080/panchanga/",
+    "Integrate simple widget into pradoshakalapooja.md",
+    "Merge feature/fix-widget-null-checks to main",
+    "Push to GitHub"
+  ]
+}
