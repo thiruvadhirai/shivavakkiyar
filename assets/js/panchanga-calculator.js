@@ -469,11 +469,106 @@ function formatDate(date) {
 }
 
 // ============================================================
+// PANCHANGA CALCULATOR CLASS
+// ============================================================
+
+class PanchangaCalculator {
+  constructor() {
+    this.initialized = false;
+  }
+
+  // Initialize the calculator (load Astronomy Engine if needed)
+  async init() {
+    // Check if Astronomy Engine is available
+    if (typeof Astronomy !== 'undefined') {
+      this.initialized = true;
+      return true;
+    }
+
+    // If not, wait for it to load
+    const maxWait = 5000; // 5 second timeout
+    const startTime = Date.now();
+    while (typeof Astronomy === 'undefined' && Date.now() - startTime < maxWait) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+
+    this.initialized = typeof Astronomy !== 'undefined';
+    return this.initialized;
+  }
+
+  // Wrapper methods for the functions
+  calculateFullPanchanga(date, lat, lon) {
+    return calculateFullPanchanga(date, lat, lon);
+  }
+
+  calculateTithi(sunLon, moonLon) {
+    return calculateTithi(sunLon, moonLon);
+  }
+
+  calculateNakshatra(moonLon) {
+    return calculateNakshatra(moonLon);
+  }
+
+  calculateYoga(sunLon, moonLon) {
+    return calculateYoga(sunLon, moonLon);
+  }
+
+  calculateKarana(tithiNum) {
+    return calculateKarana(tithiNum);
+  }
+
+  calculateHora(date, sunrise) {
+    return calculateHora(date, sunrise);
+  }
+
+  calculateRahuKalam(sunrise, sunset, date) {
+    return calculateRahuKalam(sunrise, sunset, date);
+  }
+
+  calculateAbhijitMuhurta(sunrise, sunset) {
+    return calculateAbhijitMuhurta(sunrise, sunset);
+  }
+
+  findNextPradosha(date, lat, lon) {
+    return findNextPradosha(date, lat, lon);
+  }
+
+  getDrikAyanamsa(date) {
+    return getDrikAyanamsa(date);
+  }
+
+  getSunLongitude(date, lat, lon) {
+    return getSunLongitude(date, lat, lon);
+  }
+
+  getMoonLongitude(date, lat, lon) {
+    return getMoonLongitude(date, lat, lon);
+  }
+
+  getSunrise(date, lat, lon) {
+    return getSunrise(date, lat, lon);
+  }
+
+  getSunset(date, lat, lon) {
+    return getSunset(date, lat, lon);
+  }
+
+  formatTime(hours, minutes) {
+    return formatTime(hours, minutes);
+  }
+
+  formatDate(date) {
+    return formatDate(date);
+  }
+}
+
+// ============================================================
 // EXPORTS
 // ============================================================
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
+    PanchangaCalculator,
     calculateFullPanchanga,
     calculateTithi,
     calculateNakshatra,
