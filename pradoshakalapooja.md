@@ -12,6 +12,7 @@ title: "Pradosha Kala pooja"
 * [Nindra Thiruthandagam](nindrathiruthandagam.md)
 * [Thiruneetru pathigam](thiruneetrupathigam.md)
 * [நந்தி அஷ்டோத்திரம் - Nandhi Ashtotharam](nandhi-astothram.md)
+* [நந்தி ப்ரதோஷ பாடல் - Nandhi Pradosha Song](nandhi-pradosha-song.md)
 * [சிவ அஷ்டோத்திரம் - Shiva Ashtotharam](siva-astothram.md)
-* [மந்த்ர புஷ்பம் - Mantra Pushpam](mantrapushpam.md)
 * [Arathi](arathi.md)
+* [மந்த்ர புஷ்பம் - Mantra Pushpam](mantrapushpam.md)
