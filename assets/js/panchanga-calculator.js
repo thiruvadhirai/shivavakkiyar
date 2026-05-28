@@ -297,6 +297,7 @@ function calculateAbhijitMuhurta(sunrise, sunset) {
 
 function findNextPradosha(date, lat, lon, maxSearch = 30) {
   // Find next 3 Pradosha dates (13th lunar day)
+  // Pradosha occurs on both Shukla Triyodashi (tithi 13) and Krishna Triyodashi (tithi 28)
   const pradoshas = [];
   let currentDate = new Date(date);
 
@@ -305,8 +306,10 @@ function findNextPradosha(date, lat, lon, maxSearch = 30) {
     const moonLon = getMoonLongitude(currentDate, lat, lon);
     const tithi = calculateTithi(sunLon, moonLon);
 
-    // Pradosha is on Triyodashi (13th tithi)
-    if (tithi.num === 13) {
+    // Pradosha is on Triyodashi (13th tithi of light moon or dark moon)
+    // Tithi 13 = Shukla Triyodashi (light moon 13th)
+    // Tithi 28 = Krishna Triyodashi (dark moon 13th)
+    if (tithi.num === 13 || tithi.num === 28) {
       const sunrise = getSunrise(currentDate, lat, lon);
       const sunset = getSunset(currentDate, lat, lon);
 
@@ -350,7 +353,7 @@ function calculateFullPanchanga(dateStr, latitude, longitude) {
     abhijitMuhurta: calculateAbhijitMuhurta(sunrise, sunset),
     sunrise: sunrise ? formatTime(sunrise) : null,
     sunset: sunset ? formatTime(sunset) : null,
-    nextPradoshas: findNextPradosha(date, latitude, longitude, 30)
+    nextPradoshas: findNextPradosha(date, latitude, longitude, 60)
   };
 }
 
