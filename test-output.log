@@ -1,0 +1,8 @@
+
+> panchanga-calculator@1.0.0-beta.2 test:e2e
+> playwright test --reporter=list
+
+🧪 Loading real libraries for Node.js integration tests...
+
+❌ Failed to load Astronomy Engine: require is not defined
+   Make sure astronomy.browser.js exists in assets/js/

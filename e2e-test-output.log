@@ -1,0 +1,11 @@
+3842d323af9f232183f0aa0e9b1d08c4e4441fddda58e9e38b8f4943048fad59
+[1;32m[saivamcloud-dev]  |[0m cannot open `/run/user/1000/crun/57b6f7e5e10df26f3ff2cbf7bb7f6835e59d563c10f5c05d5be7ed743dc9da83/exec.fifo`: No such file or directory
+[1;32m[saivamcloud-dev]  |[0m Error: unable to start container 57b6f7e5e10df26f3ff2cbf7bb7f6835e59d563c10f5c05d5be7ed743dc9da83: `/usr/bin/crun start 57b6f7e5e10df26f3ff2cbf7bb7f6835e59d563c10f5c05d5be7ed743dc9da83` failed: exit status 1
+[1;33m[saivamcloud-test] |[0m 
+[1;33m[saivamcloud-test] |[0m > panchanga-calculator@1.0.0-beta.2 test:e2e
+[1;33m[saivamcloud-test] |[0m > playwright test
+[1;33m[saivamcloud-test] |[0m 
+[1;33m[saivamcloud-test] |[0m 🧪 Loading real libraries for Node.js integration tests...
+[1;33m[saivamcloud-test] |[0m 
+[1;33m[saivamcloud-test] |[0m ❌ Failed to load Astronomy Engine: require is not defined
+[1;33m[saivamcloud-test] |[0m    Make sure astronomy.browser.js exists in assets/js/

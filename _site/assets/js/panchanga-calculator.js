@@ -61,19 +61,21 @@ class PanchangaCalculator {
   async getSunLongitude(date, latitude, longitude) {
     try {
       // Use SearchSunLongitude to find sun's longitude
-      const search = this.astronomy.SearchSunLongitude(0);
-      const sunEvent = search.nextEvent(date);
+      if (this.astronomy && this.astronomy.SearchSunLongitude) {
+        const search = this.astronomy.SearchSunLongitude(0);
+        const sunEvent = search.nextEvent(date);
 
-      if (sunEvent && sunEvent.lon !== undefined) {
-        const sunEcl = sunEvent.lon;
-        const ayanamsa = this.getDrikAyanamsa(date);
-        return this.normalizeDegrees(sunEcl - ayanamsa);
+        if (sunEvent && sunEvent.lon !== undefined) {
+          const sunEcl = sunEvent.lon;
+          const ayanamsa = this.getDrikAyanamsa(date);
+          return this.normalizeDegrees(sunEcl - ayanamsa);
+        }
       }
     } catch (e) {
-      console.log('SearchSunLongitude failed, using approximate calculation');
+      console.log('SearchSunLongitude failed, using fallback:', e.message);
     }
 
-    // Fallback: approximate sun longitude (moves ~1° per day)
+    // Fallback: approximate sun longitude (moves ~0.9856° per day)
     const j2000 = new Date(2000, 0, 1, 12, 0, 0);
     const daysSinceJ2000 = (date - j2000) / (1000 * 60 * 60 * 24);
     const approxSunLon = 280.46 + (0.9856474 * daysSinceJ2000);
@@ -112,16 +114,14 @@ class PanchangaCalculator {
       const ayanamsa = this.getDrikAyanamsa(date);
       return this.normalizeDegrees(moonEcl - ayanamsa);
     } catch (e) {
-      console.log('Moon calculation failed:', e.message);
+      console.log('Moon calculation failed, using fallback:', e.message);
+      // Fallback: approximate moon longitude (moves ~13° per day, with variation)
+      const j2000 = new Date(2000, 0, 1, 12, 0, 0);
+      const daysSinceJ2000 = (date - j2000) / (1000 * 60 * 60 * 24);
+      const moonMeanLon = 218.32 + (13.176358 * daysSinceJ2000);
+      const ayanamsa = this.getDrikAyanamsa(date);
+      return this.normalizeDegrees(moonMeanLon - ayanamsa);
     }
-
-    // Fallback: approximate moon longitude (moves ~13° per day, with variation)
-    const j2000 = new Date(2000, 0, 1, 12, 0, 0);
-    const daysSinceJ2000 = (date - j2000) / (1000 * 60 * 60 * 24);
-    const moonMeanLon = 218.32 + (13.176358 * daysSinceJ2000);
-    const ayanamsa = this.getDrikAyanamsa(date);
-
-    return this.normalizeDegrees(moonMeanLon - ayanamsa);
   }
 
   /**
@@ -175,8 +175,8 @@ class PanchangaCalculator {
     return {
       date: sunsetDate,
       timeIST: istTime,
-      hours: sunset.getHours(),
-      minutes: sunset.getMinutes()
+      hours: sunsetDate.getHours(),
+      minutes: sunsetDate.getMinutes()
     };
   }
 

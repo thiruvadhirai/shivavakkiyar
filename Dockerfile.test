@@ -1,0 +1,32 @@
+# Test Container for E2E & Integration Testing
+# Quick setup with minimal dependencies
+# Install only what's needed: Node + Playwright + system browsers
+
+FROM node:20-slim
+
+WORKDIR /app
+
+# Install lightweight system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    chromium \
+    firefox-esr \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy and install dependencies
+COPY package.json* ./
+RUN npm install --omit=dev @playwright/test@latest playwright@latest
+
+# Copy test files
+COPY tests/ ./tests/
+COPY assets/js/ ./assets/js/
+
+# Update Playwright to use system browsers
+RUN npm install -g playwright@latest && \
+    PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 playwright install-deps
+
+# Set environment for system browsers
+ENV PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium
+ENV PLAYWRIGHT_FIREFOX_EXECUTABLE_PATH=/usr/bin/firefox-esr
+
+# Default command: run E2E tests
+CMD ["npm", "run", "test:e2e"]

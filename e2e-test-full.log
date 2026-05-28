@@ -1,0 +1,40 @@
+saivamcloud-dev
+STEP 1/10: FROM ubuntu:24.04
+Resolved "ubuntu" as an alias (/etc/containers/registries.conf.d/shortnames.conf)
+Trying to pull docker.io/library/ubuntu:24.04...
+Getting image source signatures
+Copying blob sha256:b40150c1c2717d324cdb17278c8efdfa4dfcd2ffe083e976f0bcedf31115f081
+Copying config sha256:0b1ebe5dd42682bb8eda97ecf10a09f70f18d2d4af35f82b9271badac5dbeb27
+Writing manifest to image destination
+STEP 2/10: WORKDIR /app
+--> 8059150db540
+STEP 3/10: RUN apt-get update && apt-get install -y --no-install-recommends     node-npm     nodejs     chromium-browser     firefox     bash     curl     libnss3     libnspr4     libgconf-2-4     libxss1     libappindicator1     libindicator7     xdg-utils     fonts-liberation     xfonts-encodings     xfonts-utils     && rm -rf /var/lib/apt/lists/*
+Get:1 http://archive.ubuntu.com/ubuntu noble InRelease [256 kB]
+Get:2 http://security.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+Get:3 http://security.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1511 kB]
+Get:4 http://archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+Get:5 http://archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+Get:6 http://archive.ubuntu.com/ubuntu noble/restricted amd64 Packages [117 kB]
+Get:7 http://security.ubuntu.com/ubuntu noble-security/main amd64 Packages [2082 kB]
+Get:8 http://archive.ubuntu.com/ubuntu noble/main amd64 Packages [1808 kB]
+Get:9 http://security.ubuntu.com/ubuntu noble-security/multiverse amd64 Packages [48.4 kB]
+Get:10 http://security.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [3683 kB]
+Get:11 http://archive.ubuntu.com/ubuntu noble/universe amd64 Packages [19.3 MB]
+Get:12 http://archive.ubuntu.com/ubuntu noble/multiverse amd64 Packages [331 kB]
+Get:13 http://archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [54.6 kB]
+Get:14 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [2152 kB]
+Get:15 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [2468 kB]
+Get:16 http://archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [3932 kB]
+Get:17 http://archive.ubuntu.com/ubuntu noble-backports/main amd64 Packages [49.0 kB]
+Get:18 http://archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Packages [671 B]
+Get:19 http://archive.ubuntu.com/ubuntu noble-backports/universe amd64 Packages [35.9 kB]
+Fetched 38.2 MB in 2s (21.7 MB/s)
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+E: Unable to locate package libgconf-2-4
+E: Unable to locate package libappindicator1
+Error: building at STEP "RUN apt-get update && apt-get install -y --no-install-recommends     node-npm     nodejs     chromium-browser     firefox     bash     curl     libnss3     libnspr4     libgconf-2-4     libxss1     libappindicator1     libindicator7     xdg-utils     fonts-liberation     xfonts-encodings     xfonts-utils     && rm -rf /var/lib/apt/lists/*": while running runtime: exit status 100
+time="2026-05-28T11:52:48-07:00" level=warning msg="The input device is not a TTY. The --tty and --interactive flags might not work properly"
+Error: short-name "saivamcloud-test:latest" did not resolve to an alias and no unqualified-search registries are defined in "/etc/containers/registries.conf"

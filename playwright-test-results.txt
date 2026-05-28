@@ -1,0 +1,246 @@
+
+Running 15 tests using 1 worker
+
+  ✘   1 tests/e2e.spec.js:27:3 › Panchanga Calculator Page › Page loads and renders main elements (1ms)
+  ✘   2 tests/e2e.spec.js:41:3 › Panchanga Calculator Page › Location input accepts text input (1ms)
+  ✘   3 tests/e2e.spec.js:53:3 › Panchanga Calculator Page › Date picker accepts date input (1ms)
+  ✘   4 tests/e2e.spec.js:67:3 › Panchanga Calculator Page › Calculate button initiates panchanga calculation (1ms)
+  ✘   5 tests/e2e.spec.js:96:3 › Panchanga Calculator Page › Panchanga results display with all components (1ms)
+  ✘   6 tests/e2e.spec.js:129:3 › Panchanga Calculator Page › Shows error message when location cannot be geocoded (1ms)
+  ✘   7 tests/e2e.spec.js:155:3 › Panchanga Calculator Page › Version is displayed on page (1ms)
+  ✘   8 tests/e2e.spec.js:166:3 › Panchanga Calculator Page › Page loads without critical JavaScript errors (1ms)
+  ✘   9 tests/e2e.spec.js:203:3 › Pradosha Calculator Widget › Pradosha widget loads on page (1ms)
+  ✘  10 tests/e2e.spec.js:213:3 › Pradosha Calculator Widget › Pradosha widget can calculate (1ms)
+  ✘  11 tests/e2e.spec.js:235:3 › Responsive Design › Page is responsive on mobile (1ms)
+  ✘  12 tests/e2e.spec.js:252:3 › Responsive Design › Page is responsive on tablet (1ms)
+  ✘  13 tests/e2e.spec.js:263:3 › Responsive Design › Page is responsive on desktop (1ms)
+  ✘  14 tests/e2e.spec.js:280:3 › Accessibility › Form inputs are keyboard accessible (1ms)
+  ✘  15 tests/e2e.spec.js:294:3 › Accessibility › Buttons have accessible labels (1ms)
+
+
+  1) tests/e2e.spec.js:27:3 › Panchanga Calculator Page › Page loads and renders main elements ─────
+
+    Error: browserType.launch: Executable doesn't exist at /home/jsnadmin/.cache/ms-playwright/chromium_headless_shell-1223/chrome-headless-shell-linux64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/tests-e2e-Panchanga-Calcul-603ee-s-and-renders-main-elements/error-context.md
+
+  2) tests/e2e.spec.js:41:3 › Panchanga Calculator Page › Location input accepts text input ────────
+
+    Error: browserType.launch: Executable doesn't exist at /home/jsnadmin/.cache/ms-playwright/chromium_headless_shell-1223/chrome-headless-shell-linux64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/tests-e2e-Panchanga-Calcul-745fc-on-input-accepts-text-input/error-context.md
+
+  3) tests/e2e.spec.js:53:3 › Panchanga Calculator Page › Date picker accepts date input ───────────
+
+    Error: browserType.launch: Executable doesn't exist at /home/jsnadmin/.cache/ms-playwright/chromium_headless_shell-1223/chrome-headless-shell-linux64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/tests-e2e-Panchanga-Calcul-788c4-e-picker-accepts-date-input/error-context.md
+
+  4) tests/e2e.spec.js:67:3 › Panchanga Calculator Page › Calculate button initiates panchanga calculation 
+
+    Error: browserType.launch: Executable doesn't exist at /home/jsnadmin/.cache/ms-playwright/chromium_headless_shell-1223/chrome-headless-shell-linux64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/tests-e2e-Panchanga-Calcul-94879-iates-panchanga-calculation/error-context.md
+
+  5) tests/e2e.spec.js:96:3 › Panchanga Calculator Page › Panchanga results display with all components 
+
+    Error: browserType.launch: Executable doesn't exist at /home/jsnadmin/.cache/ms-playwright/chromium_headless_shell-1223/chrome-headless-shell-linux64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/tests-e2e-Panchanga-Calcul-b0aff-display-with-all-components/error-context.md
+
+  6) tests/e2e.spec.js:129:3 › Panchanga Calculator Page › Shows error message when location cannot be geocoded 
+
+    Error: browserType.launch: Executable doesn't exist at /home/jsnadmin/.cache/ms-playwright/chromium_headless_shell-1223/chrome-headless-shell-linux64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/tests-e2e-Panchanga-Calcul-27030-location-cannot-be-geocoded/error-context.md
+
+  7) tests/e2e.spec.js:155:3 › Panchanga Calculator Page › Version is displayed on page ────────────
+
+    Error: browserType.launch: Executable doesn't exist at /home/jsnadmin/.cache/ms-playwright/chromium_headless_shell-1223/chrome-headless-shell-linux64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/tests-e2e-Panchanga-Calcul-c2c35-ersion-is-displayed-on-page/error-context.md
+
+  8) tests/e2e.spec.js:166:3 › Panchanga Calculator Page › Page loads without critical JavaScript errors 
+
+    Error: browserType.launch: Executable doesn't exist at /home/jsnadmin/.cache/ms-playwright/chromium_headless_shell-1223/chrome-headless-shell-linux64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/tests-e2e-Panchanga-Calcul-81255--critical-JavaScript-errors/error-context.md
+
+  9) tests/e2e.spec.js:203:3 › Pradosha Calculator Widget › Pradosha widget loads on page ──────────
+
+    Error: browserType.launch: Executable doesn't exist at /home/jsnadmin/.cache/ms-playwright/chromium_headless_shell-1223/chrome-headless-shell-linux64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/tests-e2e-Pradosha-Calcula-5849d-adosha-widget-loads-on-page/error-context.md
+
+  10) tests/e2e.spec.js:213:3 › Pradosha Calculator Widget › Pradosha widget can calculate ─────────
+
+    Error: browserType.launch: Executable doesn't exist at /home/jsnadmin/.cache/ms-playwright/chromium_headless_shell-1223/chrome-headless-shell-linux64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/tests-e2e-Pradosha-Calcula-58668-adosha-widget-can-calculate/error-context.md
+
+  11) tests/e2e.spec.js:235:3 › Responsive Design › Page is responsive on mobile ───────────────────
+
+    Error: browserType.launch: Executable doesn't exist at /home/jsnadmin/.cache/ms-playwright/chromium_headless_shell-1223/chrome-headless-shell-linux64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/tests-e2e-Responsive-Design-Page-is-responsive-on-mobile/error-context.md
+
+  12) tests/e2e.spec.js:252:3 › Responsive Design › Page is responsive on tablet ───────────────────
+
+    Error: browserType.launch: Executable doesn't exist at /home/jsnadmin/.cache/ms-playwright/chromium_headless_shell-1223/chrome-headless-shell-linux64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/tests-e2e-Responsive-Design-Page-is-responsive-on-tablet/error-context.md
+
+  13) tests/e2e.spec.js:263:3 › Responsive Design › Page is responsive on desktop ──────────────────
+
+    Error: browserType.launch: Executable doesn't exist at /home/jsnadmin/.cache/ms-playwright/chromium_headless_shell-1223/chrome-headless-shell-linux64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/tests-e2e-Responsive-Design-Page-is-responsive-on-desktop/error-context.md
+
+  14) tests/e2e.spec.js:280:3 › Accessibility › Form inputs are keyboard accessible ────────────────
+
+    Error: browserType.launch: Executable doesn't exist at /home/jsnadmin/.cache/ms-playwright/chromium_headless_shell-1223/chrome-headless-shell-linux64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/tests-e2e-Accessibility-Form-inputs-are-keyboard-accessible/error-context.md
+
+  15) tests/e2e.spec.js:294:3 › Accessibility › Buttons have accessible labels ─────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at /home/jsnadmin/.cache/ms-playwright/chromium_headless_shell-1223/chrome-headless-shell-linux64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/tests-e2e-Accessibility-Buttons-have-accessible-labels/error-context.md
+
+  15 failed
+    tests/e2e.spec.js:27:3 › Panchanga Calculator Page › Page loads and renders main elements ──────
+    tests/e2e.spec.js:41:3 › Panchanga Calculator Page › Location input accepts text input ─────────
+    tests/e2e.spec.js:53:3 › Panchanga Calculator Page › Date picker accepts date input ────────────
+    tests/e2e.spec.js:67:3 › Panchanga Calculator Page › Calculate button initiates panchanga calculation 
+    tests/e2e.spec.js:96:3 › Panchanga Calculator Page › Panchanga results display with all components 
+    tests/e2e.spec.js:129:3 › Panchanga Calculator Page › Shows error message when location cannot be geocoded 
+    tests/e2e.spec.js:155:3 › Panchanga Calculator Page › Version is displayed on page ─────────────
+    tests/e2e.spec.js:166:3 › Panchanga Calculator Page › Page loads without critical JavaScript errors 
+    tests/e2e.spec.js:203:3 › Pradosha Calculator Widget › Pradosha widget loads on page ───────────
+    tests/e2e.spec.js:213:3 › Pradosha Calculator Widget › Pradosha widget can calculate ───────────
+    tests/e2e.spec.js:235:3 › Responsive Design › Page is responsive on mobile ─────────────────────
+    tests/e2e.spec.js:252:3 › Responsive Design › Page is responsive on tablet ─────────────────────
+    tests/e2e.spec.js:263:3 › Responsive Design › Page is responsive on desktop ────────────────────
+    tests/e2e.spec.js:280:3 › Accessibility › Form inputs are keyboard accessible ──────────────────
+    tests/e2e.spec.js:294:3 › Accessibility › Buttons have accessible labels ───────────────────────

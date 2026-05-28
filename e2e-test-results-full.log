@@ -1,0 +1,248 @@
+saivamcloud-dev
+saivamcloud-dev
+57b6f7e5e10df26f3ff2cbf7bb7f6835e59d563c10f5c05d5be7ed743dc9da83
+saivamcloud-dev
+STEP 1/8: FROM node:18-alpine
+Resolved "node" as an alias (/etc/containers/registries.conf.d/shortnames.conf)
+Trying to pull docker.io/library/node:18-alpine...
+Getting image source signatures
+Copying blob sha256:25ff2da83641908f65c3a74d80409d6b1b62ccfaab220b9ea70b80df5a2e0549
+Copying blob sha256:f18232174bc91741fdf3da96d85011092101a032a93a388b79e99e69c2d5c870
+Copying blob sha256:1e5a4c89cee5c0826c540ab06d4b6b491c96eda01837f430bd47f0d26702d6e3
+Copying blob sha256:dd71dde834b5c203d162902e6b8994cb2309ae049a0eabc4efea161b2b5a3d0e
+Copying config sha256:ee77c6cd7c1886ecc802ad6cedef3a8ec1ea27d1fb96162bf03dd3710839b8da
+Writing manifest to image destination
+STEP 2/8: WORKDIR /app
+--> 73b07fbd87e2
+STEP 3/8: RUN apk add --no-cache     chromium     firefox     bash     curl
+fetch https://dl-cdn.alpinelinux.org/alpine/v3.21/main/x86_64/APKINDEX.tar.gz
+fetch https://dl-cdn.alpinelinux.org/alpine/v3.21/community/x86_64/APKINDEX.tar.gz
+(1/186) Installing ncurses-terminfo-base (6.5_p20241006-r3)
+(2/186) Installing libncursesw (6.5_p20241006-r3)
+(3/186) Installing readline (8.2.13-r0)
+(4/186) Installing bash (5.2.37-r0)
+Executing bash-5.2.37-r0.post-install
+(5/186) Installing libexpat (2.7.5-r0)
+(6/186) Installing brotli-libs (1.1.0-r2)
+(7/186) Installing libbz2 (1.0.8-r6)
+(8/186) Installing libpng (1.6.57-r0)
+(9/186) Installing freetype (2.13.3-r0)
+(10/186) Installing fontconfig (2.15.0-r1)
+(11/186) Installing libfontenc (1.1.8-r0)
+(12/186) Installing mkfontscale (1.2.3-r1)
+(13/186) Installing font-opensans (0_git20210927-r1)
+(14/186) Installing pkgconf (2.3.0-r0)
+(15/186) Installing libffi (3.4.7-r0)
+(16/186) Installing libintl (0.22.5-r0)
+(17/186) Installing libeconf (0.6.3-r0)
+(18/186) Installing libblkid (2.40.4-r1)
+(19/186) Installing libmount (2.40.4-r1)
+(20/186) Installing pcre2 (10.43-r0)
+(21/186) Installing glib (2.82.5-r0)
+(22/186) Installing xz-libs (5.8.3-r0)
+(23/186) Installing libxml2 (2.13.9-r0)
+(24/186) Installing shared-mime-info (2.4-r2)
+(25/186) Installing hicolor-icon-theme (0.18-r0)
+(26/186) Installing libjpeg-turbo (3.0.4-r0)
+(27/186) Installing libsharpyuv (1.4.0-r0)
+(28/186) Installing libwebp (1.4.0-r0)
+(29/186) Installing zstd-libs (1.5.6-r2)
+(30/186) Installing tiff (4.7.1-r0)
+(31/186) Installing gdk-pixbuf (2.42.12-r1)
+(32/186) Installing gtk-update-icon-cache (3.24.49-r0)
+(33/186) Installing libxau (1.0.11-r4)
+(34/186) Installing libmd (1.1.0-r0)
+(35/186) Installing libbsd (0.12.2-r0)
+(36/186) Installing libxdmcp (1.1.5-r1)
+(37/186) Installing libxcb (1.16.1-r0)
+(38/186) Installing libx11 (1.8.10-r0)
+(39/186) Installing libxcomposite (0.4.6-r5)
+(40/186) Installing libxfixes (6.0.1-r4)
+(41/186) Installing libxrender (0.9.11-r5)
+(42/186) Installing libxcursor (1.2.3-r0)
+(43/186) Installing libxdamage (1.1.6-r5)
+(44/186) Installing libxext (1.3.6-r2)
+(45/186) Installing libxi (1.8.2-r0)
+(46/186) Installing libxinerama (1.1.5-r4)
+(47/186) Installing libxrandr (1.5.4-r1)
+(48/186) Installing libatk-1.0 (2.54.1-r0)
+(49/186) Installing libxtst (1.2.5-r0)
+(50/186) Installing dbus-libs (1.14.10-r4)
+(51/186) Installing at-spi2-core (2.54.1-r0)
+(52/186) Installing libatk-bridge-2.0 (2.54.1-r0)
+(53/186) Installing pixman (0.43.4-r1)
+(54/186) Installing cairo (1.18.4-r0)
+(55/186) Installing cairo-gobject (1.18.4-r0)
+(56/186) Installing avahi-libs (0.8-r19)
+(57/186) Installing gmp (6.3.0-r2)
+(58/186) Installing nettle (3.10.2-r0)
+(59/186) Installing libunistring (1.2-r0)
+(60/186) Installing libidn2 (2.3.7-r0)
+(61/186) Installing libtasn1 (4.21.0-r0)
+(62/186) Installing p11-kit (0.25.5-r2)
+(63/186) Installing gnutls (3.8.13-r0)
+(64/186) Installing cups-libs (2.4.18-r0)
+(65/186) Installing libepoxy (1.5.10-r1)
+(66/186) Installing fribidi (1.0.16-r0)
+(67/186) Installing graphite2 (1.3.14-r6)
+(68/186) Installing harfbuzz (9.0.0-r1)
+(69/186) Installing libxft (2.3.8-r3)
+(70/186) Installing pango (1.54.0-r1)
+(71/186) Installing wayland-libs-client (1.23.1-r0)
+(72/186) Installing wayland-libs-cursor (1.23.1-r0)
+(73/186) Installing wayland-libs-egl (1.23.1-r0)
+(74/186) Installing xkeyboard-config (2.43-r0)
+(75/186) Installing libxkbcommon (1.7.0-r1)
+(76/186) Installing gtk+3.0 (3.24.49-r0)
+(77/186) Installing icu-data-full (74.2-r1)
+(78/186) Installing llvm19-libs (19.1.4-r1)
+(79/186) Installing hwdata-pci (0.393-r0)
+(80/186) Installing libpciaccess (0.18.1-r0)
+(81/186) Installing libdrm (2.4.123-r1)
+(82/186) Installing libelf (0.191-r0)
+(83/186) Installing mesa-glapi (24.2.8-r0)
+(84/186) Installing libxshmfence (1.3.2-r6)
+(85/186) Installing mesa (24.2.8-r0)
+(86/186) Installing wayland-libs-server (1.23.1-r0)
+(87/186) Installing mesa-gbm (24.2.8-r0)
+(88/186) Installing mesa-dri-gallium (24.2.8-r0)
+(89/186) Installing eudev-libs (3.2.14-r5)
+(90/186) Installing libmagic (5.46-r2)
+(91/186) Installing file (5.46-r2)
+(92/186) Installing xprop (1.2.8-r0)
+(93/186) Installing libice (1.1.1-r6)
+(94/186) Installing libuuid (2.40.4-r1)
+(95/186) Installing libsm (1.2.4-r4)
+(96/186) Installing libxt (1.3.1-r0)
+(97/186) Installing libxmu (1.2.1-r0)
+(98/186) Installing xset (1.2.5-r1)
+(99/186) Installing xdg-utils (1.2.1-r1)
+(100/186) Installing libogg (1.3.5-r5)
+(101/186) Installing libflac (1.4.3-r1)
+(102/186) Installing alsa-lib (1.2.12-r0)
+(103/186) Installing libSvtAv1Enc (2.2.1-r0)
+(104/186) Installing aom-libs (3.11.0-r0)
+(105/186) Installing libva (2.22.0-r1)
+(106/186) Installing libvdpau (1.5-r4)
+(107/186) Installing onevpl-libs (2023.3.1-r2)
+(108/186) Installing ffmpeg-libavutil (6.1.2-r1)
+(109/186) Installing libdav1d (1.5.0-r0)
+(110/186) Installing openexr-libiex (3.3.2-r0)
+(111/186) Installing openexr-libilmthread (3.3.2-r0)
+(112/186) Installing imath (3.1.12-r0)
+(113/186) Installing libdeflate (1.22-r0)
+(114/186) Installing openexr-libopenexrcore (3.3.2-r0)
+(115/186) Installing openexr-libopenexr (3.3.2-r0)
+(116/186) Installing giflib (5.2.2-r1)
+(117/186) Installing libhwy (1.0.7-r0)
+(118/186) Installing lcms2 (2.19-r0)
+(119/186) Installing libjxl (0.10.4-r0)
+(120/186) Installing lame-libs (3.100-r5)
+(121/186) Installing opus (1.5.2-r1)
+(122/186) Installing rav1e-libs (0.7.1-r0)
+(123/186) Installing libgomp (14.2.0-r4)
+(124/186) Installing soxr (0.1.3-r7)
+(125/186) Installing ffmpeg-libswresample (6.1.2-r1)
+(126/186) Installing libtheora (1.1.1-r18)
+(127/186) Installing libvorbis (1.3.7-r2)
+(128/186) Installing libvpx (1.15.0-r0)
+(129/186) Installing libwebpmux (1.4.0-r0)
+(130/186) Installing x264-libs (0.164.3108-r0)
+(131/186) Installing numactl (2.0.18-r0)
+(132/186) Installing x265-libs (3.6-r0)
+(133/186) Installing xvidcore (1.3.7-r2)
+(134/186) Installing ffmpeg-libavcodec (6.1.2-r1)
+(135/186) Installing libbluray (1.3.4-r1)
+(136/186) Installing mpg123-libs (1.32.9-r0)
+(137/186) Installing libopenmpt (0.7.12-r0)
+(138/186) Installing cjson (1.7.19-r0)
+(139/186) Installing mbedtls (3.6.6-r0)
+(140/186) Installing librist (0.2.10-r1)
+(141/186) Installing libsrt (1.5.3-r0)
+(142/186) Installing libssh (0.11.1-r0)
+(143/186) Installing libsodium (1.0.20-r1)
+(144/186) Installing libzmq (4.3.5-r2)
+(145/186) Installing ffmpeg-libavformat (6.1.2-r1)
+(146/186) Installing crc32c (1.1.2-r1)
+(147/186) Installing double-conversion (3.3.0-r0)
+(148/186) Installing harfbuzz-subset (9.0.0-r1)
+(149/186) Installing icu-libs (74.2-r1)
+(150/186) Installing minizip (1.3.1-r0)
+(151/186) Installing nspr (4.36-r0)
+(152/186) Installing sqlite-libs (3.48.0-r4)
+(153/186) Installing nss (3.109-r0)
+(154/186) Installing openh264 (2.6.0-r0)
+(155/186) Installing libcamera-ipa (0.3.2-r0)
+(156/186) Installing libunwind (1.8.1-r0)
+(157/186) Installing yaml (0.2.5-r2)
+(158/186) Installing libcamera (0.3.2-r0)
+(159/186) Installing speexdsp (1.2.1-r2)
+(160/186) Installing libuv (1.49.2-r0)
+(161/186) Installing roc-toolkit-libs (0.4.0-r0)
+(162/186) Installing libsndfile (1.2.2-r2)
+(163/186) Installing webrtc-audio-processing-1 (1.3-r1)
+(164/186) Installing pipewire-libs (1.2.7-r0)
+(165/186) Installing libasyncns (0.8-r4)
+(166/186) Installing libltdl (2.4.7-r3)
+(167/186) Installing orc (0.4.40-r1)
+(168/186) Installing tdb-libs (1.4.12-r0)
+(169/186) Installing libpulse (17.0-r4)
+(170/186) Installing libwebpdemux (1.4.0-r0)
+(171/186) Installing libgpg-error (1.51-r0)
+(172/186) Installing libgcrypt (1.10.3-r1)
+(173/186) Installing libxslt (1.1.42-r2)
+(174/186) Installing chromium (136.0.7103.113-r0)
+(175/186) Installing c-ares (1.34.6-r0)
+(176/186) Installing nghttp2-libs (1.69.0-r0)
+(177/186) Installing libpsl (0.21.5-r3)
+(178/186) Installing libcurl (8.14.1-r2)
+(179/186) Installing curl (8.14.1-r2)
+(180/186) Installing mesa-egl (24.2.8-r0)
+(181/186) Installing libxxf86vm (1.1.5-r6)
+(182/186) Installing mesa-gl (24.2.8-r0)
+(183/186) Installing pciutils-libs (3.13.0-r1)
+(184/186) Installing libevent (2.1.12-r7)
+(185/186) Installing scudo-malloc (19.1.4-r0)
+(186/186) Installing firefox (136.0.4-r0)
+Executing busybox-1.37.0-r12.trigger
+Executing fontconfig-2.15.0-r1.trigger
+Executing mkfontscale-1.2.3-r1.trigger
+Executing glib-2.82.5-r0.trigger
+Executing shared-mime-info-2.4-r2.trigger
+Executing gdk-pixbuf-2.42.12-r1.trigger
+Executing gtk-update-icon-cache-3.24.49-r0.trigger
+Executing gtk+3.0-3.24.49-r0.trigger
+OK: 965 MiB in 203 packages
+--> 5ead5408a1ee
+STEP 4/8: COPY package.json* ./
+--> 6e33a279b23c
+STEP 5/8: RUN npm install --no-save     @playwright/test@latest     playwright@latest     chromium     && npx playwright install --with-deps
+npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+npm warn deprecated glob@7.2.3: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+npm warn deprecated rimraf@2.7.1: Rimraf versions prior to v4 are no longer supported
+
+added 120 packages, and audited 121 packages in 14s
+
+20 packages are looking for funding
+  run `npm fund` for details
+
+2 vulnerabilities (1 low, 1 high)
+
+To address all issues, run:
+  npm audit fix
+
+Run `npm audit` for details.
+npm notice
+npm notice New major version of npm available! 10.8.2 -> 11.16.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.16.0
+npm notice To update run: npm install -g npm@11.16.0
+npm notice
+BEWARE: your OS is not officially supported by Playwright; installing dependencies for ubuntu24.04-x64 as a fallback.
+Installing dependencies...
+sh: apt-get: not found
+Failed to install browsers
+Error: Installation process exited with code: 127
+Error: building at STEP "RUN npm install --no-save     @playwright/test@latest     playwright@latest     chromium     && npx playwright install --with-deps": while running runtime: exit status 1
+time="2026-05-28T11:52:23-07:00" level=warning msg="The input device is not a TTY. The --tty and --interactive flags might not work properly"
+Error: short-name "saivamcloud-test:latest" did not resolve to an alias and no unqualified-search registries are defined in "/etc/containers/registries.conf"
