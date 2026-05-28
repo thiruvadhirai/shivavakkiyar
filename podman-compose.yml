@@ -1,0 +1,22 @@
+services:
+  saivamcloud-dev:
+    image: saivamcloud-dev:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: saivamcloud-dev
+    ports:
+      - "5080:4000"
+    volumes:
+      - .:/workspace
+      - /workspace/_site
+    working_dir: /workspace
+    command: jekyll serve --host 0.0.0.0 --port 4000
+    environment:
+      - JEKYLL_ENV=development
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4000/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
