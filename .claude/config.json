@@ -15,21 +15,6 @@
     "versionFile": "VERSION",
     "versionFormat": "MAJOR.MINOR.PATCH-STAGE.NUM"
   },
-  "gitManagement": {
-    "ignoredPaths": [
-      "_site/ (Jekyll build output - GitHub Pages builds automatically)",
-      "node_modules/ (npm dependencies - install locally)",
-      ".jekyll-cache/ (Jekyll cache - regenerated on build)",
-      "test-results/ (test output and coverage)",
-      ".vscode/, .idea/ (IDE configuration)",
-      "__pycache__/, .Python, venv/ (Python environment)",
-      "*.log, *.tmp, *.bak (temporary files)"
-    ],
-    "singleSourceOfTruth": {
-      "version": "VERSION file in project root",
-      "note": "Do NOT use _data/version.yml - it is redundant and should be deleted"
-    }
-  },
   "testing": {
     "unitTests": {
       "enabled": true,
