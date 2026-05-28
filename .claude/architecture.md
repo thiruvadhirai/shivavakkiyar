@@ -43,8 +43,13 @@ shivavakkiyar/
 │   └── widget-issues.test.js                    # Widget null check tests
 │
 ├── scripts/
+│   ├── README-scripts.md             # Documentation for utility scripts
 │   ├── feature-workflow.sh           # Feature branch workflow enforcement
-│   └── push-to-github.sh             # Push to GitHub safely
+│   ├── push-to-github.sh             # Push to GitHub safely
+│   └── tests/                        # Tests for utility scripts
+│       ├── test-generate-features.py
+│       ├── test-sync-docs.py
+│       └── test-validate-commits.py
 │
 ├── panchanga.md                      # Full calculator page
 ├── pradoshakalapooja.md              # Pradosha page (needs widget integration)
@@ -365,6 +370,84 @@ Jekyll Build Process:
 - New File: `service-worker.js`
 - Modify: `assets/js/app-init.js` (register service worker)
 - Cache: All JS, CSS, HTML needed for offline operation
+
+---
+
+---
+
+## Developer Infrastructure
+
+### scripts/ Folder
+**Purpose:** Store all Claude-generated utility scripts to prevent duplication and loss.
+
+**Structure:**
+```
+scripts/
+├── README-scripts.md       # Script documentation
+├── feature-workflow.sh     # Feature branch enforcement
+├── push-to-github.sh       # Safe GitHub push
+├── generate-features.py    # Auto-generate features.json from FEATURES.md
+├── sync-docs.py            # Sync all documentation
+├── validate-commits.py     # Pre-commit validation
+└── tests/                  # Script tests
+    ├── test-generate-features.py
+    ├── test-sync-docs.py
+    └── test-validate-commits.py
+```
+
+**Why it matters:**
+- Claude reads `scripts/README-scripts.md` and `features.json` to know what scripts exist
+- Prevents "create a new validation script" when it already exists
+- Enables reuse and versioning of tools
+- Tracked in git for institutional memory
+
+### ITERATION_LOG.md
+**Purpose:** Track all development iterations, clarifications, and decisions.
+
+**Structure:**
+```
+## Feature: [Name]
+**Started:** YYYY-MM-DD
+**Status:** In Development / Complete
+
+### Iteration 1: [Description]
+**Created:** List of files created/modified
+**Key Decisions:** Why things were done
+**Clarifications:** Q&A with BA
+
+### Iteration 2: ...
+```
+
+**Why it matters:**
+- Single source of truth for "why we did this"
+- Enables pause/clarify/resume cycles
+- Future developers understand design decisions
+- Git-controlled for full traceability
+
+### Development Workflow Loop
+```
+Developer starts work (feature branch)
+    ↓
+Development reveals unclear requirement
+    ↓
+Add question to .claude/FEATURES.md
+    ↓
+Commit: "Question: clarification needed"
+    ↓
+BA responds with clarification in FEATURES.md
+    ↓
+Commit: "Clarification: BA decision"
+    ↓
+Developer continues with Claude (shows clarification)
+    ↓
+Claude updates code based on clarification
+    ↓
+Update ITERATION_LOG.md with resolution
+    ↓
+Commit: "Implement clarification: [decision]"
+    ↓
+Feature complete, merge to main
+```
 
 ---
 

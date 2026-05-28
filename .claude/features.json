@@ -184,6 +184,64 @@
         "File impact analysis"
       ]
     },
+    "developer-tools-automation": {
+      "name": "Developer Tools & Automation Scripts",
+      "status": "in-development",
+      "description": "Infrastructure for managing Claude-generated utility scripts, preventing duplication and loss of work",
+      "implementation": [
+        "scripts/ (folder for utility scripts)",
+        "scripts/README-scripts.md (documentation)",
+        "ITERATION_LOG.md (git-controlled iteration history)",
+        ".claude/ITERATION_WORKFLOW.md (clarification workflow)"
+      ],
+      "purpose": [
+        "Prevent Claude from recreating scripts in future sessions",
+        "Enable pause/clarify/resume development cycles",
+        "Track all iterations, questions, and BA clarifications",
+        "Maintain institutional memory of design decisions"
+      ],
+      "scripts": {
+        "generate-features.py": {
+          "purpose": "Auto-generate features.json from FEATURES.md",
+          "usage": "python3 scripts/generate-features.py",
+          "when": "Runs automatically via git pre-commit hook",
+          "version": "1.0",
+          "status": "planned"
+        },
+        "update-iteration-log.py": {
+          "purpose": "Update ITERATION_LOG.md with clarifications and decisions",
+          "usage": "python3 scripts/update-iteration-log.py --feature='Name' --question='Q' --answer='A'",
+          "when": "After BA provides clarification",
+          "version": "1.0",
+          "status": "planned"
+        },
+        "sync-docs.py": {
+          "purpose": "Synchronize all documentation files",
+          "usage": "python3 scripts/sync-docs.py",
+          "when": "After major FEATURES.md updates",
+          "version": "1.0",
+          "status": "planned"
+        },
+        "validate-commits.py": {
+          "purpose": "Pre-commit validation for feature documentation",
+          "usage": "Called automatically by .git/hooks/pre-commit",
+          "when": "Before every commit",
+          "version": "1.0",
+          "status": "planned"
+        }
+      },
+      "files": {
+        "scripts/README-scripts.md": "Documentation for utility scripts",
+        "ITERATION_LOG.md": "Git-controlled journal of iterations and clarifications",
+        ".claude/ITERATION_WORKFLOW.md": "Workflow for handling requirement clarifications"
+      },
+      "documentation": [
+        "How to use scripts without duplication",
+        "How to request clarifications during development",
+        "How to resume after clarifications",
+        "How to document decisions in FEATURES.md"
+      ]
+    },
     "testing-infrastructure": {
       "name": "Testing Infrastructure",
       "status": "complete",
