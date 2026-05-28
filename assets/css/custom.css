@@ -162,3 +162,39 @@ a:focus-visible {
     outline: 2px solid #0366d6;
     outline-offset: 2px;
 }
+
+/* Content area spacing and border */
+main,
+.page-header,
+.main-content {
+    margin-left: 20px;
+    margin-right: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-left: 4px solid #0366d6;
+}
+
+/* Wrapper styling for proper spacing */
+.wrapper {
+    padding: 20px 30px;
+    max-width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+
+/* Ensure proper spacing for text content */
+article,
+.markdown-body,
+main {
+    padding: 20px 30px;
+    margin: 0 auto;
+    max-width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Page content styling */
+.page-content {
+    padding: 20px;
+}
