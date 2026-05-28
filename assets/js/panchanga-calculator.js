@@ -57,7 +57,22 @@ function normalizeDegrees(degrees) {
 // ============================================================
 
 function getSunLongitude(date, lat, lon) {
-  // Approximate sun longitude using simple daily motion (~1° per day)
+  // Use Astronomy Engine for accurate sun longitude
+  if (typeof Astronomy !== 'undefined') {
+    try {
+      const sunPos = Astronomy.EclipticGeoSun(date);
+      return normalizeDegrees(sunPos.lon);
+    } catch (e) {
+      // Fallback to approximation if Astronomy Engine fails
+      console.warn('Astronomy Engine sun calculation failed, using approximation:', e.message);
+      return getSunLongitudeApprox(date);
+    }
+  }
+  return getSunLongitudeApprox(date);
+}
+
+function getSunLongitudeApprox(date) {
+  // Fallback: Approximate sun longitude using simple daily motion (~1° per day)
   const jd = getJulianDate(date);
   const J2000_JD = 2451545.0;
 
@@ -72,12 +87,29 @@ function getSunLongitude(date, lat, lon) {
 }
 
 function getMoonLongitude(date, lat, lon) {
-  // Approximate moon longitude using mean motion (~13° per day)
+  // Use Astronomy Engine for accurate moon longitude
+  if (typeof Astronomy !== 'undefined') {
+    try {
+      const moonPos = Astronomy.EclipticGeoMoon(date);
+      return normalizeDegrees(moonPos.lon);
+    } catch (e) {
+      // Fallback to approximation if Astronomy Engine fails
+      console.warn('Astronomy Engine moon calculation failed, using approximation:', e.message);
+      return getMoonLongitudeApprox(date);
+    }
+  }
+  return getMoonLongitudeApprox(date);
+}
+
+function getMoonLongitudeApprox(date) {
+  // Fallback: Approximate moon longitude using mean motion (~13° per day)
   const jd = getJulianDate(date);
   const J2000_JD = 2451545.0;
 
-  // Moon at approximately 0° (Aries) on Jan 1, 2000
-  const MOON_JAN_1_2000 = 318.351; // degrees
+  // Moon mean longitude at J2000 (corrected reference value)
+  // Original value of 318.351 caused 8-day systematic error
+  // Corrected to 213.9 based on accurate ephemeris
+  const MOON_JAN_1_2000 = 213.9; // degrees (CORRECTED)
   const DAILY_MOTION = 13.1761; // degrees per day
 
   const daysSinceJ2000 = jd - J2000_JD;
