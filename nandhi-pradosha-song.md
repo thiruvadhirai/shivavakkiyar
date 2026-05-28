@@ -72,14 +72,6 @@ title: "Pradosha Nandhi Song"
 
 இந்த பாடல்கள் பிரதோஷ வேளையில் நந்தி இறைவனை வணங்க பயன்படுகிறது.
 
-**பிரயோஜனங்கள்:**
-- பாப நிவர்த்தி (பாவங்கள் நீங்குதல்)
-- பக்தி வர்த்धन (பக்தி அதிகரிதல்)
-- செல்வ வளர்ச்சி (செல்வம் பெருகுதல்)
-- மோக்ஷ பிராப்தி (முக்தி அடைதல்)
-- அனைத்து நன்மைகளும் பெறுதல்
-
----
 
 ## பிரதோஷ நந்தி பாடல் அனுஷ்ठानம்
 
@@ -93,7 +85,3 @@ title: "Pradosha Nandhi Song"
 3. "நந்தி, நந்தி" என்று மந்திரம் ஜபிக்கலாம்
 
 ---
-
-**Sources:**
-- [Arul Isai - Pradhosha Nandhi](https://arulisai.in/pradhosha-nandhi/)
-- [DivineInfoGuru - Pradosha Nandhi Ashtakam](https://divineinfoguru.com/devotional-songs-lyrics/lord-shiva-songs/)

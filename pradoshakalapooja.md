@@ -5,6 +5,7 @@ title: "Pradosha Kala pooja"
 ---
 * [ஶ்ரீ ருத்³ரம் நமகம் - Sri Rudram Namakam](namakkam.md)
 * [ஶ்ரீ ருத்³ரம் சமகம் - Sri Rudram Chamakam](chamakkam.md)
+* [சிவ புராணம் - Shiva Puranam](shivapuranam.md)
 * [புருஷ ஸூக்தம் - Purusa Suktham](purusasuktham.md)
 * [ஶ்ரீ ஸூக்தம் - Sri Suktam](srisuktam.md)
 * [Shivavakkiyar](shivavakkiyar.md)
