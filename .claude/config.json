@@ -1,0 +1,114 @@
+{
+  "project": {
+    "name": "Panchanga Calculator",
+    "description": "Hindu calendar (panchanga) calculator for Jekyll GitHub Pages site",
+    "version": "1.0.0-beta.2",
+    "primaryBranch": "main",
+    "developmentBranch": "feature/*"
+  },
+  "workflow": {
+    "enforceFeatureBranch": true,
+    "featureBranchPattern": "feature/.*",
+    "requireTestsBeforeCommit": true,
+    "requireCommitBeforeMerge": true,
+    "autoVersionIncrement": true,
+    "versionFile": "VERSION",
+    "versionFormat": "MAJOR.MINOR.PATCH-STAGE.NUM"
+  },
+  "testing": {
+    "unitTests": {
+      "enabled": true,
+      "command": "node tests/panchanga-calculator.test.js",
+      "framework": "vanilla-node",
+      "required": true
+    },
+    "integrationTests": {
+      "enabled": true,
+      "command": "node tests/panchanga-calculator-integration.test.js",
+      "framework": "vanilla-node",
+      "required": true
+    },
+    "e2eTests": {
+      "enabled": true,
+      "command": "npm run test:e2e",
+      "framework": "playwright",
+      "browsers": ["chromium", "firefox"],
+      "required": false,
+      "notes": "E2E tests require browser binaries - optional for local dev"
+    }
+  },
+  "development": {
+    "tools": {
+      "versionControl": "git",
+      "containerization": "podman",
+      "buildTool": "jekyll",
+      "packageManager": "npm"
+    },
+    "containers": {
+      "dev": {
+        "image": "saivamcloud-dev",
+        "port": "5080:4000",
+        "service": "jekyll-development-server"
+      },
+      "test": {
+        "image": "saivamcloud-test",
+        "framework": "playwright",
+        "service": "e2e-testing"
+      }
+    }
+  },
+  "documentation": {
+    "developmentGuide": ".claude/DEVELOPMENT.md",
+    "workflowGuide": ".claude/WORKFLOW.md",
+    "codebaseDoc": "CLAUDE.md",
+    "skillsDoc": "SKILLS.md",
+    "testingDoc": "TESTING.md",
+    "bugFixesDoc": "WIDGET_BUG_FIXES.md"
+  },
+  "rules": {
+    "commitWorkflow": {
+      "rule": "ALWAYS use feature branch workflow",
+      "steps": [
+        "1. Create feature branch: ./scripts/feature-workflow.sh start <name>",
+        "2. Make changes",
+        "3. Run tests: ./scripts/feature-workflow.sh test",
+        "4. Commit: ./scripts/feature-workflow.sh commit 'message'",
+        "5. Repeat 2-4 until feature complete",
+        "6. Finish: ./scripts/feature-workflow.sh finish",
+        "7. Push: ./scripts/push-to-github.sh"
+      ]
+    },
+    "noDirectMainChanges": {
+      "rule": "NEVER commit directly to main branch",
+      "reason": "Ensures code review and test validation before merge",
+      "enforcement": "Use feature branch workflow script only"
+    },
+    "testBeforeCommit": {
+      "rule": "ALWAYS run tests before committing",
+      "command": "./scripts/feature-workflow.sh test",
+      "why": "Prevents broken code from being committed"
+    },
+    "meaningfulCommitMessages": {
+      "rule": "Use descriptive commit messages",
+      "format": "First line: what and why. Body: detailed explanation if needed.",
+      "example": "Add E2E testing infrastructure with Playwright\n\n- Implement Playwright test suite\n- Add containerized testing\n- Configure code coverage"
+    }
+  },
+  "shortcuts": {
+    "startFeature": "./scripts/feature-workflow.sh start <name>",
+    "testCode": "./scripts/feature-workflow.sh test",
+    "commitChanges": "./scripts/feature-workflow.sh commit '<message>'",
+    "finishFeature": "./scripts/feature-workflow.sh finish",
+    "pushToGithub": "./scripts/push-to-github.sh",
+    "runDevServer": "podman-compose up -d saivamcloud-dev",
+    "runTests": "npm test",
+    "runE2ETests": "npm run test:e2e"
+  },
+  "reminders": {
+    "beforeMakingChanges": "Are you on a feature branch? If not, run: ./scripts/feature-workflow.sh start <feature-name>",
+    "afterMakingChanges": "Did you run tests? Run: ./scripts/feature-workflow.sh test",
+    "beforeCommitting": "Did you use the workflow script? Never use plain 'git commit'",
+    "beforeMerging": "Is feature complete? Use: ./scripts/feature-workflow.sh finish",
+    "beforePushing": "Did you merge to main first? Then: ./scripts/push-to-github.sh"
+  }
+}
