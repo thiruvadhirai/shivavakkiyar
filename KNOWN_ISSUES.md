@@ -1,40 +1,31 @@
 # Known Issues & Limitations
 
-## 1. Pradosha Date Calculation Discrepancy
+## 1. Pradosha Date Calculation Bug (FIXED ✅)
 
-**Issue:** Pradosha dates calculated by our implementation differ significantly from traditional Hindu calendar systems.
+**Status:** ✅ RESOLVED in commit 44a47031b
 
-**Details:**
-- Our calculation: June 5, June 19, July 4, July 19 (for Olympia, WA in 2026)
-- Traditional calendars: June 12, June 26, July 11 (drikpanchangam.com, prokerala.com)
-- Difference: ~7 days offset consistently
+**Issue:** Pradosha dates were 6-8 days off from correct astronomical values.
 
-**Root Cause:**
-Our implementation uses the **Drik Ayanamsa** (modern, scientific system) with specific astronomical calculation methods. Traditional Hindu calendars may use:
-- Different ayanamsa values or calculation precision
-- Different astronomical libraries or epoch references
-- Different time zone or local time handling
-- Different tithi calculation methodology (instant vs. average)
+**Root Cause (CRITICAL BUG):**
+1. **Missing Astronomy Engine Library** - Was in git history but not in current branch
+2. **Wrong Moon Reference Value** - MOON_JAN_1_2000 = 318.351° was systematically wrong
+3. **Crude Linear Approximation** - Moon calculation used simple daily motion formula
+   - This caused 8-day error: full moons on June 22 instead of June 14
 
-**Verification:**
-On June 12, 2026 (when traditional calendars show Pradosha):
-- Our calculation: Tithi 6 (Shashthi) throughout entire day
-- Traditional calendar: Tithi 13 (Triyodashi)
-- Never reaches Tithi 13 in our model
+**Evidence of Bug:**
+- June 14, 2026 (correct full moon): Our angle was 85.27° (should be ~180°)
+- June 22, 2026 (8 days later): Our angle was 182.80° (correct full moon angle)
+- Moon position was systematically offset by 8 days
 
-On June 5, 2026 (when our calculation shows Pradosha):
-- Our calculation: Tithi 28 at start of day ✅
-- Traditional calendar: Shows Tithi 6-7
+**The Fix (Commit 44a47031b):**
+1. **Restored Astronomy Engine** - NASA JPL accurate ephemeris (413KB library)
+2. **Updated Calculation Functions:**
+   - `getSunLongitude()` now uses `Astronomy.EclipticGeoSun()`
+   - `getMoonLongitude()` now uses `Astronomy.EclipticGeoMoon()`
+   - Falls back with corrected reference value (213.9° instead of 318.351°)
+3. **Result:** Pradosha dates now match traditional calendars (June 12, 26, July 11)
 
-**Status:** NOT A BUG - This is a **system-level difference** between astronomical calculation methods.
-
-**Workaround:**
-For alignment with traditional Hindu calendars, users should:
-1. Compare results against trusted sources (drikpanchangam.com, prokerala.com)
-2. Apply consistent offset if needed for their use case
-3. Note that Drik Ayanamsa provides modern scientific accuracy, not traditional alignment
-
-**Impact:** All Pradosha dates will be consistently ~7 days earlier than traditional systems
+**Impact:** ✅ Bug fixed - calculations now scientifically accurate
 
 ---
 
@@ -73,22 +64,24 @@ For alignment with traditional Hindu calendars, users should:
 
 ---
 
-## Recommendations
+## Future Enhancements
 
-1. **For Production Use:** 
-   - Clearly document that Drik Ayanamsa differs from traditional calendars
-   - Provide comparison tool to check against drikpanchangam.com
-   - Allow users to apply custom offset if needed
+1. **Multiple Ayanamsa Systems**
+   - Drik (modern, scientific) - Currently implemented ✅
+   - Lahiri (traditional) - For compatibility with Hindu calendar systems
+   - BV Raman - Alternative calculation method
+   - User selectable ayanamsa option
 
-2. **For Traditional Alignment:**
-   - Would need to support multiple ayanamsa systems (Drik, Lahiri, BV Raman, etc.)
-   - Requires significant refactoring of calculation engine
-   - Recommend as future enhancement
+2. **Additional Astronomical Data**
+   - Planetary positions and calculations
+   - Lunar apsis (apogee/perigee) data
+   - Eclipse predictions
+   - Historical panchang data
 
-3. **For Users:**
-   - Verify Pradosha dates against trusted traditional sources
-   - Use for general astronomical accuracy, not strict traditional alignment
-   - Report any other discrepancies not related to Pradosha dates
+3. **Localization & Timezone Improvements**
+   - Support more timezone variations
+   - Local time vs UTC options
+   - Regional calendar variants
 
 ---
 
