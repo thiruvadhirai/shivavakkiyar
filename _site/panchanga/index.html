@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Panchanga Calculator</title>
+
+  <!-- Cayman theme stylesheet (local copy) -->
+  <link rel="stylesheet" href="/assets/css/cayman-theme.css">
+
+  <!-- Custom CSS for burger menu and overrides -->
+  <link rel="stylesheet" href="/assets/css/custom.css">
+
+  <!-- Panchanga Calculator CSS -->
+  <link rel="stylesheet" href="/assets/css/panchanga.css">
+
+  <style>
+    /* Accessibility: Skip to main content link */
+    .skip-to-main {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: #0366d6;
+      color: white;
+      padding: 8px;
+      text-decoration: none;
+      z-index: 100;
+    }
+
+    .skip-to-main:focus {
+      top: 0;
+    }
+
+    /* Burger Menu & Sidebar */
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #f6f8fa;
+      border-bottom: 1px solid #e1e4e8;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .burger-btn {
+      background: none;
+      border: 2px solid transparent;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 4px 8px;
+      color: #24292e;
+      line-height: 1;
+      border-radius: 4px;
+      transition: border-color 0.2s;
+    }
+
+    .burger-btn:hover,
+    .burger-btn:focus {
+      color: #0366d6;
+      border-color: #0366d6;
+      outline: none;
+    }
+
+    .burger-btn:focus-visible {
+      outline: 2px solid #0366d6;
+      outline-offset: 2px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: #24292e;
+    }
+
+    /* Sidebar Navigation */
+    .nav-sidebar {
+      position: fixed;
+      left: -280px;
+      top: 0;
+      width: 280px;
+      height: 100vh;
+      background-color: #fff;
+      border-right: 1px solid #e1e4e8;
+      z-index: 999;
+      transition: left 0.3s ease-in-out;
+      overflow-y: auto;
+      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-sidebar.open {
+      left: 0;
+    }
+
+    .nav-close {
+      background: none;
+      border: 2px solid transparent;
+      font-size: 28px;
+      cursor: pointer;
+      padding: 12px 16px;
+      color: #24292e;
+      line-height: 1;
+      width: 100%;
+      text-align: right;
+      border-radius: 4px;
+      transition: border-color 0.2s;
+    }
+
+    .nav-close:hover,
+    .nav-close:focus {
+      color: #0366d6;
+      border-color: #0366d6;
+      outline: none;
+    }
+
+    .nav-close:focus-visible {
+      outline: 2px solid #0366d6;
+      outline-offset: -4px;
+    }
+
+    .nav-sidebar nav {
+      padding: 16px 0;
+    }
+
+    .nav-sidebar a {
+      display: block;
+      padding: 12px 16px;
+      color: #0366d6;
+      text-decoration: none;
+      border-left: 3px solid transparent;
+      transition: background-color 0.2s, border-left-color 0.2s;
+    }
+
+    .nav-sidebar a:hover,
+    .nav-sidebar a:focus {
+      background-color: #f6f8fa;
+      border-left-color: #0366d6;
+      outline: none;
+    }
+
+    .nav-sidebar a:focus-visible {
+      outline: 2px solid #0366d6;
+      outline-offset: -2px;
+    }
+
+    /* Overlay */
+    .nav-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 998;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .nav-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Main content adjustments */
+    main {
+      margin-top: 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 16px;
+      }
+
+      .nav-sidebar {
+        width: 250px;
+        left: -250px;
+      }
+    }
+
+    /* Reduced motion support */
+    @media (prefers-reduced-motion: reduce) {
+      .nav-sidebar,
+      .nav-overlay {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Accessibility: Skip to main content link -->
+  <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+  <!-- Header with Burger Menu -->
+  <header role="banner">
+    <button class="burger-btn" id="burger-btn" aria-label="Open navigation menu" aria-expanded="false" aria-controls="nav-sidebar">☰</button>
+    <h1>Saivam - Ancient Tamil & Other Spiritual Texts</h1>
+  </header>
+
+  <!-- Sidebar Navigation -->
+  <nav class="nav-sidebar" id="nav-sidebar" aria-label="Main navigation">
+    <button class="nav-close" id="nav-close" aria-label="Close navigation menu">×</button>
+    <nav>
+      
+        <a href="/namakkam/">Sri Rudram Namakam</a>
+      
+        <a href="/chamakkam/">Sri Rudram Chamakam</a>
+      
+        <a href="/shivapuranam/">Shiva Puranam</a>
+      
+        <a href="/purusasuktham/">Purusa Suktham</a>
+      
+        <a href="/srisuktam/">Sri Suktam</a>
+      
+        <a href="/shivavakkiyar/">Shivavakkiyam</a>
+      
+        <a href="/natarajarpathu/">Natarajar Pathu</a>
+      
+        <a href="/nindrathiruthandagam/">Nindra Thiruthandagam</a>
+      
+        <a href="/thiruneetrupathigam/">Thiruneetru Pathigam</a>
+      
+        <a href="/nandhi-pradosha-song/">Nandhi Pradosha Song</a>
+      
+        <a href="/mantrapushpam/">Mantra Pushpam</a>
+      
+        <a href="/arathi/">Arathi</a>
+      
+        <a href="/panchanga/">Panchanga Calculator</a>
+      
+        <a href="/pradoshakalapooja/">Pradosha Kala Pooja</a>
+      
+        <a href="/license/">License</a>
+      
+    </nav>
+  </nav>
+
+  <!-- Overlay -->
+  <div class="nav-overlay" id="nav-overlay" aria-hidden="true"></div>
+
+  <!-- Main content area -->
+  <main class="page-content" id="main-content" aria-label="Content">
+    <div class="wrapper">
+      <h1 id="-panchanga-calculator">🔮 Panchanga Calculator</h1>
+
+<p>A comprehensive Hindu calendar calculator that displays accurate daily astronomical data based on <strong>Drik Panchang</strong> (modern astronomical system).</p>
+
+<h2 id="what-is-panchanga">What is Panchanga?</h2>
+
+<p><strong>Panchanga</strong> (पञ्चाङ्ग) literally means “five limbs” in Sanskrit. It is the Hindu calendar system that consists of five essential elements:</p>
+
+<ol>
+  <li><strong>Tithi</strong> (तिथि) - Lunar day, based on the Moon’s position relative to the Sun</li>
+  <li><strong>Nakshatra</strong> (नक्षत्र) - Lunar mansion or constellation where the Moon resides</li>
+  <li><strong>Yoga</strong> (योग) - Auspiciousness combination determined by Sun and Moon positions</li>
+  <li><strong>Karana</strong> (करण) - Half-tithi period, used for determining auspicious times</li>
+  <li><strong>Vara</strong> (वार) - Day of the week</li>
+</ol>
+
+<p>Along with these five elements, the panchanga also includes:</p>
+<ul>
+  <li><strong>Sunrise &amp; Sunset times</strong> (location-specific)</li>
+  <li><strong>Rahu Kalam</strong> (राहु काल) - Inauspicious time period</li>
+  <li><strong>Abhijit Muhurta</strong> - Most auspicious time for starting ventures</li>
+  <li><strong>Planetary Hours</strong> (Hora)</li>
+</ul>
+
+<h2 id="about-drik-panchang">About Drik Panchang</h2>
+
+<p>This calculator uses <strong>Drik Panchang</strong>, a modern astronomical system that:</p>
+<ul>
+  <li>Is based on actual astronomical observations</li>
+  <li>Accounts for current Earth precession (Drik Ayanamsa)</li>
+  <li>Is more accurate than traditional Lahiri Ayanamsa for the 21st century</li>
+  <li>Uses NASA JPL ephemeris data for celestial calculations</li>
+</ul>
+
+<p><strong>Note:</strong> Results may differ slightly from traditional Tamil/Indian calendars which use the older Lahiri Ayanamsa system.</p>
+
+<h2 id="how-to-use">How to Use</h2>
+
+<ol>
+  <li><strong>Enter Location:</strong> Use “Auto-Detect” to automatically detect your location, or type a city, state, country, or ZIP code</li>
+  <li><strong>Select Date:</strong> Choose any date you want to calculate panchanga for</li>
+  <li><strong>Calculate:</strong> Click “Calculate Panchanga” to see all the astronomical data</li>
+  <li><strong>Save Location:</strong> Check the “Save location for next visit” option to remember your location</li>
+</ol>
+
+<!-- Panchanga Calculator Widget - Full Version -->
+<div class="panchanga-container" id="panchanga-full-widget">
+  <div class="panchanga-header">
+    <h2 class="panchanga-title">🔮 Panchanga Calculator</h2>
+    <p class="panchanga-subtitle">Hindu Calendar - Daily Astronomical Calculations</p>
+    <p class="panchanga-note">Based on Drik Panchang (modern astronomical system with accurate precession)</p>
+  </div>
+
+  <!-- Input Section -->
+  <div style="background: #f9f9f9; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
+    <!-- Location Input -->
+    <div class="panchanga-location-group">
+      <label class="panchanga-location-label">📍 Location</label>
+      <div class="panchanga-location-input-wrapper" style="position: relative;">
+        <input type="text" id="panchanga-location-input" class="panchanga-location-input" placeholder="Enter city, state, country, or ZIP code" style="flex: 1;" />
+        <button class="panchanga-btn" id="panchanga-auto-detect-btn">Auto-Detect</button>
+        <div id="panchanga-location-suggestions" class="panchanga-location-suggestions"></div>
+      </div>
+      <div class="panchanga-current-location" id="panchanga-current-location">
+        Click "Auto-Detect" or type a location to begin
+      </div>
+    </div>
+
+    <!-- Date Input -->
+    <div class="panchanga-date-group">
+      <label class="panchanga-date-label">📅 Date</label>
+      <input type="date" id="panchanga-date-input" class="panchanga-date-input" />
+    </div>
+
+    <!-- Calculate Button -->
+    <button class="panchanga-btn" id="panchanga-calculate-btn" style="width: 100%;">
+      Calculate Panchanga
+    </button>
+  </div>
+
+  <!-- Loading state -->
+  <div id="panchanga-full-loading" style="display: none; text-align: center; padding: 30px;">
+    <span class="panchanga-spinner"></span>
+    <p style="margin-top: 10px; color: #666;">Calculating panchanga...</p>
+  </div>
+
+  <!-- Error state -->
+  <div id="panchanga-full-error" style="display: none;" class="panchanga-error"></div>
+
+  <!-- Results -->
+  <div id="panchanga-full-results" style="display: none;">
+    <!-- Header with date and location -->
+    <div style="background: #f0f8ff; padding: 12px; border-left: 4px solid #0366d6; border-radius: 4px; margin-bottom: 20px;">
+      <div style="font-weight: 600; color: #0366d6; margin-bottom: 5px;" id="panchanga-result-date">--</div>
+      <div style="font-size: 12px; color: #666;" id="panchanga-result-location">--</div>
+      <div style="font-size: 11px; color: #999; margin-top: 5px;">Ayanamsa: <span id="panchanga-result-ayanamsa">--</span>°</div>
+    </div>
+
+    <!-- Main Panchanga Grid -->
+    <div class="panchanga-grid">
+      <!-- Tithi -->
+      <div class="panchanga-card panchanga-tithi">
+        <div class="panchanga-card-title">तिथि - Tithi (Lunar Day)</div>
+        <div class="panchanga-card-value" id="result-tithi-name">--</div>
+        <div class="panchanga-card-subtitle" id="result-tithi-phase">--</div>
+        <div class="panchanga-progress">
+          <div class="panchanga-progress-bar" id="result-tithi-progress" style="width: 0%"></div>
+        </div>
+        <div class="panchanga-progress-label" id="result-tithi-percent">0% complete</div>
+      </div>
+
+      <!-- Nakshatra -->
+      <div class="panchanga-card panchanga-nakshatra">
+        <div class="panchanga-card-title">नक्षत्र - Nakshatra (Star)</div>
+        <div class="panchanga-card-value" id="result-nakshatra-name">--</div>
+        <div class="panchanga-card-subtitle" id="result-nakshatra-tamil">--</div>
+        <div style="font-size: 12px; color: #999; margin-top: 8px;">
+          <strong>Zodiac:</strong> <span id="result-nakshatra-degree">--</span>
+        </div>
+        <div class="panchanga-progress">
+          <div class="panchanga-progress-bar" id="result-nakshatra-progress" style="width: 0%; background-color: #6f42c1;"></div>
+        </div>
+        <div class="panchanga-progress-label" id="result-nakshatra-percent">0% complete</div>
+      </div>
+
+      <!-- Yoga -->
+      <div class="panchanga-card panchanga-yoga">
+        <div class="panchanga-card-title">योग - Yoga</div>
+        <div class="panchanga-card-value" id="result-yoga-name">--</div>
+        <div class="panchanga-card-subtitle" id="result-yoga-tamil">--</div>
+        <div style="font-size: 11px; color: #999; margin-top: 8px;">Auspiciousness combination</div>
+      </div>
+
+      <!-- Karana -->
+      <div class="panchanga-card panchanga-karana">
+        <div class="panchanga-card-title">करण - Karana</div>
+        <div class="panchanga-card-value" id="result-karana-name">--</div>
+        <div class="panchanga-card-subtitle" id="result-karana-tamil">--</div>
+        <div style="font-size: 11px; color: #999; margin-top: 8px;">Half-tithi period</div>
+      </div>
+
+      <!-- Hora -->
+      <div class="panchanga-card panchanga-hora">
+        <div class="panchanga-card-title">होरा - Hora (Planetary Hour)</div>
+        <div class="panchanga-card-value" id="result-hora-planet">--</div>
+        <div class="panchanga-card-subtitle" id="result-hora-number">Hour #--</div>
+        <div style="font-size: 11px; color: #999; margin-top: 8px;">Current ruling planet</div>
+      </div>
+
+      <!-- Rahu Kalam -->
+      <div class="panchanga-card panchanga-rahukkalam">
+        <div class="panchanga-card-title">⚠️ राहु काल - Rahu Kalam</div>
+        <div class="panchanga-card-subtitle">Inauspicious Time</div>
+        <div style="font-weight: 600; margin-top: 8px; color: #d73a49;" id="result-rahu-time">--:-- to --:--</div>
+        <div style="font-size: 11px; color: #999; margin-top: 5px;">Avoid starting new ventures</div>
+      </div>
+    </div>
+
+    <!-- Times Section -->
+    <div class="panchanga-times">
+      <div class="panchanga-times-label">☀️ Important Times</div>
+      <div class="panchanga-times-grid">
+        <div class="panchanga-time-item">
+          <div class="panchanga-time-label">🌅 Sunrise</div>
+          <div class="panchanga-time-value" id="result-sunrise">--:--</div>
+        </div>
+        <div class="panchanga-time-item">
+          <div class="panchanga-time-label">🌇 Sunset</div>
+          <div class="panchanga-time-value" id="result-sunset">--:--</div>
+        </div>
+        <div class="panchanga-time-item">
+          <div class="panchanga-time-label">✨ Abhijit Muhurta</div>
+          <div class="panchanga-time-value" id="result-abhijit">--:-- to --:--</div>
+          <div style="font-size: 11px; color: #999; margin-top: 3px;">Most auspicious time</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pradosha Information -->
+    <div class="panchanga-pradosha">
+      <div class="panchanga-pradosha-title">🔯 Next Pradosha Dates</div>
+      <ul class="panchanga-pradosha-list" id="result-pradosha-list">
+        <li style="text-align: center; color: #999;">Loading...</li>
+      </ul>
+    </div>
+
+    <!-- Celestial Data -->
+    <div style="background: #f6f8fa; padding: 15px; border-radius: 4px; margin-top: 20px;">
+      <div style="font-weight: 600; color: #24292e; margin-bottom: 12px; font-size: 13px;">📊 Celestial Data (Sidereal)</div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+        <div>
+          <div style="color: #666; font-size: 12px;">Sun's Longitude</div>
+          <div style="font-weight: 600; color: #24292e; margin-top: 3px;" id="result-sun-lon">--°</div>
+        </div>
+        <div>
+          <div style="color: #666; font-size: 12px;">Moon's Longitude</div>
+          <div style="font-weight: 600; color: #24292e; margin-top: 3px;" id="result-moon-lon">--°</div>
+        </div>
+        <div>
+          <div style="color: #666; font-size: 12px;">Drik Ayanamsa</div>
+          <div style="font-weight: 600; color: #24292e; margin-top: 3px;" id="result-drik-ayanamsa">--°</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Location & Save Options -->
+    <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #e1e4e8; display: flex; gap: 10px; align-items: center;">
+      <label style="flex: 1; font-size: 13px; color: #666;">
+        <input type="checkbox" id="panchanga-save-location-checkbox" checked="" />
+        Save location for next visit
+      </label>
+      <button class="panchanga-btn panchanga-btn-secondary panchanga-btn-small" id="panchanga-clear-cache-btn">
+        Clear Cache
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Wait for required libraries to load
+  async function waitForLibraries(timeout = 10000) {
+    const startTime = Date.now();
+    while (typeof PanchangaCalculator === 'undefined' || typeof LocationManager === 'undefined') {
+      if (Date.now() - startTime > timeout) {
+        throw new Error('Required libraries not loaded. Please ensure Astronomy Engine CDN and calculator scripts are included.');
+      }
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+  }
+
+  async function initFullPanchangaWidget() {
+    const widget = document.getElementById('panchanga-full-widget');
+    const loadingEl = document.getElementById('panchanga-full-loading');
+    const errorEl = document.getElementById('panchanga-full-error');
+    const resultsEl = document.getElementById('panchanga-full-results');
+
+    try {
+      // Wait for required libraries to load
+      await waitForLibraries();
+
+    const calculator = new PanchangaCalculator();
+    const locationManager = new LocationManager();
+
+    await calculator.init();
+
+    // Set date to today
+    const today = new Date();
+    document.getElementById('panchanga-date-input').valueAsDate = today;
+
+    // Restore saved location
+    const savedLocation = locationManager.getStoredLocation();
+    if (savedLocation) {
+      document.getElementById('panchanga-location-input').value = savedLocation.name;
+      document.getElementById('panchanga-current-location').textContent = `📍 ${savedLocation.name} (${savedLocation.latitude.toFixed(4)}, ${savedLocation.longitude.toFixed(4)})`;
+    }
+
+    // Location input autocomplete
+    let selectedLocation = savedLocation;
+    const locationInput = document.getElementById('panchanga-location-input');
+    const suggestionsDiv = document.getElementById('panchanga-location-suggestions');
+
+    locationInput.addEventListener('input', async (e) => {
+      const query = e.target.value;
+      if (query.length < 2) {
+        suggestionsDiv.classList.remove('active');
+        return;
+      }
+
+      const results = await locationManager.geocodeLocation(query);
+      suggestionsDiv.innerHTML = results.map((loc, idx) =>
+        `<div class="panchanga-suggestion-item" data-idx="${idx}">${loc.name}</div>`
+      ).join('');
+
+      suggestionsDiv.classList.add('active');
+
+      document.querySelectorAll('.panchanga-suggestion-item').forEach((item, idx) => {
+        item.onclick = async () => {
+          const results = await locationManager.geocodeLocation(query);
+          selectedLocation = results[item.dataset.idx];
+          locationInput.value = selectedLocation.name;
+          suggestionsDiv.classList.remove('active');
+        };
+      });
+    });
+
+    // Auto-detect button
+    document.getElementById('panchanga-auto-detect-btn').onclick = async () => {
+      const location = await locationManager.detectUserLocation();
+      if (location) {
+        selectedLocation = location;
+        locationInput.value = location.name;
+        document.getElementById('panchanga-current-location').textContent = `📍 ${location.name} (${location.latitude.toFixed(4)}, ${location.longitude.toFixed(4)})`;
+      } else {
+        alert('Could not detect location. Please enable location access or enter manually.');
+      }
+    };
+
+    // Calculate button
+    document.getElementById('panchanga-calculate-btn').onclick = async () => {
+      if (!selectedLocation && !locationInput.value) {
+        alert('Please enter a location or use Auto-Detect');
+        return;
+      }
+
+      // If location input has new value, geocode it
+      if (locationInput.value && (!selectedLocation || selectedLocation.name !== locationInput.value)) {
+        const results = await locationManager.geocodeLocation(locationInput.value);
+        if (results.length === 0) {
+          alert('Location not found. Please try again.');
+          return;
+        }
+        selectedLocation = results[0];
+      }
+
+      if (!selectedLocation) {
+        alert('Please select a location');
+        return;
+      }
+
+      try {
+        loadingEl.style.display = 'block';
+        resultsEl.style.display = 'none';
+        errorEl.style.display = 'none';
+
+        const dateValue = document.getElementById('panchanga-date-input').valueAsDate;
+        if (!dateValue) {
+          throw new Error('Please select a date');
+        }
+
+        // Calculate panchanga
+        const panchanga = await calculator.calculateFullPanchanga(
+          dateValue,
+          selectedLocation.latitude,
+          selectedLocation.longitude
+        );
+
+        const p = panchanga.panchanga;
+
+        // Update results header
+        document.getElementById('panchanga-result-date').textContent = `📅 ${calculator.formatDate(dateValue)}`;
+        document.getElementById('panchanga-result-location').textContent = `📍 ${selectedLocation.name}`;
+        document.getElementById('panchanga-result-ayanamsa').textContent = panchanga.ayanamsa.toFixed(2);
+
+        // Tithi
+        document.getElementById('result-tithi-name').textContent = p.tithi.name;
+        document.getElementById('result-tithi-phase').textContent = p.tithi.phase.toUpperCase();
+        document.getElementById('result-tithi-progress').style.width = p.tithi.percent + '%';
+        document.getElementById('result-tithi-percent').textContent = p.tithi.percent + '% complete';
+
+        // Nakshatra
+        document.getElementById('result-nakshatra-name').textContent = p.nakshatra.name;
+        document.getElementById('result-nakshatra-tamil').textContent = p.nakshatra.tamil;
+        document.getElementById('result-nakshatra-degree').textContent = p.nakshatra.degree;
+        document.getElementById('result-nakshatra-progress').style.width = p.nakshatra.percent + '%';
+        document.getElementById('result-nakshatra-percent').textContent = p.nakshatra.percent + '% complete';
+
+        // Yoga
+        document.getElementById('result-yoga-name').textContent = p.yoga.name;
+        document.getElementById('result-yoga-tamil').textContent = p.yoga.tamil;
+
+        // Karana
+        document.getElementById('result-karana-name').textContent = p.karana.name;
+        document.getElementById('result-karana-tamil').textContent = p.karana.tamil;
+
+        // Hora
+        document.getElementById('result-hora-planet').textContent = p.hora.planet;
+        document.getElementById('result-hora-number').textContent = `Hour #${p.hora.number}`;
+
+        // Rahu Kalam
+        document.getElementById('result-rahu-time').textContent = `${p.rahuKalam.startTime} to ${p.rahuKalam.endTime}`;
+
+        // Times
+        document.getElementById('result-sunrise').textContent = panchanga.times.sunrise.timeIST;
+        document.getElementById('result-sunset').textContent = panchanga.times.sunset.timeIST;
+        document.getElementById('result-abhijit').textContent = `${panchanga.times.abhijitMuhurta.startTime} to ${panchanga.times.abhijitMuhurta.endTime}`;
+
+        // Celestial Data
+        document.getElementById('result-sun-lon').textContent = panchanga.celestial.sunLongitude.toFixed(2) + '°';
+        document.getElementById('result-moon-lon').textContent = panchanga.celestial.moonLongitude.toFixed(2) + '°';
+        document.getElementById('result-drik-ayanamsa').textContent = panchanga.ayanamsa.toFixed(2) + '°';
+
+        // Pradosha dates
+        const nextPradosha = await calculator.findNextPradosha(
+          dateValue,
+          selectedLocation.latitude,
+          selectedLocation.longitude
+        );
+        const pradoshaListEl = document.getElementById('result-pradosha-list');
+        pradoshaListEl.innerHTML = nextPradosha.slice(0, 3).map((pd) => `
+          <li class="panchanga-pradosha-item">
+            <div class="panchanga-pradosha-date">${calculator.formatDate(pd.date)}</div>
+            <div class="panchanga-pradosha-time">Tithi: ${pd.tithi.name} (${pd.tithi.phase.toUpperCase()})</div>
+            <div class="panchanga-pradosha-time" style="margin-top: 3px;">Pradosha: ${calculator.formatTime(pd.pradoshaStart.getHours(), pd.pradoshaStart.getMinutes())} to ${calculator.formatTime(pd.pradoshaEnd.getHours(), pd.pradoshaEnd.getMinutes())}</div>
+          </li>
+        `).join('');
+
+        loadingEl.style.display = 'none';
+        resultsEl.style.display = 'block';
+
+        // Save location if checkbox is checked
+        if (document.getElementById('panchanga-save-location-checkbox').checked) {
+          locationManager.saveLocationToStorage(selectedLocation);
+        }
+
+      } catch (error) {
+        console.error('Calculation error:', error);
+        loadingEl.style.display = 'none';
+        errorEl.style.display = 'block';
+        errorEl.textContent = '❌ Error: ' + error.message;
+      }
+    };
+
+    // Clear cache button
+    document.getElementById('panchanga-clear-cache-btn').onclick = () => {
+      if (confirm('Clear all cached locations and geocoding data?')) {
+        locationManager.clearAllCache();
+        locationInput.value = '';
+        selectedLocation = null;
+        document.getElementById('panchanga-current-location').textContent = 'Cache cleared. Click "Auto-Detect" to begin.';
+      }
+    };
+
+    } catch (error) {
+      console.error('Widget initialization error:', error);
+      loadingEl.style.display = 'none';
+      errorEl.style.display = 'block';
+      errorEl.textContent = '❌ Initialization Error: ' + error.message;
+    }
+  }
+
+  // Run on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFullPanchangaWidget);
+  } else {
+    initFullPanchangaWidget();
+  }
+</script>
+
+<h2 id="understanding-each-element">Understanding Each Element</h2>
+
+<h3 id="tithi-lunar-day">Tithi (Lunar Day)</h3>
+<p>The lunar day is calculated based on the angular distance between the Sun and Moon. Each tithi spans 12 degrees of arc. A tithi typically lasts 19-26 hours.</p>
+
+<h3 id="nakshatra-lunar-mansion">Nakshatra (Lunar Mansion)</h3>
+<p>There are 27 nakshatras, each spanning 13.33 degrees of the zodiac. The nakshatra where the Moon resides on a given day influences personality traits and auspiciousness.</p>
+
+<h3 id="yoga">Yoga</h3>
+<p>There are 27 yogas calculated from the combined longitudes of the Sun and Moon. Each yoga lasts approximately 13.33 degrees.</p>
+
+<h3 id="karana">Karana</h3>
+<p>Karanas are half-tithis (60 in total), used in timing important activities like pujas and muhurtas.</p>
+
+<h3 id="rahu-kalam">Rahu Kalam</h3>
+<p>An inauspicious time period of 1.5 hours that occurs daily. Timing varies by day of the week. Avoid starting important activities during this time.</p>
+
+<h3 id="abhijit-muhurta">Abhijit Muhurta</h3>
+<p>An auspicious time period of about 48 minutes centered around noon. This is an excellent time for starting new ventures, ceremonies, and important tasks.</p>
+
+<h2 id="location-calculation">Location Calculation</h2>
+
+<p>All times are calculated based on your specific location:</p>
+<ul>
+  <li><strong>Sunrise/Sunset times</strong> adjust based on latitude and longitude</li>
+  <li><strong>Rahu Kalam and Abhijit Muhurta</strong> are location-specific</li>
+  <li>Times are displayed in <strong>IST (Indian Standard Time)</strong> for convenience</li>
+</ul>
+
+<p>Your location is saved in your browser’s local storage (not sent to any server) for future visits.</p>
+
+<h2 id="important-notes">Important Notes</h2>
+
+<ul>
+  <li>✅ All calculations are performed in your browser - no data is sent to external servers (except Nominatim for location lookup)</li>
+  <li>✅ Astronomy Engine uses NASA JPL ephemeris data, the gold standard for astronomical calculations</li>
+  <li>✅ Drik Ayanamsa provides ~±1-3 minutes accuracy for tithi and nakshatra calculations</li>
+  <li>⚠️ Results are astronomically accurate but may differ from traditional regional calendars</li>
+  <li>⚠️ For precise muhurta selection for important ceremonies, consult with a qualified Hindu priest or traditional astrologer</li>
+</ul>
+
+<hr />
+
+<p><strong>Curious about Pradosha?</strong> <a href="pradoshakalapooja.md">Learn about Pradosha Kalam</a> - the most auspicious time for Shiva worship.</p>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <span class="site-footer-credits">
+      <a href="/license">Licensed under Creative Commons (CC0)</a>
+    </span>
+  </footer>
+
+  <script>
+    const burgerBtn = document.getElementById('burger-btn');
+    const navClose = document.getElementById('nav-close');
+    const navSidebar = document.getElementById('nav-sidebar');
+    const navOverlay = document.getElementById('nav-overlay');
+    let isNavOpen = false;
+
+    function openNav() {
+      navSidebar.classList.add('open');
+      navOverlay.classList.add('open');
+      isNavOpen = true;
+      burgerBtn.setAttribute('aria-expanded', 'true');
+      // Move focus to close button
+      navClose.focus();
+    }
+
+    function closeNav() {
+      navSidebar.classList.remove('open');
+      navOverlay.classList.remove('open');
+      isNavOpen = false;
+      burgerBtn.setAttribute('aria-expanded', 'false');
+      // Return focus to burger button
+      burgerBtn.focus();
+    }
+
+    burgerBtn.addEventListener('click', () => {
+      isNavOpen ? closeNav() : openNav();
+    });
+
+    navClose.addEventListener('click', closeNav);
+    navOverlay.addEventListener('click', closeNav);
+
+    // Close sidebar when a link is clicked
+    document.querySelectorAll('.nav-sidebar a').forEach(link => {
+      link.addEventListener('click', closeNav);
+    });
+
+    // Keyboard accessibility: ESC to close, Tab management
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isNavOpen) {
+        closeNav();
+      }
+    });
+
+    // Trap focus within sidebar when open
+    document.addEventListener('keydown', (e) => {
+      if (!isNavOpen || e.key !== 'Tab') return;
+
+      const focusableElements = navSidebar.querySelectorAll('button, a');
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      if (e.shiftKey && document.activeElement === firstElement) {
+        e.preventDefault();
+        lastElement.focus();
+      } else if (!e.shiftKey && document.activeElement === lastElement) {
+        e.preventDefault();
+        firstElement.focus();
+      }
+    });
+  </script>
+
+  <!-- Astronomy Engine - NASA JPL Ephemeris (local copy) -->
+  <script src="/assets/js/astronomy.browser.js" defer></script>
+
+  <!-- Astronomy Engine - Fallback CDN if primary fails -->
+  <script>
+    // Try alternative CDN if primary fails
+    window.addEventListener('DOMContentLoaded', function() {
+      if (typeof Astronomy === 'undefined') {
+        console.log('Primary CDN loading, retrying...');
+        // Give it 2 more seconds then try alternative
+        setTimeout(function() {
+          if (typeof Astronomy === 'undefined') {
+            console.error('Astronomy Engine: Failed to load local library.');
+
+            // Show warning message
+            var warningDiv = document.createElement('div');
+            warningDiv.style.cssText = 'background:#fff5f5; border:2px solid #d73a49; padding:15px; margin:15px; border-radius:4px; color:#d73a49; font-family:monospace; font-size:13px;';
+            warningDiv.innerHTML = '<strong>⚠️ Astronomy Engine Load Error</strong><br><br>' +
+              'The Astronomy Engine library failed to load.<br><br>' +
+              '<strong>Troubleshooting:</strong><br>' +
+              '• Check browser console (F12 → Console) for detailed errors<br>' +
+              '• Verify /assets/js/astronomy.browser.js is accessible<br>' +
+              '• Try refreshing the page (Ctrl+R)<br><br>' +
+              'The calculator requires this library to function.';
+
+            var containers = document.querySelectorAll('[id*="panchanga"]');
+            if (containers.length > 0) {
+              containers[0].parentNode.insertBefore(warningDiv, containers[0]);
+            } else {
+              document.body.insertBefore(warningDiv, document.body.firstChild);
+            }
+          }
+        }, 2000);
+      }
+    });
+  </script>
+
+  <!-- Panchanga Calculator Scripts (defer for proper loading order) -->
+  <script src="/assets/js/location-manager.js" defer></script>
+  <script src="/assets/js/panchanga-calculator.js" defer></script>
+
+  <!-- Version Footer -->
+  <footer style="margin-top: 40px; padding: 20px; border-top: 1px solid #e1e4e8; text-align: center; font-size: 12px; color: #666;">
+    <div>Panchanga Calculator v1.0.0-beta.2 • Updated: 2026-05-28</div>
+  </footer>
+
+</body>
+</html>

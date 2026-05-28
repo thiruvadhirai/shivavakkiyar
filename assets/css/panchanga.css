@@ -1,0 +1,541 @@
+/* Panchanga Calculator Styling */
+
+.panchanga-container {
+  margin: 20px 0;
+  padding: 20px;
+  background: #f9f9f9;
+  border-left: 5px solid #0366d6;
+  border-radius: 4px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* ==================== HEADER & TITLE ==================== */
+.panchanga-header {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #0366d6;
+}
+
+.panchanga-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #24292e;
+  margin: 0 0 5px 0;
+}
+
+.panchanga-subtitle {
+  font-size: 13px;
+  color: #666;
+  margin: 0;
+}
+
+.panchanga-note {
+  font-size: 11px;
+  color: #999;
+  margin-top: 5px;
+  font-style: italic;
+}
+
+/* ==================== LOCATION INPUT ==================== */
+.panchanga-location-group {
+  margin-bottom: 20px;
+}
+
+.panchanga-location-label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #24292e;
+  font-size: 14px;
+}
+
+.panchanga-location-input-wrapper {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.panchanga-location-input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.panchanga-location-input:focus {
+  outline: none;
+  border-color: #0366d6;
+  box-shadow: 0 0 0 3px rgba(3, 102, 214, 0.1);
+}
+
+.panchanga-location-suggestions {
+  display: none;
+  position: absolute;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 10;
+  width: 100%;
+  margin-top: -2px;
+}
+
+.panchanga-location-suggestions.active {
+  display: block;
+}
+
+.panchanga-suggestion-item {
+  padding: 10px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 13px;
+  transition: background-color 0.2s;
+}
+
+.panchanga-suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.panchanga-suggestion-item:hover {
+  background-color: #f6f8fa;
+  color: #0366d6;
+}
+
+.panchanga-btn {
+  padding: 10px 16px;
+  background-color: #0366d6;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-family: inherit;
+}
+
+.panchanga-btn:hover {
+  background-color: #0256c7;
+}
+
+.panchanga-btn:focus {
+  outline: 2px solid #0366d6;
+  outline-offset: 2px;
+}
+
+.panchanga-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.panchanga-btn-secondary {
+  background-color: #6a737d;
+}
+
+.panchanga-btn-secondary:hover {
+  background-color: #586069;
+}
+
+.panchanga-btn-small {
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+.panchanga-btn-text {
+  background: none;
+  color: #0366d6;
+  border: none;
+  padding: 4px 8px;
+  font-size: 13px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.panchanga-btn-text:hover {
+  color: #0256c7;
+}
+
+.panchanga-current-location {
+  font-size: 12px;
+  color: #666;
+  margin-top: 8px;
+}
+
+/* ==================== DATE PICKER ==================== */
+.panchanga-date-group {
+  margin-bottom: 20px;
+}
+
+.panchanga-date-label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #24292e;
+  font-size: 14px;
+}
+
+.panchanga-date-input {
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: inherit;
+  max-width: 200px;
+}
+
+.panchanga-date-input:focus {
+  outline: none;
+  border-color: #0366d6;
+  box-shadow: 0 0 0 3px rgba(3, 102, 214, 0.1);
+}
+
+/* ==================== RESULTS DISPLAY ==================== */
+.panchanga-results {
+  margin-top: 20px;
+}
+
+.panchanga-results.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.panchanga-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #0366d6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.panchanga-error {
+  background-color: #fff5f5;
+  border: 1px solid #d73a49;
+  border-radius: 4px;
+  padding: 12px;
+  color: #d73a49;
+  font-size: 13px;
+  margin-bottom: 15px;
+}
+
+.panchanga-info {
+  background-color: #f0f8ff;
+  border: 1px solid #0366d6;
+  border-radius: 4px;
+  padding: 12px;
+  color: #0366d6;
+  font-size: 13px;
+  margin-bottom: 15px;
+}
+
+/* ==================== RESULT GRID ==================== */
+.panchanga-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.panchanga-card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 15px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.2s;
+}
+
+.panchanga-card:hover {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.panchanga-card-title {
+  font-weight: 600;
+  font-size: 13px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+}
+
+.panchanga-card-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: #24292e;
+  margin-bottom: 5px;
+}
+
+.panchanga-card-subtitle {
+  font-size: 12px;
+  color: #999;
+}
+
+/* Color coding for elements */
+.panchanga-tithi { border-left: 4px solid #0366d6; }
+.panchanga-nakshatra { border-left: 4px solid #6f42c1; }
+.panchanga-yoga { border-left: 4px solid #008000; }
+.panchanga-karana { border-left: 4px solid #ff6b6b; }
+.panchanga-hora { border-left: 4px solid #ff9800; }
+.panchanga-rahukkalam { border-left: 4px solid #d73a49; }
+.panchanga-abhijit { border-left: 4px solid #28a745; }
+
+/* ==================== PROGRESS BAR ==================== */
+.panchanga-progress {
+  width: 100%;
+  height: 8px;
+  background-color: #e1e4e8;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.panchanga-progress-bar {
+  height: 100%;
+  background-color: #0366d6;
+  transition: width 0.3s ease;
+}
+
+.panchanga-progress-label {
+  font-size: 11px;
+  color: #999;
+  margin-top: 4px;
+}
+
+/* ==================== TIMES SECTION ==================== */
+.panchanga-times {
+  background: #f6f8fa;
+  border-radius: 4px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.panchanga-times-label {
+  font-weight: 600;
+  font-size: 13px;
+  color: #24292e;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.panchanga-times-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.panchanga-time-item {
+  font-size: 13px;
+}
+
+.panchanga-time-label {
+  color: #666;
+  margin-bottom: 3px;
+}
+
+.panchanga-time-value {
+  font-weight: 600;
+  color: #24292e;
+  font-size: 14px;
+}
+
+/* ==================== PRADOSHA SECTION ==================== */
+.panchanga-pradosha {
+  background: #fff8e1;
+  border: 2px solid #ff9800;
+  border-radius: 4px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.panchanga-pradosha-title {
+  font-weight: 600;
+  color: #ff6f00;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.panchanga-pradosha-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.panchanga-pradosha-item {
+  padding: 10px;
+  background: white;
+  border-left: 3px solid #ff9800;
+  margin-bottom: 8px;
+  border-radius: 2px;
+  font-size: 13px;
+}
+
+.panchanga-pradosha-date {
+  font-weight: 600;
+  color: #24292e;
+  margin-bottom: 3px;
+}
+
+.panchanga-pradosha-time {
+  color: #666;
+  font-size: 12px;
+}
+
+/* ==================== EXPAND/COLLAPSE ==================== */
+.panchanga-expandable {
+  margin-top: 15px;
+}
+
+.panchanga-expand-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  color: #0366d6;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.panchanga-expand-btn:hover {
+  color: #0256c7;
+}
+
+.panchanga-expand-icon {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  transition: transform 0.2s;
+}
+
+.panchanga-expand-icon.open {
+  transform: rotate(180deg);
+}
+
+.panchanga-expandable-content {
+  display: none;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #e1e4e8;
+}
+
+.panchanga-expandable-content.open {
+  display: block;
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 768px) {
+  .panchanga-container {
+    padding: 15px;
+    margin: 15px 0;
+  }
+
+  .panchanga-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .panchanga-title {
+    font-size: 18px;
+  }
+
+  .panchanga-card-value {
+    font-size: 16px;
+  }
+
+  .panchanga-location-input-wrapper {
+    flex-direction: column;
+  }
+
+  .panchanga-times-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .panchanga-date-input {
+    max-width: 100%;
+  }
+}
+
+/* ==================== ACCESSIBILITY ==================== */
+.panchanga-btn:focus-visible,
+.panchanga-location-input:focus-visible,
+.panchanga-date-input:focus-visible,
+.panchanga-expand-btn:focus-visible,
+.panchanga-suggestion-item:focus-visible {
+  outline: 2px solid #0366d6;
+  outline-offset: 2px;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .panchanga-progress-bar,
+  .panchanga-expand-icon,
+  .panchanga-card,
+  .panchanga-btn {
+    transition: none !important;
+  }
+
+  .panchanga-spinner {
+    animation: none;
+    border-top-color: #ccc;
+  }
+}
+
+/* High contrast support */
+@media (prefers-contrast: more) {
+  .panchanga-card {
+    border-width: 2px;
+  }
+
+  .panchanga-btn,
+  .panchanga-location-input,
+  .panchanga-date-input {
+    border-width: 2px;
+  }
+}
+
+/* Dark mode support (if needed in future) */
+@media (prefers-color-scheme: dark) {
+  .panchanga-container {
+    background: #1c2128;
+    color: #c9d1d9;
+  }
+
+  .panchanga-card {
+    background: #0d1117;
+    border-color: #30363d;
+  }
+
+  .panchanga-card-value {
+    color: #e6edf3;
+  }
+
+  .panchanga-card-title,
+  .panchanga-card-subtitle {
+    color: #8b949e;
+  }
+
+  .panchanga-times {
+    background: #161b22;
+  }
+
+  .panchanga-location-input,
+  .panchanga-date-input {
+    background: #0d1117;
+    border-color: #30363d;
+    color: #c9d1d9;
+  }
+}

@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Sri Rudram Chamakam</title>
+
+  <!-- Cayman theme stylesheet (local copy) -->
+  <link rel="stylesheet" href="/assets/css/cayman-theme.css">
+
+  <!-- Custom CSS for burger menu and overrides -->
+  <link rel="stylesheet" href="/assets/css/custom.css">
+
+  <!-- Panchanga Calculator CSS -->
+  <link rel="stylesheet" href="/assets/css/panchanga.css">
+
+  <style>
+    /* Accessibility: Skip to main content link */
+    .skip-to-main {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: #0366d6;
+      color: white;
+      padding: 8px;
+      text-decoration: none;
+      z-index: 100;
+    }
+
+    .skip-to-main:focus {
+      top: 0;
+    }
+
+    /* Burger Menu & Sidebar */
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #f6f8fa;
+      border-bottom: 1px solid #e1e4e8;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .burger-btn {
+      background: none;
+      border: 2px solid transparent;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 4px 8px;
+      color: #24292e;
+      line-height: 1;
+      border-radius: 4px;
+      transition: border-color 0.2s;
+    }
+
+    .burger-btn:hover,
+    .burger-btn:focus {
+      color: #0366d6;
+      border-color: #0366d6;
+      outline: none;
+    }
+
+    .burger-btn:focus-visible {
+      outline: 2px solid #0366d6;
+      outline-offset: 2px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: #24292e;
+    }
+
+    /* Sidebar Navigation */
+    .nav-sidebar {
+      position: fixed;
+      left: -280px;
+      top: 0;
+      width: 280px;
+      height: 100vh;
+      background-color: #fff;
+      border-right: 1px solid #e1e4e8;
+      z-index: 999;
+      transition: left 0.3s ease-in-out;
+      overflow-y: auto;
+      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-sidebar.open {
+      left: 0;
+    }
+
+    .nav-close {
+      background: none;
+      border: 2px solid transparent;
+      font-size: 28px;
+      cursor: pointer;
+      padding: 12px 16px;
+      color: #24292e;
+      line-height: 1;
+      width: 100%;
+      text-align: right;
+      border-radius: 4px;
+      transition: border-color 0.2s;
+    }
+
+    .nav-close:hover,
+    .nav-close:focus {
+      color: #0366d6;
+      border-color: #0366d6;
+      outline: none;
+    }
+
+    .nav-close:focus-visible {
+      outline: 2px solid #0366d6;
+      outline-offset: -4px;
+    }
+
+    .nav-sidebar nav {
+      padding: 16px 0;
+    }
+
+    .nav-sidebar a {
+      display: block;
+      padding: 12px 16px;
+      color: #0366d6;
+      text-decoration: none;
+      border-left: 3px solid transparent;
+      transition: background-color 0.2s, border-left-color 0.2s;
+    }
+
+    .nav-sidebar a:hover,
+    .nav-sidebar a:focus {
+      background-color: #f6f8fa;
+      border-left-color: #0366d6;
+      outline: none;
+    }
+
+    .nav-sidebar a:focus-visible {
+      outline: 2px solid #0366d6;
+      outline-offset: -2px;
+    }
+
+    /* Overlay */
+    .nav-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 998;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .nav-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Main content adjustments */
+    main {
+      margin-top: 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 16px;
+      }
+
+      .nav-sidebar {
+        width: 250px;
+        left: -250px;
+      }
+    }
+
+    /* Reduced motion support */
+    @media (prefers-reduced-motion: reduce) {
+      .nav-sidebar,
+      .nav-overlay {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Accessibility: Skip to main content link -->
+  <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+  <!-- Header with Burger Menu -->
+  <header role="banner">
+    <button class="burger-btn" id="burger-btn" aria-label="Open navigation menu" aria-expanded="false" aria-controls="nav-sidebar">☰</button>
+    <h1>Saivam - Ancient Tamil & Other Spiritual Texts</h1>
+  </header>
+
+  <!-- Sidebar Navigation -->
+  <nav class="nav-sidebar" id="nav-sidebar" aria-label="Main navigation">
+    <button class="nav-close" id="nav-close" aria-label="Close navigation menu">×</button>
+    <nav>
+      
+        <a href="/namakkam/">Sri Rudram Namakam</a>
+      
+        <a href="/chamakkam/">Sri Rudram Chamakam</a>
+      
+        <a href="/shivapuranam/">Shiva Puranam</a>
+      
+        <a href="/purusasuktham/">Purusa Suktham</a>
+      
+        <a href="/srisuktam/">Sri Suktam</a>
+      
+        <a href="/shivavakkiyar/">Shivavakkiyam</a>
+      
+        <a href="/natarajarpathu/">Natarajar Pathu</a>
+      
+        <a href="/nindrathiruthandagam/">Nindra Thiruthandagam</a>
+      
+        <a href="/thiruneetrupathigam/">Thiruneetru Pathigam</a>
+      
+        <a href="/nandhi-pradosha-song/">Nandhi Pradosha Song</a>
+      
+        <a href="/mantrapushpam/">Mantra Pushpam</a>
+      
+        <a href="/arathi/">Arathi</a>
+      
+        <a href="/panchanga/">Panchanga Calculator</a>
+      
+        <a href="/pradoshakalapooja/">Pradosha Kala Pooja</a>
+      
+        <a href="/license/">License</a>
+      
+    </nav>
+  </nav>
+
+  <!-- Overlay -->
+  <div class="nav-overlay" id="nav-overlay" aria-hidden="true"></div>
+
+  <!-- Main content area -->
+  <main class="page-content" id="main-content" aria-label="Content">
+    <div class="wrapper">
+      <h1 id="ஷ்ரீ-ருத்ரம்-சமகம்---sri-rudram-chamakam">ஷ்ரீ ருத்³ரம் சமகம் - Sri Rudram Chamakam</h1>
+
+<p>ஓம் அக்³னா॑விஷ்ணூ ஸ॒ஜோஷ॑ஸே॒மாவ॑ர்த⁴ந்து வாம்॒ கி³ர: ।
+த்³யு॒ம்னைர்வாஜே॑பி॒⁴ராக॑³தம் ।
+வாஜ॑ஷ்ச மே ப்ரஸ॒வஷ்ச॑ மே॒
+ப்ரய॑திஷ்ச மே॒ ப்ரஸி॑திஷ்ச மே
+தீ॒⁴திஷ்ச॑ மே॒ க்ரது॑ஷ்ச மே॒
+ஸ்வர॑ஷ்ச மே॒ ஷ்லோக॑ஷ்ச மே
+ஷ்ரா॒வஷ்ச॑ மே॒ ஷ்ருதி॑ஷ்ச மே॒
+ஜ்யோதி॑ஷ்ச மே॒ ஸுவ॑ஷ்ச மே
+ப்ரா॒ணஷ்ச॑ மேபா॒னஷ்ச॑ மே
+வ்யா॒னஷ்ச॒ மேஸு॑ஷ்ச மே
+சி॒த்தம் ச॑ ம॒ ஆதீ॑⁴தம் ச மே॒
+வாக்ச॑ மே॒ மன॑ஷ்ச மே॒
+சக்ஷு॑ஷ்ச மே॒ ஷ்ரோத்ரம்॑ ச மே॒
+த³க்ஷ॑ஷ்ச மே॒ ப³லம்॑ ச ம॒
+ஓஜ॑ஷ்ச மே॒ ஸஹ॑ஷ்ச ம॒
+ஆயு॑ஷ்ச மே ஜ॒ரா ச॑ ம
+ஆ॒த்மா ச॑ மே த॒னூஷ்ச॑ மே॒
+ஷர்ம॑ ச மே॒ வர்ம॑ ச॒ மேங்கா॑³னி ச மே॒ஸ்தா²னி॑ ச மே॒
+பரூக்³ம்॑ஷி ச மே॒ ஷரீ॑ராணி ச மே ॥ 1 ॥</p>
+
+<p>ஜைஷ்ட்²யம்॑ ச ம॒ ஆதி॑⁴பத்யம் ச மே
+ம॒ன்யுஷ்ச॑ மே॒ பா⁴ம॑ஷ்ச॒ மேம॑ஷ்ச॒ மேம்ப॑⁴ஷ்ச மே
+ஜே॒மா ச॑ மே மஹி॒மா ச॑ மே
+வரி॒மா ச॑ மே ப்ரதி॒²மா ச॑ மே
+வ॒ர்​ஷ்மா ச॑ மே த்³ராகு॒⁴யா ச॑ மே
+வ்ரு॒த்³த⁴ம் ச॑ மே॒ வ்ருத்³தி॑⁴ஷ்ச மே
+ஸ॒த்யம் ச॑ மே ஷ்ர॒த்³தா⁴ ச॑ மே॒
+ஜக॑³ச்ச மே॒ த⁴னம்॑ ச மே॒
+வஷ॑ஷ்ச மே॒ த்விஷி॑ஷ்ச மே
+க்ரீ॒டா³ ச॑ மே॒ மோத॑³ஷ்ச மே
+ஜா॒தம் ச॑ மே ஜனி॒ஷ்யமா॑ணம் ச மே
+ஸூ॒க்தம் ச॑ மே ஸுக்ரு॒தம் ச॑ மே
+வி॒த்தம் ச॑ மே॒ வேத்³யம்॑ ச மே
+பூ॒⁴தம் ச॑ மே ப⁴வி॒ஷ்யச்ச॑ மே
+ஸு॒க³ம் ச॑ மே ஸு॒பத²ம்॑ ச ம
+ரு॒த்³த⁴ம் ச॑ ம॒ ருத்³தி॑⁴ஷ்ச மே
+க௢॒ப்தம் ச॑ மே॒ க௢ப்தி॑ஷ்ச மே
+ம॒திஷ்ச॑ மே ஸும॒திஷ்ச॑ மே ॥ 2 ॥</p>
+
+<p>ஷம் ச॑ மே॒ மய॑ஷ்ச மே
+ப்ரி॒யம் ச॑ மேனுகா॒மஷ்ச॑ மே॒ காம॑ஷ்ச மே
+ஸௌமன॒ஸஷ்ச॑ மே ப॒⁴த்³ரம் ச॑ மே॒
+ஷ்ரேய॑ஷ்ச மே॒ வஸ்ய॑ஷ்ச மே॒
+யஷ॑ஷ்ச மே॒ ப⁴க॑³ஷ்ச மே॒ த்³ரவி॑ணம் ச மே
+ய॒ந்தா ச॑ மே த॒⁴ர்தா ச॑ மே॒
+க்ஷேம॑ஷ்ச மே॒ த்⁴ருதி॑ஷ்ச மே॒
+விஷ்வம்॑ ச மே॒ மஹ॑ஷ்ச மே
+ஸம்॒விச்ச॑ மே॒ ஜ்ஞாத்ரம்॑ ச மே॒
+ஸூஷ்ச॑ மே ப்ர॒ஸூஷ்ச॑ மே॒
+ஸீரம்॑ ச மே ல॒யஷ்ச॑ ம
+ரு॒தம் ச॑ மே॒ம்ருதம்॑ ச மேய॒க்ஷ்மம் ச॒ மேனா॑மயச்ச மே
+ஜீ॒வாது॑ஷ்ச மே தீ³ர்கா⁴யு॒த்வம் ச॑ மேனமி॒த்ரம் ச॒ மேப॑⁴யம் ச மே
+ஸு॒க³ம் ச॑ மே॒ ஷய॑னம் ச மே
+ஸூ॒ஷா ச॑ மே ஸு॒தி³னம்॑ ச மே ॥ 3 ॥</p>
+
+<p>ஊர்க்ச॑ மே ஸூ॒ன்ருதா॑ ச மே॒
+பய॑ஷ்ச மே॒ ரஸ॑ஷ்ச மே
+க்⁴ரு॒தம் ச॑ மே॒ மது॑⁴ ச மே॒
+ஸக்³தி॑⁴ஷ்ச மே॒ ஸபீ॑திஷ்ச மே
+க்ரு॒ஷிஷ்ச॑ மே॒ வ்ருஷ்டி॑ஷ்ச மே॒
+ஜைத்ரம்॑ ச ம॒ ஔத்³பி॑⁴த்³யம் ச மே
+ர॒யிஷ்ச॑ மே॒ ராய॑ஷ்ச மே
+பு॒ஷ்டம் ச॑ மே॒ புஷ்டி॑ஷ்ச மே
+வி॒பு⁴ ச॑ மே ப்ர॒பு⁴ ச॑ மே
+ப॒³ஹு ச॑ மே॒ பூ⁴ய॑ஷ்ச மே
+பூ॒ர்ணம் ச॑ மே பூ॒ர்ணத॑ரம் ச॒ மேக்ஷி॑திஷ்ச மே॒ கூய॑வாஷ்ச॒ மேன்னம்॑ ச॒ மேக்ஷு॑ச்ச மே
+வ்ரீ॒ஹய॑ஷ்ச மே॒ யவா᳚ஷ்ச மே॒
+மாஷா᳚ஷ்ச மே॒ திலா᳚ஷ்ச மே
+மு॒த்³கா³ஷ்ச॑ மே க॒²ல்வா᳚ஷ்ச மே
+கோ॒³தூ⁴மா᳚ஷ்ச மே ம॒ஸுரா᳚ஷ்ச மே
+ப்ரி॒யங்க॑³வஷ்ச॒ மேண॑வஷ்ச மே
+ஷ்யா॒மாகா᳚ஷ்ச மே நீ॒வாரா᳚ஷ்ச மே ॥ 4 ॥</p>
+
+<p>அஷ்மா॑ ச மே॒ ம்ருத்தி॑கா ச மே
+கி॒³ரய॑ஷ்ச மே॒ பர்வ॑தாஷ்ச மே॒
+ஸிக॑தாஷ்ச மே॒ வன॒ஸ்பத॑யஷ்ச மே॒
+ஹிர॑ண்யம் ச॒ மேய॑ஷ்ச மே॒
+ஸீஸம்॑ ச॒ மே த்ரபு॑ஷ்ச மே
+ஷ்யா॒மம் ச॑ மே லோ॒ஹம் ச॑ மே॒க்³னிஷ்ச॑ ம॒
+ஆப॑ஷ்ச மே வீ॒ருத॑⁴ஷ்ச ம॒ ஓஷ॑த⁴யஷ்ச மே
+க்ருஷ்டப॒ச்யம் ச॑ மேக்ருஷ்டப॒ச்யம் ச॑ மே
+க்³ரா॒ம்யாஷ்ச॑ மே ப॒ஷவ॑ ஆர॒ண்யாஷ்ச॑ ய॒ஜ்ஞேன॑ கல்பந்தாம்
+வி॒த்தம் ச॑ மே॒ வித்தி॑ஷ்ச மே
+பூ॒⁴தம் ச॑ மே॒ பூ⁴தி॑ஷ்ச மே॒
+வஸு॑ ச மே வஸ॒திஷ்ச॑ மே॒
+கர்ம॑ ச மே॒ ஷக்தி॑ஷ்ச॒ மேர்த॑²ஷ்ச ம॒
+ஏம॑ஷ்ச ம॒ இதி॑ஷ்ச மே॒ க³தி॑ஷ்ச மே ॥ 5 ॥</p>
+
+<p>அ॒க்³னிஷ்ச॑ ம॒ இந்த்³ர॑ஷ்ச மே॒
+ஸோம॑ஷ்ச ம॒ இந்த்³ர॑ஷ்ச மே
+ஸவி॒தா ச॑ ம॒ இந்த்³ர॑ஷ்ச மே॒
+ஸர॑ஸ்வதீ ச ம॒ இந்த்³ர॑ஷ்ச மே
+பூ॒ஷா ச॑ ம॒ இந்த்³ர॑ஷ்ச மே॒
+ப்³ருஹ॒ஸ்பதி॑ஷ்ச ம॒ இந்த்³ர॑ஷ்ச மே
+மி॒த்ரஷ்ச॑ ம॒ இந்த்³ர॑ஷ்ச மே॒
+வரு॑ணஷ்ச ம॒ இந்த்³ர॑ஷ்ச மே॒
+த்வஷ்டா॑² ச ம॒ இந்த்³ர॑ஷ்ச மே
+தா॒⁴தா ச॑ ம॒ இந்த்³ர॑ஷ்ச மே॒
+விஷ்ணு॑ஷ்ச ம॒ இந்த்³ர॑ஷ்ச மே॒ஷ்வினௌ॑ ச ம॒ இந்த்³ர॑ஷ்ச மே
+ம॒ருத॑ஷ்ச ம॒ இந்த்³ர॑ஷ்ச மே॒
+விஷ்வே॑ ச மே தே॒³வா இந்த்³ர॑ஷ்ச மே
+ப்ருதி॒²வீ ச॑ ம॒ இந்த்³ர॑ஷ்ச மே॒ந்தரி॑க்ஷம் ச ம॒ இந்த்³ர॑ஷ்ச மே॒
+த்³யௌஷ்ச॑ ம॒ இந்த்³ர॑ஷ்ச மே॒
+தி³ஷ॑ஷ்ச ம॒ இந்த்³ர॑ஷ்ச மே
+மூ॒ர்தா⁴ ச॑ ம॒ இந்த்³ர॑ஷ்ச மே
+ப்ர॒ஜாப॑திஷ்ச ம॒ இந்த்³ர॑ஷ்ச மே ॥ 6 ॥</p>
+
+<p>அ॒க்³ம்॒ஷுஷ்ச॑ மே ர॒ஷ்மிஷ்ச॒ மேதா᳚³ப்⁴யஷ்ச॒ மேதி॑⁴பதிஷ்ச ம
+உபா॒க்³ம்॒ஷுஷ்ச॑ மேந்தர்யா॒மஷ்ச॑ ம
+ஐந்த்³ரவாய॒வஷ்ச॑ மே மைத்ராவரு॒ணஷ்ச॑ ம
+ஆஷ்வி॒னஷ்ச॑ மே ப்ரதிப்ர॒ஸ்தா²ன॑ஷ்ச மே
+ஷு॒க்ரஷ்ச॑ மே ம॒ந்தீ² ச॑ ம
+ஆக்³ரய॒ணஷ்ச॑ மே வைஷ்வதே॒³வஷ்ச॑ மே
+த்⁴ரு॒வஷ்ச॑ மே வைஷ்வான॒ரஷ்ச॑ ம
+ருதுக்³ர॒ஹாஷ்ச॑ மேதிக்³ரா॒ஹ்யா᳚ஷ்ச ம
+ஐந்த்³ரா॒க்³னஷ்ச॑ மே வைஷ்வதே॒³வஷ்ச॑ மே
+மருத்வ॒தீயா᳚ஷ்ச மே மாஹே॒ந்த்³ரஷ்ச॑ ம
+ஆதி॒³த்யஷ்ச॑ மே ஸாவி॒த்ரஷ்ச॑ மே
+ஸாரஸ்வ॒தஷ்ச॑ மே பௌ॒ஷ்ணஷ்ச॑ மே
+பாத்னீவ॒தஷ்ச॑ மே ஹாரியோஜ॒னஷ்ச॑ மே ॥ 7 ॥</p>
+
+<p>இ॒த்⁴மஷ்ச॑ மே ப॒³ர்॒ஹிஷ்ச॑ மே॒
+வேதி॑³ஷ்ச மே॒ தி³ஷ்ணி॑யாஷ்ச மே॒
+ஸ்ருச॑ஷ்ச மே சம॒ஸாஷ்ச॑ மே॒
+க்³ராவா॑ணஷ்ச மே॒ ஸ்வர॑வஷ்ச ம
+உபர॒வாஷ்ச॑ மேதி॒⁴ஷவ॑ணே ச மே
+த்³ரோணகல॒ஷஷ்ச॑ மே வாய॒வ்யா॑னி ச மே
+பூத॒ப்⁴ருச்ச॑ ம ஆத⁴வ॒னீய॑ஷ்ச ம॒
+ஆக்³னீ᳚த்⁴ரம் ச மே ஹவி॒ர்தா⁴னம்॑ ச மே
+க்³ரு॒ஹாஷ்ச॑ மே॒ ஸத॑³ஷ்ச மே புரோ॒டா³ஷா᳚ஷ்ச மே
+பச॒தாஷ்ச॑ மேவப்⁴ரு॒த²ஷ்ச॑ மே ஸ்வகா³கா॒ரஷ்ச॑ மே ॥ 8 ॥</p>
+
+<p>அ॒க்³னிஷ்ச॑ மே க॒⁴ர்மஷ்ச॑ மே॒ர்கஷ்ச॑ மே॒
+ஸூர்ய॑ஷ்ச மே ப்ரா॒ணஷ்ச॑ மேஷ்வமே॒த⁴ஷ்ச॑ மே
+ப்ருதி॒²வீ ச॒ மேதி॑³திஷ்ச மே॒ தி³தி॑ஷ்ச மே॒
+த்³யௌஷ்ச॑ மே॒ ஷக்வ॑ரீர॒ங்கு³ல॑யோ॒ தி³ஷ॑ஷ்ச மே
+ய॒ஜ்ஞேன॑ கல்பந்தா॒ம்ருக்ச॑ மே॒
+ஸாம॑ ச மே॒ ஸ்தோம॑ஷ்ச மே॒
+யஜு॑ஷ்ச மே தீ॒³க்ஷா ச॑ மே॒
+தப॑ஷ்ச ம ரு॒துஷ்ச॑ மே
+வ்ர॒தம் ச॑ மேஹோரா॒த்ரயோ᳚ர்வ்ரு॒ஷ்ட்யா ப்³ரு॑ஹத்³ரத²ந்த॒ரே ச॑ மே
+ய॒ஜ்ஞேன॑ கல்பேதாம் ॥ 9 ॥</p>
+
+<p>க³ர்பா᳚⁴ஷ்ச மே வ॒த்ஸாஷ்ச॑ மே॒
+த்ர்யவி॑ஷ்ச மே த்ர்ய॒வீச॑ மே
+தி³த்ய॒வாட் ச॑ மே தி³த்யௌ॒ஹீ ச॑ மே॒
+பஞ்சா॑விஷ்ச மே பஞ்சா॒வீ ச॑ மே
+த்ரிவ॒த்ஸஷ்ச॑ மே த்ரிவ॒த்ஸா ச॑ மே
+துர்ய॒வாட் ச॑ மே துர்யௌ॒ஹீ ச॑ மே
+பஷ்ட॒²வாட் ச॑ மே பஷ்டௌ॒²ஹீ ச॑ ம
+உ॒க்ஷா ச॑ மே வ॒ஷா ச॑ ம
+ருஷ॒ப⁴ஷ்ச॑ மே வே॒ஹச்ச॑ மேன॒ட்³வாஞ்ச॑ மே
+தே॒⁴னுஷ்ச॑ ம॒ ஆயு॑ர்ய॒ஜ்ஞேன॑ கல்பதாம்
+ப்ரா॒ணோ ய॒ஜ்ஞேன॑ கல்பதாமபா॒னோ ய॒ஜ்ஞேன॑ கல்பதாம்
+வ்யா॒னோ ய॒ஜ்ஞேன॑ கல்பதாம்॒
+சக்ஷு॑ர்ய॒ஜ்ஞேன॑ கல்பதா॒க்॒³ ஷ்ரோத்ரம்॑ ய॒ஜ்ஞேன॑ கல்பதாம்॒
+மனோ॑ ய॒ஜ்ஞேன॑ கல்பதாம்॒
+வாக்³ய॒ஜ்ஞேன॑ கல்பதாமா॒த்மா ய॒ஜ்ஞேன॑ கல்பதாம்
+ய॒ஜ்ஞோ ய॒ஜ்ஞேன॑ கல்பதாம் ॥ 1௦ ॥</p>
+
+<p>ஏகா॑ ச மே தி॒ஸ்ரஷ்ச॑ மே॒
+பஞ்ச॑ ச மே ஸ॒ப்த ச॑ மே॒
+நவ॑ ச ம॒ ஏகா॑த³ஷ ச மே॒
+த்ரயோ॑த³ஷ ச மே॒ பஞ்ச॑த³ஷ ச மே
+ஸ॒ப்தத॑³ஷ ச மே॒ நவ॑த³ஷ ச ம॒
+ஏக॑விக்³ம்ஷதிஷ்ச மே॒ த்ரயோ॑விக்³ம்ஷதிஷ்ச மே॒
+பஞ்ச॑விக்³ம்ஷதிஷ்ச மே ஸ॒ப்தவிக்³ம்॑ஷதிஷ்ச மே॒
+நவ॑விக்³ம்ஷதிஷ்ச ம॒ ஏக॑த்ரிக்³ம்ஷச்ச மே॒
+த்ரய॑ஸ்த்ரிக்³ம்ஷச்ச மே॒ சத॑ஸ்ரஷ்ச மே॒ஷ்டௌ ச॑ மே॒
+த்³வாத॑³ஷ ச மே॒ ஷோட॑³ஷ ச மே
+விக்³ம்ஷ॒திஷ்ச॑ மே॒ சது॑ர்விக்³ம்ஷதிஷ்ச மே॒ஷ்டாவிக்³ம்॑ஷதிஷ்ச மே॒
+த்³வாத்ரிக்³ம்॑ஷச்ச மே॒ ஷட்-த்ரிக்³ம்॑ஷச்ச மே
+சத்வாரி॒க்³ம்॒ஷச்ச॑ மே॒ சது॑ஷ்சத்வாரிக்³ம்ஷச்ச மே॒ஷ்டாச॑த்வாரிக்³ம்ஷச்ச மே॒
+வாஜ॑ஷ்ச ப்ரஸ॒வஷ்சா॑பி॒ஜஷ்ச॒
+க்ரது॑ஷ்ச॒ ஸுவ॑ஷ்ச மூ॒ர்தா⁴ ச॒
+வ்யஷ்னி॑யஷ்சாந்த்யாய॒னஷ்சாந்த்ய॑ஷ்ச
+பௌ⁴வ॒னஷ்ச॒ பு⁴வ॑ன॒ஷ்சாதி॑⁴பதிஷ்ச ॥ 11 ॥</p>
+
+<p>ஓம் இடா॑³ தே³வ॒ஹூ-ர்மனு॑ர்யஜ்ஞ॒னீ-ர்ப்³ருஹ॒ஸ்பதி॑ருக்தா²ம॒தா³னி॑
+ஷக்³ம்ஸிஷ॒த்³விஷ்வே॑ தே॒³வா: ஸூ᳚க்த॒வாச:  ப்ருதி॑²விமாத॒ர்மா
+மா॑ ஹிக்³ம்ஸீ॒ர்மது॑⁴ மனிஷ்யே॒ மது॑⁴ ஜனிஷ்யே॒
+மது॑⁴ வக்ஷ்யாமி॒ மது॑⁴ வதி³ஷ்யாமி॒
+மது॑⁴மதீம் தே॒³வேப்⁴யோ॒ வாச॒முத்³யாஸக்³ம்ஷுஷ்ரூஷே॒ண்யா᳚ம்
+மனு॒ஷ்யே᳚ப்⁴ய॒ஸ்தம்
+மா॑ தே॒³வா அ॑வந்து ஷோ॒பா⁴யை॑ பி॒தரோனு॑மத³ந்து ॥</p>
+
+<p>ஓம் ஷாந்தி:  ஷாந்தி:  ஷாந்தி: ॥</p>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <span class="site-footer-credits">
+      <a href="/license">Licensed under Creative Commons (CC0)</a>
+    </span>
+  </footer>
+
+  <script>
+    const burgerBtn = document.getElementById('burger-btn');
+    const navClose = document.getElementById('nav-close');
+    const navSidebar = document.getElementById('nav-sidebar');
+    const navOverlay = document.getElementById('nav-overlay');
+    let isNavOpen = false;
+
+    function openNav() {
+      navSidebar.classList.add('open');
+      navOverlay.classList.add('open');
+      isNavOpen = true;
+      burgerBtn.setAttribute('aria-expanded', 'true');
+      // Move focus to close button
+      navClose.focus();
+    }
+
+    function closeNav() {
+      navSidebar.classList.remove('open');
+      navOverlay.classList.remove('open');
+      isNavOpen = false;
+      burgerBtn.setAttribute('aria-expanded', 'false');
+      // Return focus to burger button
+      burgerBtn.focus();
+    }
+
+    burgerBtn.addEventListener('click', () => {
+      isNavOpen ? closeNav() : openNav();
+    });
+
+    navClose.addEventListener('click', closeNav);
+    navOverlay.addEventListener('click', closeNav);
+
+    // Close sidebar when a link is clicked
+    document.querySelectorAll('.nav-sidebar a').forEach(link => {
+      link.addEventListener('click', closeNav);
+    });
+
+    // Keyboard accessibility: ESC to close, Tab management
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isNavOpen) {
+        closeNav();
+      }
+    });
+
+    // Trap focus within sidebar when open
+    document.addEventListener('keydown', (e) => {
+      if (!isNavOpen || e.key !== 'Tab') return;
+
+      const focusableElements = navSidebar.querySelectorAll('button, a');
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      if (e.shiftKey && document.activeElement === firstElement) {
+        e.preventDefault();
+        lastElement.focus();
+      } else if (!e.shiftKey && document.activeElement === lastElement) {
+        e.preventDefault();
+        firstElement.focus();
+      }
+    });
+  </script>
+
+  <!-- Astronomy Engine - NASA JPL Ephemeris (local copy) -->
+  <script src="/assets/js/astronomy.browser.js" defer></script>
+
+  <!-- Astronomy Engine - Fallback CDN if primary fails -->
+  <script>
+    // Try alternative CDN if primary fails
+    window.addEventListener('DOMContentLoaded', function() {
+      if (typeof Astronomy === 'undefined') {
+        console.log('Primary CDN loading, retrying...');
+        // Give it 2 more seconds then try alternative
+        setTimeout(function() {
+          if (typeof Astronomy === 'undefined') {
+            console.error('Astronomy Engine: Failed to load local library.');
+
+            // Show warning message
+            var warningDiv = document.createElement('div');
+            warningDiv.style.cssText = 'background:#fff5f5; border:2px solid #d73a49; padding:15px; margin:15px; border-radius:4px; color:#d73a49; font-family:monospace; font-size:13px;';
+            warningDiv.innerHTML = '<strong>⚠️ Astronomy Engine Load Error</strong><br><br>' +
+              'The Astronomy Engine library failed to load.<br><br>' +
+              '<strong>Troubleshooting:</strong><br>' +
+              '• Check browser console (F12 → Console) for detailed errors<br>' +
+              '• Verify /assets/js/astronomy.browser.js is accessible<br>' +
+              '• Try refreshing the page (Ctrl+R)<br><br>' +
+              'The calculator requires this library to function.';
+
+            var containers = document.querySelectorAll('[id*="panchanga"]');
+            if (containers.length > 0) {
+              containers[0].parentNode.insertBefore(warningDiv, containers[0]);
+            } else {
+              document.body.insertBefore(warningDiv, document.body.firstChild);
+            }
+          }
+        }, 2000);
+      }
+    });
+  </script>
+
+  <!-- Panchanga Calculator Scripts (defer for proper loading order) -->
+  <script src="/assets/js/location-manager.js" defer></script>
+  <script src="/assets/js/panchanga-calculator.js" defer></script>
+
+  <!-- Version Footer -->
+  <footer style="margin-top: 40px; padding: 20px; border-top: 1px solid #e1e4e8; text-align: center; font-size: 12px; color: #666;">
+    <div>Panchanga Calculator v1.0.0-beta.2 • Updated: 2026-05-28</div>
+  </footer>
+
+</body>
+</html>

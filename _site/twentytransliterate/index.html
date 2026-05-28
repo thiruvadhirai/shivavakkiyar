@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Shivavakkiyam</title>
+
+  <!-- Cayman theme stylesheet (local copy) -->
+  <link rel="stylesheet" href="/assets/css/cayman-theme.css">
+
+  <!-- Custom CSS for burger menu and overrides -->
+  <link rel="stylesheet" href="/assets/css/custom.css">
+
+  <!-- Panchanga Calculator CSS -->
+  <link rel="stylesheet" href="/assets/css/panchanga.css">
+
+  <style>
+    /* Accessibility: Skip to main content link */
+    .skip-to-main {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: #0366d6;
+      color: white;
+      padding: 8px;
+      text-decoration: none;
+      z-index: 100;
+    }
+
+    .skip-to-main:focus {
+      top: 0;
+    }
+
+    /* Burger Menu & Sidebar */
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #f6f8fa;
+      border-bottom: 1px solid #e1e4e8;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .burger-btn {
+      background: none;
+      border: 2px solid transparent;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 4px 8px;
+      color: #24292e;
+      line-height: 1;
+      border-radius: 4px;
+      transition: border-color 0.2s;
+    }
+
+    .burger-btn:hover,
+    .burger-btn:focus {
+      color: #0366d6;
+      border-color: #0366d6;
+      outline: none;
+    }
+
+    .burger-btn:focus-visible {
+      outline: 2px solid #0366d6;
+      outline-offset: 2px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: #24292e;
+    }
+
+    /* Sidebar Navigation */
+    .nav-sidebar {
+      position: fixed;
+      left: -280px;
+      top: 0;
+      width: 280px;
+      height: 100vh;
+      background-color: #fff;
+      border-right: 1px solid #e1e4e8;
+      z-index: 999;
+      transition: left 0.3s ease-in-out;
+      overflow-y: auto;
+      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-sidebar.open {
+      left: 0;
+    }
+
+    .nav-close {
+      background: none;
+      border: 2px solid transparent;
+      font-size: 28px;
+      cursor: pointer;
+      padding: 12px 16px;
+      color: #24292e;
+      line-height: 1;
+      width: 100%;
+      text-align: right;
+      border-radius: 4px;
+      transition: border-color 0.2s;
+    }
+
+    .nav-close:hover,
+    .nav-close:focus {
+      color: #0366d6;
+      border-color: #0366d6;
+      outline: none;
+    }
+
+    .nav-close:focus-visible {
+      outline: 2px solid #0366d6;
+      outline-offset: -4px;
+    }
+
+    .nav-sidebar nav {
+      padding: 16px 0;
+    }
+
+    .nav-sidebar a {
+      display: block;
+      padding: 12px 16px;
+      color: #0366d6;
+      text-decoration: none;
+      border-left: 3px solid transparent;
+      transition: background-color 0.2s, border-left-color 0.2s;
+    }
+
+    .nav-sidebar a:hover,
+    .nav-sidebar a:focus {
+      background-color: #f6f8fa;
+      border-left-color: #0366d6;
+      outline: none;
+    }
+
+    .nav-sidebar a:focus-visible {
+      outline: 2px solid #0366d6;
+      outline-offset: -2px;
+    }
+
+    /* Overlay */
+    .nav-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 998;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .nav-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Main content adjustments */
+    main {
+      margin-top: 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 16px;
+      }
+
+      .nav-sidebar {
+        width: 250px;
+        left: -250px;
+      }
+    }
+
+    /* Reduced motion support */
+    @media (prefers-reduced-motion: reduce) {
+      .nav-sidebar,
+      .nav-overlay {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Accessibility: Skip to main content link -->
+  <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+  <!-- Header with Burger Menu -->
+  <header role="banner">
+    <button class="burger-btn" id="burger-btn" aria-label="Open navigation menu" aria-expanded="false" aria-controls="nav-sidebar">☰</button>
+    <h1>Saivam - Ancient Tamil & Other Spiritual Texts</h1>
+  </header>
+
+  <!-- Sidebar Navigation -->
+  <nav class="nav-sidebar" id="nav-sidebar" aria-label="Main navigation">
+    <button class="nav-close" id="nav-close" aria-label="Close navigation menu">×</button>
+    <nav>
+      
+        <a href="/namakkam/">Sri Rudram Namakam</a>
+      
+        <a href="/chamakkam/">Sri Rudram Chamakam</a>
+      
+        <a href="/shivapuranam/">Shiva Puranam</a>
+      
+        <a href="/purusasuktham/">Purusa Suktham</a>
+      
+        <a href="/srisuktam/">Sri Suktam</a>
+      
+        <a href="/shivavakkiyar/">Shivavakkiyam</a>
+      
+        <a href="/natarajarpathu/">Natarajar Pathu</a>
+      
+        <a href="/nindrathiruthandagam/">Nindra Thiruthandagam</a>
+      
+        <a href="/thiruneetrupathigam/">Thiruneetru Pathigam</a>
+      
+        <a href="/nandhi-pradosha-song/">Nandhi Pradosha Song</a>
+      
+        <a href="/mantrapushpam/">Mantra Pushpam</a>
+      
+        <a href="/arathi/">Arathi</a>
+      
+        <a href="/panchanga/">Panchanga Calculator</a>
+      
+        <a href="/pradoshakalapooja/">Pradosha Kala Pooja</a>
+      
+        <a href="/license/">License</a>
+      
+    </nav>
+  </nav>
+
+  <!-- Overlay -->
+  <div class="nav-overlay" id="nav-overlay" aria-hidden="true"></div>
+
+  <!-- Main content area -->
+  <main class="page-content" id="main-content" aria-label="Content">
+    <div class="wrapper">
+      <table>
+  <thead>
+    <tr>
+      <th>Tamil</th>
+      <th>Transliteration</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1. ஓடி ஓடி ஓடி ஓடி உட்கலந்த ஜோதியை<br />நாடி நாடி நாடி நாடி நாட்களும் கழிந்துபோய்<br />வாடி வாடி வாடி வாடி மாண்டுபோன மாந்தர்கள்<br />கோடி கோடி கோடி கோடி எண்ணிறந்த கோடியே (ஓம்)</td>
+      <td><span class="translit-l12b">1. Oodi oodi oodi oodi utkalandha jothiyai<br />Naadi naadi naadi naadi naadhalum kazhindhupoi<br />Vaadi vaadi vaadi vaadi maandupona maandhargal<br />Kodi kodi kodi kodi ennirandha kodhiye (Om)</span></td>
+    </tr>
+    <tr>
+      <td>2. என்னிலே இருந்த ஒன்றையான் அறிந்ததில்லையே<br />என்னிலே இருந்த ஒன்றையான் அறிந்து கொண்டபின்<br />என்னிலே இருந்த ஒன்றையாவர் காணவல்லரோ<br />என்னிலே இருந்திருந்து யான்உணர்ந்து கொண்டவனே (ஓம்)<br />இதுவுமது</td>
+      <td><span class="translit-l12b">2. ennilē irunda onṟaiyāṉ aṟintatillaiyē<br />ennilē irunda onṟaiyāṉ aṟindu koṇṭapin<br />ennilē irunda onṟaiyāvar kāṇavallarō<br />ennilē irundiruntu yānuṇarntu koṇḍavaṉē (ōm)<br />Iduvumathu</span></td>
+    </tr>
+    <tr>
+      <td>3. நானதேது நீயதேது நடுவில் நின்றதேதடா<br />கோனதேது குருவதேது கூறிடும் குலாமரே<br />ஆனதேது அழிவதேது அப்புறத்தில் அப்புறம்<br />ஈனதேது ராம ராம ராமவென்ற நாமமே (ஓம்)<br />யோக நிலை</td>
+      <td><span class="translit-l12b">3. nānatētu nīyatētu naṭuvil ninṟatētadā<br />kōnatētu kuruvatētu kūṟiṭum kulāmarē<br />ānatētu aḻivatētu appuṟattil appuṟam<br />īnatētu rāma rāma rāmavendra nāmāmē (ōm)<br />Yōka nilai</span></td>
+    </tr>
+    <tr>
+      <td>4. அஞ்செழுத்திலே பிறந்து அஞ்செழுத்திலே வளர்ந்து<br />அஞ்செழுத்தை ஓதுகின்ற பஞ்சபூத பாவிகாள்<br />அஞ்செழுத்திலோர் எழுத்து அறிந்துகூற வல்லரேல்<br />அஞ்சல் அஞ்சல் என்றுநாதன் அம்பலத்தில் ஆடுமே. (ஓம்)<br />விராட் சொரூபம்</td>
+      <td><span class="translit-l12b">4. anjezhuththilē piṟantu anjezhuththilē vaḷarnthu<br />anjezhuthtai ōthugiṉṟa panjabūtha pāvikāḷ<br />anjezhuthtilōr ezhuthu aṟintukūṟa vallarēl<br />anjal anjal eṉṟunātan ampalattil āḍumē. (ōm)<br />Virāṭ sorūpam</span></td>
+    </tr>
+    <tr>
+      <td>5. இடதுகண்கள் சந்திரன் வலது கண்கள் சூரியன்<br />இடக்கை சங்குசக்கரம் வலக்கை சூலமானமழு<br />எடுத்தபாதம் நீள்முடி எண்திசைக்கும் அப்புறம்<br />உடல்கலந்து நின்றமாயம் யாவர்காண வல்லரே (ஓம்)<br />தெய்வ சொரூபம்</td>
+      <td><span class="translit-l12b">5. idathukaṇkaḷ cantiraṉ valatu kaṇkaḷ sūriyaṉ<br />iṭakkai caṅkucakkaram valakkai sūlamānamazu<br />eṭuttapātam nīḷmuṭi eṇticaikkum appuṟam<br />uṭalkalantu niṉṟamāyam yāvarkāṇa vallarē (ōm)<br />Theiva sorūpam</span></td>
+    </tr>
+    <tr>
+      <td>6. உருவுமல்ல வெளியுமல்ல ஒன்றைமேவி நின்றதல்ல<br />மருவுமல்ல காதமல்ல மற்றதல்ல அற்றதல்ல<br />பெரியதல்ல சிறியதல்ல பேசுமாவி தானுமல்ல<br />அரியதாகி நின்றநேர்மை யாவர்காண வல்லரே (ஓம்)<br />தேகநிலை</td>
+      <td><span class="translit-l12b">6. Uruvumalla veliiyumalla ondraimevi ninrathalla<br />Maruvumalla kaadhamalla matirathalla atrathalla<br />Periyathalla siriyathalla pesumaavi thaanumalla<br />Ariyataagi ninranaermai yaavarkaana vallare (Om)<br />tēka nilai</span></td>
+    </tr>
+    <tr>
+      <td>7. மண்கலங் கவிழ்ந்தபோது வைத்துவைத்து அடுக்குவார்<br />வெண்கலங் கவிழ்ந்தபோது வேணுமென்று பேணுவார்<br />நண்கலங் கவிழ்ந்தபோது நாறுமென்று போடுவார்<br />எண்கலந்து நின்றமாயம் என்ன மாய மீசனே (ஓம்)<br />அட்சர நிலை</td>
+      <td><span class="translit-l12b">7. maṇkalaṅ kaviḻndapōthu vaiththuvaiththu aṭukkuvār<br />veṇkalaṅ kaviḻndapōthu vēṇumendru pēṇuvār<br />ṇaṅkalaṅ kaviḻndapōthu nāṛumendru pōduvār<br />eṅkalanthu ninramāyam enna māya mīcanē (Ōm)<br />Akṣara nilai</span></td>
+    </tr>
+    <tr>
+      <td>8. ஆனவஞ் செழுத்துளே அண்டமும் அகண்டமும்<br />ஆனவஞ் செழுத்துளே ஆதியான மூவரும்<br />ஆனவஞ் செழுத்துளே அகாரமும் மகாரமும்<br />ஆனவஞ் செழுத்துளே அடங்கலாவ லுற்றதே (ஓம்)<br />இதுவுமது</td>
+      <td><span class="translit-l12b">8. āṉavañ ceḻuttuḷē aṇṭamum akaṇṭamum<br />āṉavañ ceḻuttuḷē ātiyāṉ mūvarum<br />āṉavañ ceḻuttuḷē akāramum mahāramum<br />āṉavañ ceḻuttuḷē aṭaṅkalāva luṟṟatē (ōm)<br />ithuvumathu</span></td>
+    </tr>
+    <tr>
+      <td>9. நினைப்பதொன்று கண்டிலேன் நீயலாது வேறிலை<br />நினைப்புமாய் மறப்புமாய் நின்றமாய்கை மாய்கையை<br />அனைத்துமாய் அகண்டமாய் அனாதிமுன் அனாதியாய்<br />எனக்குள்நீ உனக்குள்நான் இருக்குமாறு எங்ஙனே (ஓம்)<br />ஞானநிலை</td>
+      <td><span class="translit-l12b">9. ninaippathonru kandilēn nīyalātu vērilai<br />ninaippumāy maṛappumāy ninṟamāy kai māykaiyai<br />anaiththumāy akaṇṭamāy anādhimuṉ anādhiyāy<br />enakkuḷnī uṉakkuḷnāṉ irukkumāṟu eṅṅanē (ōm)<br />ñāṉanilai</span></td>
+    </tr>
+    <tr>
+      <td>10. பண்டுநான் பறித்தெறிந்த பன்மலர்கள் எத்தனை<br />பாழிலே செபித்துவிட்ட மந்திரங்கள் எத்தனை<br />மிண்டராய்த் திரிந்தபோது இரைத்தநீர்கள் எத்தனை<br />மீளவும் சிவாலயங்கள் சூழவந்தது எத்தனை (ஓம்)<br />ஞானம்</td>
+      <td><span class="translit-l12b">10. Paṇṭunāṉ paṟittediṟinta panmalarhaḷ ettanai<br />Pāḻilē sebituvitta manthiraṅkaḷ ettanai<br />Miṇṭarāyt tiṟintapōtu iraithanīrkaḷ ettanai<br />Mīḷavum civālayaṅkaḷ cūḻavantatu ettanai (Ōm)<br />ñāṉam</span></td>
+    </tr>
+    <tr>
+      <td>11. சிவமாயினும் சிவமாயினும் எம்மை யாவரே<br />சிவமாயினும் சிவமாயினும் எம்மை யாவரே<br />சிவமாயினும் சிவமாயினும் எம்மை யாவரே<br />சிவமாயினும் சிவமாயினும் எம்மை யாவரே (ஓம்)<br />சிவம்</td>
+      <td><span class="translit-l12b">11. civamāyiṉum civamāyiṉum emmai yāvarē<br />civamāyiṉum civamāyiṉum emmai yāvarē<br />civamāyiṉum civamāyiṉum emmai yāvarē<br />civamāyiṉum civamāyiṉum emmai yāvarē (ōm)<br />civam</span></td>
+    </tr>
+    <tr>
+      <td>12. அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br />அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br />அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br />அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம் (ஓம்)<br />அஞ்சல்</td>
+      <td><span class="translit-l12b">12. anjezhuthu mantiram anjezhuthu mantiram<br />anjezhuthu mantiram anjezhuthu mantiram<br />anjezhuthu mantiram anjezhuthu mantiram<br />anjezhuthu mantiram anjezhuthu mantiram (ōm) </span></td>
+    </tr>
+    <tr>
+      <td>13. அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br />அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br />அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br />அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம் (ஓம்)<br />அஞ்சல்</td>
+      <td><span class="translit-l12b">13. anjezhuthu mantiram anjezhuthu mantiram<br />anjezhuthu mantiram anjezhuthu mantiram<br />anjezhuthu mantiram anjezhuthu mantiram<br />anjezhuthu mantiram anjezhuthu mantiram (ōm) </span></td>
+    </tr>
+    <tr>
+      <td>14. அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br />அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br />அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br />அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம் (ஓம்)<br />அஞ்சல்</td>
+      <td><span class="translit-l12b">14. anjezhuthu mantiram anjezhuthu mantiram<br />anjezhuthu mantiram anjezhuthu mantiram<br />anjezhuthu mantiram anjezhuthu mantiram<br />anjezhuthu mantiram anjezhuthu mantiram (ōm) </span></td>
+    </tr>
+    <tr>
+      <td>15. அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br />அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br />அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br />அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம் (ஓம்)<br />அஞ்சல்</td>
+      <td><span class="translit-l12b">15. anjezhuthu mantiram anjezhuthu mantiram<br />anjezhuthu mantiram anjezhuthu mantiram<br />anjezhuthu mantiram anjezhuthu mantiram<br />anjezhuthu mantiram anjezhuthu mantiram (ōm)</span></td>
+    </tr>
+    <tr>
+      <td>16. அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br />அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br />அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br />அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம் (ஓம்)<br />அஞ்சல்</td>
+      <td><span class="translit-l12b">16. anjezhuthu mantiram anjezhuthu mantiram<br />anjezhuthu mantiram anjezhuthu mantiram<br />anjezhuthu mantiram anjezhuthu mantiram<br />anjezhuthu mantiram anjezhuthu mantiram (ōm)</span></td>
+    </tr>
+    <tr>
+      <td>17. அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br />அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br />அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br />அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம் (ஓம்)<br />அஞ்சல்</td>
+      <td><span class="translit-l12b">17. anjezhuthu mantiram anjezhuthu mantiram<br />anjezhuthu mantiram anjezhuthu mantiram<br />anjezhuthu mantiram anjezhuthu mantiram<br />anjezhuthu mantiram anjezhuthu mantiram (ōm)</span></td>
+    </tr>
+    <tr>
+      <td>18. அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br />அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br />அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br />அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம் (ஓம்)<br />அஞ்சல்</td>
+      <td><span class="translit-l12b">18. anjezhuthu mantiram anjezhuthu mantiram<br />anjezhuthu mantiram anjezhuthu mantiram<br />anjezhuthu mantiram anjezhuthu mantiram<br />anjezhuthu mantiram anjezhuthu mantiram (ōm) </span></td>
+    </tr>
+    <tr>
+      <td>19. அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br />அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br />அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம்<br />அஞ்செழுத்து மந்திரம் அஞ்செழுத்து மந்திரம் (ஓம்)<br />அஞ்சல்</td>
+      <td><span class="translit-l12b">19. anjezhuthu mantiram anjezhuthu mantiram<br />anjezhuthu mantiram anjezhuthu mantiram<br />anjezhuthu mantiram anjezhuthu mantiram<br />anjezhuthu mantiram anjezhuthu mantiram (ōm)</span></td>
+    </tr>
+    <tr>
+      <td>20. ஓம்நம சிவாயமே உணர்ந்துமெய் தெளிந்துபின்<br />ஓம்நம சிவாயமே உணர்ந்துமெய் உணர்ந்தபின்<br />ஓம்நம சிவாயமே உட்கலந்து நிற்குமே (ஓம்)</td>
+      <td>ōmna ma civāyamē uṇarndumey teḷindupin<br />ōmna ma civāyamē uṇarndumey uṇarndapin<br />ōmna ma civāyamē uṭkalaṇdu nirkumē (ōm)</td>
+    </tr>
+  </tbody>
+</table>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <span class="site-footer-credits">
+      <a href="/license">Licensed under Creative Commons (CC0)</a>
+    </span>
+  </footer>
+
+  <script>
+    const burgerBtn = document.getElementById('burger-btn');
+    const navClose = document.getElementById('nav-close');
+    const navSidebar = document.getElementById('nav-sidebar');
+    const navOverlay = document.getElementById('nav-overlay');
+    let isNavOpen = false;
+
+    function openNav() {
+      navSidebar.classList.add('open');
+      navOverlay.classList.add('open');
+      isNavOpen = true;
+      burgerBtn.setAttribute('aria-expanded', 'true');
+      // Move focus to close button
+      navClose.focus();
+    }
+
+    function closeNav() {
+      navSidebar.classList.remove('open');
+      navOverlay.classList.remove('open');
+      isNavOpen = false;
+      burgerBtn.setAttribute('aria-expanded', 'false');
+      // Return focus to burger button
+      burgerBtn.focus();
+    }
+
+    burgerBtn.addEventListener('click', () => {
+      isNavOpen ? closeNav() : openNav();
+    });
+
+    navClose.addEventListener('click', closeNav);
+    navOverlay.addEventListener('click', closeNav);
+
+    // Close sidebar when a link is clicked
+    document.querySelectorAll('.nav-sidebar a').forEach(link => {
+      link.addEventListener('click', closeNav);
+    });
+
+    // Keyboard accessibility: ESC to close, Tab management
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isNavOpen) {
+        closeNav();
+      }
+    });
+
+    // Trap focus within sidebar when open
+    document.addEventListener('keydown', (e) => {
+      if (!isNavOpen || e.key !== 'Tab') return;
+
+      const focusableElements = navSidebar.querySelectorAll('button, a');
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      if (e.shiftKey && document.activeElement === firstElement) {
+        e.preventDefault();
+        lastElement.focus();
+      } else if (!e.shiftKey && document.activeElement === lastElement) {
+        e.preventDefault();
+        firstElement.focus();
+      }
+    });
+  </script>
+
+  <!-- Astronomy Engine - NASA JPL Ephemeris (local copy) -->
+  <script src="/assets/js/astronomy.browser.js" defer></script>
+
+  <!-- Astronomy Engine - Fallback CDN if primary fails -->
+  <script>
+    // Try alternative CDN if primary fails
+    window.addEventListener('DOMContentLoaded', function() {
+      if (typeof Astronomy === 'undefined') {
+        console.log('Primary CDN loading, retrying...');
+        // Give it 2 more seconds then try alternative
+        setTimeout(function() {
+          if (typeof Astronomy === 'undefined') {
+            console.error('Astronomy Engine: Failed to load local library.');
+
+            // Show warning message
+            var warningDiv = document.createElement('div');
+            warningDiv.style.cssText = 'background:#fff5f5; border:2px solid #d73a49; padding:15px; margin:15px; border-radius:4px; color:#d73a49; font-family:monospace; font-size:13px;';
+            warningDiv.innerHTML = '<strong>⚠️ Astronomy Engine Load Error</strong><br><br>' +
+              'The Astronomy Engine library failed to load.<br><br>' +
+              '<strong>Troubleshooting:</strong><br>' +
+              '• Check browser console (F12 → Console) for detailed errors<br>' +
+              '• Verify /assets/js/astronomy.browser.js is accessible<br>' +
+              '• Try refreshing the page (Ctrl+R)<br><br>' +
+              'The calculator requires this library to function.';
+
+            var containers = document.querySelectorAll('[id*="panchanga"]');
+            if (containers.length > 0) {
+              containers[0].parentNode.insertBefore(warningDiv, containers[0]);
+            } else {
+              document.body.insertBefore(warningDiv, document.body.firstChild);
+            }
+          }
+        }, 2000);
+      }
+    });
+  </script>
+
+  <!-- Panchanga Calculator Scripts (defer for proper loading order) -->
+  <script src="/assets/js/location-manager.js" defer></script>
+  <script src="/assets/js/panchanga-calculator.js" defer></script>
+
+  <!-- Version Footer -->
+  <footer style="margin-top: 40px; padding: 20px; border-top: 1px solid #e1e4e8; text-align: center; font-size: 12px; color: #666;">
+    <div>Panchanga Calculator v1.0.0-beta.2 • Updated: 2026-05-28</div>
+  </footer>
+
+</body>
+</html>

@@ -4,7 +4,7 @@ custom_heading: "Pradosha Kala pooja"
 title: "Pradosha Kala pooja"
 ---
 
-# ப्रदোश काल - Pradosha Kalam
+# ப்ரதோஷ காலம் - Pradosha Kalam
 
 Pradosha Kalam is an auspicious time period of 1½ hours before and after sunset, occurring on the 13th day (Triyodashi) of both lunar phases:
 - **Shukla Paksha** (ascending moon phase)
@@ -13,6 +13,14 @@ Pradosha Kalam is an auspicious time period of 1½ hours before and after sunset
 This sacred time is particularly devoted to the worship of Lord Shiva. Performing puja, chanting mantras, and meditation during Pradosha Kalam is believed to bring spiritual benefits and divine blessings.
 
 ---
+
+## 📅 Calculate Your Pradosha Times
+
+{% include panchanga-widget-simple.html %}
+
+---
+
+## 📖 Texts for Pradosha Worship
 
 * [ஶ்ரீ ருத்³ரம் நமகம் - Sri Rudram Namakam](namakkam.md)
 * [ஶ்ரீ ருத்³ரம் சமகம் - Sri Rudram Chamakam](chamakkam.md)

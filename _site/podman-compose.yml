@@ -1,0 +1,13 @@
+version: '3'
+services:
+  saivamcloud-dev:
+    build: .
+    image: saivamcloud-dev
+    container_name: saivamcloud-dev
+    ports:
+      - "5080:4000"
+    volumes:
+      - .:/srv/jekyll
+    environment:
+      - JEKYLL_ENV=development
+    working_dir: /srv/jekyll

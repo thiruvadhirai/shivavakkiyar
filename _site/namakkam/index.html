@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Sri Rudram Namakam</title>
+
+  <!-- Cayman theme stylesheet (local copy) -->
+  <link rel="stylesheet" href="/assets/css/cayman-theme.css">
+
+  <!-- Custom CSS for burger menu and overrides -->
+  <link rel="stylesheet" href="/assets/css/custom.css">
+
+  <!-- Panchanga Calculator CSS -->
+  <link rel="stylesheet" href="/assets/css/panchanga.css">
+
+  <style>
+    /* Accessibility: Skip to main content link */
+    .skip-to-main {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: #0366d6;
+      color: white;
+      padding: 8px;
+      text-decoration: none;
+      z-index: 100;
+    }
+
+    .skip-to-main:focus {
+      top: 0;
+    }
+
+    /* Burger Menu & Sidebar */
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #f6f8fa;
+      border-bottom: 1px solid #e1e4e8;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .burger-btn {
+      background: none;
+      border: 2px solid transparent;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 4px 8px;
+      color: #24292e;
+      line-height: 1;
+      border-radius: 4px;
+      transition: border-color 0.2s;
+    }
+
+    .burger-btn:hover,
+    .burger-btn:focus {
+      color: #0366d6;
+      border-color: #0366d6;
+      outline: none;
+    }
+
+    .burger-btn:focus-visible {
+      outline: 2px solid #0366d6;
+      outline-offset: 2px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: #24292e;
+    }
+
+    /* Sidebar Navigation */
+    .nav-sidebar {
+      position: fixed;
+      left: -280px;
+      top: 0;
+      width: 280px;
+      height: 100vh;
+      background-color: #fff;
+      border-right: 1px solid #e1e4e8;
+      z-index: 999;
+      transition: left 0.3s ease-in-out;
+      overflow-y: auto;
+      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-sidebar.open {
+      left: 0;
+    }
+
+    .nav-close {
+      background: none;
+      border: 2px solid transparent;
+      font-size: 28px;
+      cursor: pointer;
+      padding: 12px 16px;
+      color: #24292e;
+      line-height: 1;
+      width: 100%;
+      text-align: right;
+      border-radius: 4px;
+      transition: border-color 0.2s;
+    }
+
+    .nav-close:hover,
+    .nav-close:focus {
+      color: #0366d6;
+      border-color: #0366d6;
+      outline: none;
+    }
+
+    .nav-close:focus-visible {
+      outline: 2px solid #0366d6;
+      outline-offset: -4px;
+    }
+
+    .nav-sidebar nav {
+      padding: 16px 0;
+    }
+
+    .nav-sidebar a {
+      display: block;
+      padding: 12px 16px;
+      color: #0366d6;
+      text-decoration: none;
+      border-left: 3px solid transparent;
+      transition: background-color 0.2s, border-left-color 0.2s;
+    }
+
+    .nav-sidebar a:hover,
+    .nav-sidebar a:focus {
+      background-color: #f6f8fa;
+      border-left-color: #0366d6;
+      outline: none;
+    }
+
+    .nav-sidebar a:focus-visible {
+      outline: 2px solid #0366d6;
+      outline-offset: -2px;
+    }
+
+    /* Overlay */
+    .nav-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 998;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .nav-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Main content adjustments */
+    main {
+      margin-top: 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 16px;
+      }
+
+      .nav-sidebar {
+        width: 250px;
+        left: -250px;
+      }
+    }
+
+    /* Reduced motion support */
+    @media (prefers-reduced-motion: reduce) {
+      .nav-sidebar,
+      .nav-overlay {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Accessibility: Skip to main content link -->
+  <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+  <!-- Header with Burger Menu -->
+  <header role="banner">
+    <button class="burger-btn" id="burger-btn" aria-label="Open navigation menu" aria-expanded="false" aria-controls="nav-sidebar">☰</button>
+    <h1>Saivam - Ancient Tamil & Other Spiritual Texts</h1>
+  </header>
+
+  <!-- Sidebar Navigation -->
+  <nav class="nav-sidebar" id="nav-sidebar" aria-label="Main navigation">
+    <button class="nav-close" id="nav-close" aria-label="Close navigation menu">×</button>
+    <nav>
+      
+        <a href="/namakkam/">Sri Rudram Namakam</a>
+      
+        <a href="/chamakkam/">Sri Rudram Chamakam</a>
+      
+        <a href="/shivapuranam/">Shiva Puranam</a>
+      
+        <a href="/purusasuktham/">Purusa Suktham</a>
+      
+        <a href="/srisuktam/">Sri Suktam</a>
+      
+        <a href="/shivavakkiyar/">Shivavakkiyam</a>
+      
+        <a href="/natarajarpathu/">Natarajar Pathu</a>
+      
+        <a href="/nindrathiruthandagam/">Nindra Thiruthandagam</a>
+      
+        <a href="/thiruneetrupathigam/">Thiruneetru Pathigam</a>
+      
+        <a href="/nandhi-pradosha-song/">Nandhi Pradosha Song</a>
+      
+        <a href="/mantrapushpam/">Mantra Pushpam</a>
+      
+        <a href="/arathi/">Arathi</a>
+      
+        <a href="/panchanga/">Panchanga Calculator</a>
+      
+        <a href="/pradoshakalapooja/">Pradosha Kala Pooja</a>
+      
+        <a href="/license/">License</a>
+      
+    </nav>
+  </nav>
+
+  <!-- Overlay -->
+  <div class="nav-overlay" id="nav-overlay" aria-hidden="true"></div>
+
+  <!-- Main content area -->
+  <main class="page-content" id="main-content" aria-label="Content">
+    <div class="wrapper">
+      <h1 id="ஷ்ரீ-ருத்ரம்-நமகம்---sri-rudram-namakam">ஷ்ரீ ருத்³ரம் நமகம் - Sri Rudram Namakam</h1>
+
+<p>க்ருஷ்ண யஜுர்வேதீ³ய தைத்திரீய ஸம்ஹிதா
+சதுர்த²ம் வைஷ்வதே³வம் காண்ட³ம் பஞ்சம: ப்ரபாட²க:</p>
+
+<p>ஓம் நமோ ப⁴க³வதே॑ ருத்³ரா॒ய ॥
+நம॑ஸ்தே ருத்³ர ம॒ன்யவ॑ உ॒தோத॒ இஷ॑வே॒ நம: ।
+நம॑ஸ்தே அஸ்து॒ த⁴ன்வ॑னே பா॒³ஹுப்⁴யா॑மு॒த தே॒ நம: ॥</p>
+
+<p>யா த॒ இஷு: ஷி॒வத॑மா ஷி॒வம் ப॒³பூ⁴வ॑ தே॒ த⁴னு: ।
+ஷி॒வா ஷ॑ர॒வ்யா॑ யா தவ॒ தயா॑ நோ ருத்³ர ம்ருட³ய ।</p>
+
+<p>யா தே॑ ருத்³ர ஷி॒வா த॒னூரகோ॒⁴ராபா॑பகாஷினீ ।
+தயா॑ நஸ்த॒னுவா॒ ஷந்த॑மயா॒ கி³ரி॑ஷந்தா॒பி⁴சா॑கஷீஹி ॥</p>
+
+<p>யாமிஷும்॑ கி³ரிஷந்த॒ ஹஸ்தே॒ பி³ப॒⁴ர்​ஷ்யஸ்த॑வே ।
+ஷி॒வாம் கி॑³ரித்ர॒ தாம் கு॑ரு॒ மா ஹிக்³ம்॑ஸீ:  புரு॑ஷம்॒ ஜக॑³த்॥</p>
+
+<p>ஷி॒வேன॒ வச॑ஸா த்வா॒ கி³ரி॒ஷாச்சா॑² வதா³மஸி ।
+யதா॑² ந:  ஸர்வ॒மிஜ்ஜக॑³த³ய॒க்ஷ்மக்³ம் ஸு॒மனா॒ அஸ॑த் ॥</p>
+
+<p>அத்⁴ய॑வோசத³தி⁴வ॒க்தா ப்ர॑த॒²மோ தை³வ்யோ॑ பி॒⁴ஷக் ।
+அஹீக்॑³ஷ்ச॒ ஸர்வா᳚ஞ்ஜ॒ம்ப⁴ய॒ன்-த்²ஸர்வா᳚ஷ்ச யாதுதா॒⁴ன்ய: ॥</p>
+
+<p>அ॒ஸௌ யஸ்தா॒ம்ரோ அ॑ரு॒ண உ॒த ப॒³ப்⁴ருஸ்ஸு॑ம॒ங்க³ல: ।
+யே சே॒மாக்³ம் ரு॒த்³ரா அ॒பி⁴தோ॑ தி॒³க்ஷு ஷ்ரி॒தா: ஸ॑ஹஸ்ர॒ஷோவை॑ஷா॒க்³ம்॒॒ ஹேட॑³ ஈமஹே ॥</p>
+
+<p>அ॒ஸௌ யோ॑வ॒ஸர்ப॑தி॒ நீல॑க்³ரீவோ॒ விலோ॑ஹித: ।
+உ॒தைனம்॑ கோ॒³பா அ॑த்³ருஷ॒ன்னத்³ரு॑ஷன்னுத³ஹா॒ர்ய: ।
+உ॒தைனம்॒ விஷ்வா॑ பூ॒⁴தானி॒ ஸ த்³ரு॒ஷ்டோ ம்ரு॑ட³யாதி ந: ॥</p>
+
+<p>நமோ॑ அஸ்து॒ நீல॑க்³ரீவாய ஸஹஸ்ரா॒க்ஷாய॑ மீ॒டு⁴ஷே᳚ ।
+அதோ॒² யே அ॑ஸ்ய॒ ஸத்வா॑னோ॒ஹம் தேப்⁴யோ॑கர॒ன்னம: ॥</p>
+
+<p>ப்ரமு॑ஞ்ச॒ த⁴ன்வ॑ன॒ஸ்த்வமு॒ப⁴யோ॒ரார்த்னி॑ யோ॒ர்ஜ்யாம் ।
+யாஷ்ச॑ தே॒ ஹஸ்த॒ இஷ॑வ:  பரா॒ தா ப॑⁴க³வோ வப ॥</p>
+
+<p>அ॒வ॒தத்ய॒ த⁴னு॒ஸ்த்வக்³ம் ஸஹ॑ஸ்ராக்ஷ॒ ஷதே॑ஷுதே⁴ ।
+நி॒ஷீர்ய॑ ஷ॒ல்யானாம்॒ முகா॑² ஷி॒வோ ந: ஸு॒மனா॑ ப⁴வ ॥</p>
+
+<p>விஜ்யம்॒ த⁴னு: கப॒ர்தி³னோ॒ விஷ॑ல்யோ॒ பா³ண॑வாக்³ம் உ॒த ।
+அனே॑ஷன்ன॒ஸ்யேஷ॑வ ஆ॒பு⁴ர॑ஸ்ய நிஷ॒ங்க³தி॑²: ॥</p>
+
+<p>யா தே॑ ஹே॒திர்மீ॑டு³ஷ்டம॒ ஹஸ்தே॑ ப॒³பூ⁴வ॑ தே॒ த⁴னு: ।
+தயா॒ஸ்மான், வி॒ஷ்வத॒ஸ்த்வம॑ய॒க்ஷ்மயா॒ பரி॑ப்³பு⁴ஜ ॥</p>
+
+<p>நம॑ஸ்தே அ॒ஸ்த்வாயு॑தா॒⁴யானா॑ததாய த்⁴ரு॒ஷ்ணவே᳚ ।
+உ॒பா⁴ப்⁴யா॑மு॒த தே॒ நமோ॑ பா॒³ஹுப்⁴யாம்॒ தவ॒ த⁴ன்வ॑னே ॥</p>
+
+<p>பரி॑ தே॒ த⁴ன்வ॑னோ ஹே॒திர॒ஸ்மான் வ்ரு॑ணக்து வி॒ஷ்வத: ।
+அதோ॒² ய இ॑ஷு॒தி⁴ஸ்தவா॒ரே அ॒ஸ்மன்னிதே॑⁴ஹி॒ தம் ॥ 1 ॥</p>
+
+<p>ஷ்ரீ ஷம்ப॑⁴வே॒ நம: ॥
+நம॑ஸ்தே அஸ்து ப⁴க³வன்-விஷ்வேஷ்வ॒ராய॑ மஹாதே॒³வாய॑ த்ர்யம்ப॒³காய॑ த்ரிபுராந்த॒காய॑ த்ரிகாக்³னிகா॒லாய॑ காலாக்³னிரு॒த்³ராய॑ நீலக॒ண்டா²ய॑ ம்ருத்யுஞ்ஜ॒யாய॑ ஸர்வேஷ்வ॒ராய॑ ஸதா³ஷி॒வாய॑ [ஷங்க॒ராய॑] ஷ்ரீமன்-மஹாதே॒³வாய॒ நம: ।</p>
+
+<p>நமோ॒ ஹிர॑ண்ய பா³ஹவே ஸேனா॒ன்யே॑ தி॒³ஷாம் ச॒ பத॑யே॒ நமோ॒
+நமோ॑ வ்ரு॒க்ஷேப்⁴யோ॒ ஹரி॑கேஷேப்⁴ய: பஷூ॒னாம் பத॑யே॒ நமோ॒
+நம: ஸ॒ஸ்பிஞ்ஜ॑ராய॒ த்விஷீ॑மதே பதீ॒²னாம் பத॑யே॒ நமோ॒
+நமோ॑ ப³ப்⁴லு॒ஷாய॑ விவ்யா॒தி⁴னேன்னா॑னாம்॒ பத॑யே॒ நமோ॒
+நமோ॒ ஹரி॑கேஷாயோபவீ॒தினே॑ பு॒ஷ்டானாம்॒ பத॑யே॒ நமோ॒
+நமோ॑ ப॒⁴வஸ்ய॑ ஹே॒த்யை ஜக॑³தாம்॒ பத॑யே॒ நமோ॒
+நமோ॑ ரு॒த்³ராயா॑ததா॒வினே॒ க்ஷேத்ரா॑ணாம்॒ பத॑யே॒ நமோ॒
+நம॑ஸ்ஸூ॒தாயாஹ॑ந்த்யாய॒ வனா॑னாம்॒ பத॑யே॒ நமோ॒
+நமோ॒ ரோஹி॑தாய ஸ்த॒²பத॑யே வ்ரு॒க்ஷாணாம்॒ பத॑யே॒ நமோ॒
+நமோ॑ ம॒ந்த்ரிணே॑ வாணி॒ஜாய॒ கக்ஷா॑ணாம்॒ பத॑யே॒ நமோ॒
+நமோ॑ பு⁴வ॒ந்தயே॑ வாரிவஸ்க்ரு॒தா-யௌஷ॑தீ⁴னாம்॒ பத॑யே॒ நமோ॒
+நம॑ உ॒ச்சைர்கோ॑⁴ஷாயாக்ர॒ந்த³ய॑தே பத்தீ॒னாம் பத॑யே॒ நமோ॒
+நம: க்ருத்ஸ்னவீ॒தாய॒ தா⁴வ॑தே॒ ஸத்த்வ॑னாம்॒ பத॑யே॒ நம: ॥ 2 ॥</p>
+
+<p>நம:  ஸஹ॑மானாய நிவ்யா॒தி⁴ன॑ ஆவ்யா॒தி⁴னீ॑னாம்॒ பத॑யே॒ நமோ॒
+நம: ககு॒பா⁴ய॑ நிஷ॒ங்கி³ணே᳚ ஸ்தே॒னானாம்॒ பத॑யே॒ நமோ॒
+நமோ॑ நிஷ॒ங்கி³ண॑ இஷுதி॒⁴மதே॒ தஸ்க॑ராணாம்॒ பத॑யே॒ நமோ॒
+நமோ॒ வஞ்ச॑தே பரி॒வஞ்ச॑தே ஸ்தாயூ॒னாம் பத॑யே॒ நமோ॒
+நமோ॑ நிசே॒ரவே॑ பரிச॒ராயார॑ண்யானாம்॒ பத॑யே॒ நமோ॒
+நம: ஸ்ருகா॒விப்⁴யோ॒ ஜிகா⁴க்³ம்॑ஸத்³ப்⁴யோ முஷ்ண॒தாம் பத॑யே॒ நமோ॒
+நமோ॑ஸி॒மத்³ப்⁴யோ॒ நக்த॒ஞ்சர॑த்³ப்⁴ய: ப்ரக்ரு॒ந்தானாம்॒ பத॑யே॒ நமோ॒
+நம॑ உஷ்ணீ॒ஷிணே॑ கி³ரிச॒ராய॑ குலு॒ஞ்சானாம்॒ பத॑யே॒ நமோ॒
+நம॒ இஷு॑மத்³ப்⁴யோ த⁴ன்வா॒விப்⁴ய॑ஷ்ச வோ॒ நமோ॒
+நம॑ ஆதன்-வா॒னேப்⁴ய: ப்ரதி॒த³தா॑⁴னேப்⁴யஷ்ச வோ॒ நமோ॒
+நம॑ ஆ॒யச்ச॑²த்³ப்⁴யோ விஸ்ரு॒ஜத்³ப்⁴ய॑ஷ்ச வோ॒ நமோ॒
+நமோஸ்ய॑த்³ப்⁴யோ॒ வித்³ய॑த்³ப்⁴யஷ்ச வோ॒ நமோ॒
+நம॒ ஆஸீ॑னேப்⁴ய:  ஷயா॑னேப்⁴யஷ்ச வோ॒ நமோ॒
+நம: ஸ்வ॒பத்³ப்⁴யோ॒ ஜாக்³ர॑த்³ப்⁴யஷ்ச வோ॒ நமோ॒
+நம॒ஸ்திஷ்ட॑²த்³ப்⁴யோ॒ தா⁴வ॑த்³ப்⁴யஷ்ச வோ॒ நமோ॒
+நம: ஸ॒பா⁴ப்⁴ய: ஸ॒பா⁴ப॑திப்⁴யஷ்ச வோ॒ நமோ॒
+நமோ॒ அஷ்வே॒ப்⁴யோஷ்வ॑பதிப்⁴யஷ்ச வோ॒ நம: ॥ 3 ॥</p>
+
+<p>நம॑ ஆவ்யா॒தி⁴னீ᳚ப்⁴யோ வி॒வித்⁴ய॑ந்தீப்⁴யஷ்ச வோ॒ நமோ॒
+நம॒ உக॑³ணாப்⁴யஸ்த்ருக்³ம்-ஹ॒தீப்⁴ய॑ஷ்ச வோ॒ நமோ॒
+நமோ॑ க்³ரு॒த்ஸேப்⁴யோ॑ க்³ரு॒த்ஸப॑திப்⁴யஷ்ச வோ॒ நமோ॒
+நமோ॒ வ்ராதே᳚ப்⁴யோ॒ வ்ராத॑பதிப்⁴யஷ்ச வோ॒ நமோ॒
+நமோ॑ க॒³ணேப்⁴யோ॑ க॒³ணப॑திப்⁴யஷ்ச வோ॒ நமோ॒
+நமோ॒ விரூ॑பேப்⁴யோ வி॒ஷ்வரூ॑பேப்⁴யஷ்ச வோ॒ நமோ॒
+நமோ॑ மஹ॒த்³ப்⁴ய:, க்ஷுல்ல॒கேப்⁴ய॑ஷ்ச வோ॒ நமோ॒
+நமோ॑ ர॒தி²ப்⁴யோ॑ர॒தே²ப்⁴ய॑ஷ்ச வோ॒ நமோ॒
+நமோ॒ ரதே᳚²ப்⁴யோ॒ ரத॑²பதிப்⁴யஷ்ச வோ॒ நமோ॒
+நம:  ஸேனா᳚ப்⁴ய: ஸேனா॒னிப்⁴ய॑ஷ்ச வோ॒ நமோ॒
+நம:, க்ஷ॒த்த்ருப்⁴ய: ஸங்க்³ரஹீ॒த்ருப்⁴ய॑ஷ்ச வோ॒ நமோ॒
+நம॒ஸ்தக்ஷ॑ப்⁴யோ ரத²கா॒ரேப்⁴ய॑ஷ்ச வோ॒ நமோ॒
+நம:  குலா॑லேப்⁴ய: க॒ர்மாரே᳚ப்⁴யஷ்ச வோ॒ நமோ॒
+நம: பு॒ஞ்ஜிஷ்டே᳚ப்⁴யோ நிஷா॒தே³ப்⁴ய॑ஷ்ச வோ॒ நமோ॒
+நம॑ இஷு॒க்ருத்³ப்⁴யோ॑ த⁴ன்வ॒க்ருத்³ப்⁴ய॑ஷ்ச வோ॒ நமோ॒
+நமோ॑ ம்ருக॒³யுப்⁴ய: ஷ்வ॒னிப்⁴ய॑ஷ்ச வோ॒ நமோ॒
+நம॒-ஷ்ஷ்வப்⁴ய॒-ஷ்ஷ்வப॑திப்⁴யஷ்ச வோ॒ நம: ॥ 4 ॥</p>
+
+<p>நமோ॑ ப॒⁴வாய॑ ச ரு॒த்³ராய॑ ச॒
+நம: ஷ॒ர்வாய॑ ச பஷு॒பத॑யே ச॒
+நமோ॒ நீல॑க்³ரீவாய ச ஷிதி॒கண்டா॑²ய ச॒
+நம: கப॒ர்தி³னே॑ ச॒ வ்யு॑ப்தகேஷாய ச॒
+நம: ஸஹஸ்ரா॒க்ஷாய॑ ச ஷ॒தத॑⁴ன்வனே ச॒
+நமோ॑ கி³ரி॒ஷாய॑ ச ஷிபிவி॒ஷ்டாய॑ ச॒
+நமோ॑ மீ॒டு⁴ஷ்ட॑மாய॒ சேஷு॑மதே ச॒
+நமோ᳚ ஹ்ர॒ஸ்வாய॑ ச வாம॒னாய॑ ச॒
+நமோ॑ ப்³ருஹ॒தே ச॒ வர்​ஷீ॑யஸே ச॒
+நமோ॑ வ்ரு॒த்³தா⁴ய॑ ச ஸம்॒வ்ருத்⁴வ॑னே ச॒
+நமோ॒ அக்³ரி॑யாய ச ப்ரத॒²மாய॑ ச॒
+நம॑ ஆ॒ஷவே॑ சாஜி॒ராய॑ ச॒
+நம:  ஷீக்⁴ரி॑யாய ச॒ ஷீப்⁴யா॑ய ச॒
+நம॑ ஊ॒ர்ம்யா॑ய சாவஸ்வ॒ன்யா॑ய ச॒
+நம: ஸ்ரோத॒ஸ்யா॑ய ச॒ த்³வீப்யா॑ய ச ॥ 5 ॥</p>
+
+<p>நமோ᳚ ஜ்யே॒ஷ்டா²ய॑ ச கனி॒ஷ்டா²ய॑ ச॒
+நம: பூர்வ॒ஜாய॑ சாபர॒ஜாய॑ ச॒
+நமோ॑ மத்⁴ய॒மாய॑ சாபக॒³ல்பா⁴ய॑ ச॒
+நமோ॑ ஜக॒⁴ன்யா॑ய ச॒ பு³த்⁴னி॑யாய ச॒
+நம: ஸோ॒ப்⁴யா॑ய ச ப்ரதிஸ॒ர்யா॑ய ச॒
+நமோ॒ யாம்யா॑ய ச॒ க்ஷேம்யா॑ய ச॒
+நம॑ உர்வ॒ர்யா॑ய ச॒ க²ல்யா॑ய ச॒
+நம:  ஷ்லோக்யா॑ய சாவஸா॒ன்யா॑ய ச॒
+நமோ॒ வன்யா॑ய ச॒ கக்ஷ்யா॑ய ச॒
+நம: ஷ்ர॒வாய॑ ச ப்ரதிஷ்ர॒வாய॑ ச॒
+நம॑ ஆ॒ஷுஷே॑ணாய சா॒ஷுர॑தா²ய ச॒
+நம:  ஷூரா॑ய சாவபி⁴ந்த॒³தே ச॒
+நமோ॑ வ॒ர்மிணே॑ ச வரூ॒தி²னே॑ ச॒
+நமோ॑ பி॒³ல்மினே॑ ச கவ॒சினே॑ ச॒
+நம: ஷ்ரு॒தாய॑ ச ஷ்ருதஸே॒னாய॑ ச ॥ 6 ॥</p>
+
+<p>நமோ॑ து³ந்து॒³ப்⁴யா॑ய சாஹன॒ன்யா॑ய ச॒
+நமோ॑ த்⁴ரு॒ஷ்ணவே॑ ச ப்ரம்ரு॒ஷாய॑ ச॒
+நமோ॑ தூ॒³தாய॑ ச॒ ப்ரஹி॑தாய ச॒
+நமோ॑ நிஷ॒ங்கி³ணே॑ சேஷுதி॒⁴மதே॑ ச॒
+நம॑ஸ்தீ॒க்ஷ்ணேஷ॑வே சாயு॒தி⁴னே॑ ச॒
+நம: ஸ்வாயு॒தா⁴ய॑ ச ஸு॒த⁴ன்வ॑னே ச॒
+நம:  ஸ்ருத்யா॑ய ச॒ பத்²யா॑ய ச॒
+நம: கா॒ட்யா॑ய ச நீ॒ப்யா॑ய ச॒
+நம:  ஸூத்³யா॑ய ச ஸர॒ஸ்யா॑ய ச॒
+நமோ॑ நா॒த்³யாய॑ ச வைஷ॒ந்தாய॑ ச॒
+நம:  கூப்யா॑ய சாவ॒ட்யா॑ய ச॒
+நமோ॒ வர்​ஷ்யா॑ய சாவ॒ர்​ஷ்யாய॑ ச॒
+நமோ॑ மே॒க்⁴யா॑ய ச வித்³யு॒த்யா॑ய ச॒
+நம ஈ॒த்⁴ரியா॑ய சாத॒ப்யா॑ய ச॒
+நமோ॒ வாத்யா॑ய ச॒ ரேஷ்மி॑யாய ச॒
+நமோ॑ வாஸ்த॒வ்யா॑ய ச வாஸ்து॒பாய॑ ச ॥ 7 ॥</p>
+
+<p>நம:  ஸோமா॑ய ச ரு॒த்³ராய॑ ச॒
+நம॑ஸ்தா॒ம்ராய॑ சாரு॒ணாய॑ ச॒
+நம: ஷ॒ங்கா³ய॑ ச பஷு॒பத॑யே ச॒
+நம॑ உ॒க்³ராய॑ ச பீ॒⁴மாய॑ ச॒
+நமோ॑ அக்³ரேவ॒தா⁴ய॑ ச தூ³ரேவ॒தா⁴ய॑ ச॒
+நமோ॑ ஹ॒ந்த்ரே ச॒ ஹனீ॑யஸே ச॒
+நமோ॑ வ்ரு॒க்ஷேப்⁴யோ॒ ஹரி॑கேஷேப்⁴யோ॒
+நம॑ஸ்தா॒ராய॒
+நம॑ஷ்ஷ॒ம்ப⁴வே॑ ச மயோ॒ப⁴வே॑ ச॒
+நம: ஷங்க॒ராய॑ ச மயஸ்க॒ராய॑ ச॒
+நம: ஷி॒வாய॑ ச ஷி॒வத॑ராய ச॒
+நம॒ஸ்தீர்த்²யா॑ய ச॒ கூல்யா॑ய ச॒
+நம: பா॒ர்யா॑ய சாவா॒ர்யா॑ய ச॒
+நம: ப்ர॒தர॑ணாய சோ॒த்தர॑ணாய ச॒
+நம॑ ஆதா॒ர்யா॑ய சாலா॒த்³யா॑ய ச॒
+நம:  ஷஷ்ப்யா॑ய ச॒ பே²ன்யா॑ய ச॒
+நம: ஸிக॒த்யா॑ய ச ப்ரவா॒ஹ்யா॑ய ச ॥ 8 ॥</p>
+
+<p>நம॑ இரி॒ண்யா॑ய ச ப்ரப॒த்²யா॑ய ச॒
+நம: கிக்³ம்ஷி॒லாய॑ ச॒ க்ஷய॑ணாய ச॒
+நம: கப॒ர்தி³னே॑ ச புல॒ஸ்தயே॑ ச॒
+நமோ॒ கோ³ஷ்ட்²யா॑ய ச॒ க்³ருஹ்யா॑ய ச॒
+நம॒ஸ்தல்ப்யா॑ய ச॒ கே³ஹ்யா॑ய ச॒
+நம: கா॒ட்யா॑ய ச க³ஹ்வரே॒ஷ்டா²ய॑ ச॒
+நமோ᳚ ஹ்ரத॒³ய்யா॑ய ச நிவே॒ஷ்ப்யா॑ய ச॒
+நம: பாக்³ம் ஸ॒வ்யா॑ய ச ரஜ॒ஸ்யா॑ய ச॒
+நம:  ஷுஷ்க்யா॑ய ச ஹரி॒த்யா॑ய ச॒
+நமோ॒ லோப்யா॑ய சோல॒ப்யா॑ய ச॒
+நம॑ ஊ॒ர்வ்யா॑ய ச ஸூ॒ர்ம்யா॑ய ச॒
+நம: ப॒ர்ண்யா॑ய ச பர்ணஷ॒த்³யா॑ய ச॒
+நமோ॑பகு॒³ரமா॑ணாய சாபி⁴க்⁴ன॒தே ச॒
+நம॑ ஆக்²கி²த॒³தே ச॑ ப்ரக்²கி²த॒³தே ச॒
+நமோ॑ வ: கிரி॒கேப்⁴யோ॑ தே॒³வானா॒க்॒³ம்॒ ஹ்ருத॑³யேப்⁴யோ॒
+நமோ॑ விக்ஷீண॒கேப்⁴யோ॒ நமோ॑ விசின்வ॒த்கேப்⁴யோ॒
+நம॑ ஆனிர் ஹ॒தேப்⁴யோ॒ நம॑ ஆமீவ॒த்கேப்⁴ய: ॥ 9 ॥</p>
+
+<p>த்³ராபே॒ அந்த॑⁴ஸஸ்பதே॒ த³ரி॑த்³ர॒ன்னீல॑லோஹித ।
+ஏ॒ஷாம் புரு॑ஷாணாமே॒ஷாம் ப॑ஷூ॒னாம் மா பே⁴ர்மாரோ॒ மோ ஏ॑ஷாம்॒ கிஞ்ச॒னாம॑மத் ।</p>
+
+<p>யா தே॑ ருத்³ர ஷி॒வா த॒னூ: ஷி॒வா வி॒ஷ்வாஹ॑பே⁴ஷஜீ ।
+ஷி॒வா ரு॒த்³ரஸ்ய॑ பே⁴ஷ॒ஜீ தயா॑ நோ ம்ருட³ ஜீ॒வஸே᳚ ॥</p>
+
+<p>இ॒மாக்³ம் ரு॒த்³ராய॑ த॒வஸே॑ கப॒ர்தி³னே᳚ க்ஷ॒யத்³வீ॑ராய॒ ப்ரப॑⁴ராமஹே ம॒திம் ।
+யதா॑² ந॒ஷ்ஷமஸ॑த்³த்³வி॒பதே॒³ சது॑ஷ்பதே॒³ விஷ்வம்॑ பு॒ஷ்டம் க்³ராமே॑ அ॒ஸ்மின்னனா॑துரம் ।</p>
+
+<p>ம்ரு॒டா³ நோ॑ ருத்³ரோ॒த நோ॒ மய॑ஸ்க்ருதி⁴ க்ஷ॒யத்³வீ॑ராய॒ நம॑ஸா விதே⁴ம தே ।
+யச்ச²ம் ச॒ யோஷ்ச॒ மனு॑ராய॒ஜே பி॒தா தத॑³ஷ்யாம॒ தவ॑ ருத்³ர॒ ப்ரணீ॑தௌ ।</p>
+
+<p>மா நோ॑ ம॒ஹாந்த॑மு॒த மா நோ॑ அர்ப॒⁴கம் மா ந॒ உக்ஷ॑ந்தமு॒த மா ந॑ உக்ஷி॒தம் ।
+மா நோ॑வதீ⁴: பி॒தரம்॒ மோத மா॒தரம்॑ ப்ரி॒யா மா ந॑ஸ்த॒னுவோ॑ ருத்³ர ரீரிஷ: ।</p>
+
+<p>மா ந॑ஸ்தோ॒கே தன॑யே॒ மா ந॒ ஆயு॑ஷி॒ மா நோ॒ கோ³ஷு॒ மா நோ॒ அஷ்வே॑ஷு ரீரிஷ: ।
+வீ॒ரான்மா நோ॑ ருத்³ர பா⁴மி॒தோவ॑தீ⁴ர்​ஹ॒விஷ்மம்॑தோ॒ நம॑ஸா விதே⁴ம தே ।</p>
+
+<p>ஆ॒ராத்தே॑ கோ॒³க்⁴ன உ॒த பூ॑ருஷ॒க்⁴னே க்ஷ॒யத்³வீ॑ராய ஸு॒ம்னம॒ஸ்மே தே॑ அஸ்து ।
+ரக்ஷா॑ ச நோ॒ அதி॑⁴ ச தே³வ ப்³ரூ॒ஹ்யதா॑⁴ ச ந:  ஷர்ம॑ யச்ச² த்³வி॒ப³ர்​ஹா:᳚ ।</p>
+
+<p>ஸ்து॒ஹி ஷ்ரு॒தம் க॑³ர்த॒ஸத³ம்॒ யுவா॑னம் ம்ரு॒க³ன்ன பீ॒⁴மமு॑பஹ॒த்னுமு॒க்³ரம் ।
+ம்ரு॒டா³ ஜ॑ரி॒த்ரே ரு॑த்³ர॒ ஸ்தவா॑னோ அ॒ன்யந்தே॑ அ॒ஸ்மன்னிவ॑பந்து॒ ஸேனா:᳚ ।</p>
+
+<p>பரி॑ணோ ரு॒த்³ரஸ்ய॑ ஹே॒திர்வ்ரு॑ணக்து॒ பரி॑ த்வே॒ஷஸ்ய॑ து³ர்ம॒தி ர॑கா॒⁴யோ: ।
+அவ॑ ஸ்தி॒²ரா ம॒க⁴வ॑த்³ப்⁴ய-ஸ்தனுஷ்வ॒ மீட்⁴வ॑ஸ்தோ॒காய॒ தன॑யாய ம்ருட³ய ।</p>
+
+<p>மீடு॑⁴ஷ்டம॒ ஷிவ॑தம ஷி॒வோ ந: ஸு॒மனா॑ ப⁴வ ।
+ப॒ர॒மே வ்ரு॒க்ஷ ஆயு॑த⁴ன்னி॒தா⁴ய॒ க்ருத்திம்॒ வஸா॑ன॒ ஆச॑ர॒ பினா॑கம்॒ பி³ப்⁴ர॒தா³க॑³ஹி ।</p>
+
+<p>விகி॑ரித॒³ விலோ॑ஹித॒ நம॑ஸ்தே அஸ்து ப⁴க³வ: ।
+யாஸ்தே॑ ஸ॒ஹஸ்ரக்³ம்॑ ஹே॒தயோ॒ன்யம॒ஸ்மன்னிவ॑பந்து॒ தா: ।</p>
+
+<p>ஸ॒ஹஸ்ரா॑ணி ஸஹஸ்ர॒தா⁴ பா॑³ஹு॒வோஸ்தவ॑ ஹே॒தய: ।
+தாஸா॒மீஷா॑னோ ப⁴க³வ: பரா॒சீனா॒ முகா॑² க்ருதி⁴ ॥ 1௦ ॥</p>
+
+<p>ஸ॒ஹஸ்ரா॑ணி ஸஹஸ்ர॒ஷோ யே ரு॒த்³ரா அதி॒⁴ பூ⁴ம்யா᳚ம் ।
+தேஷாக்³ம்॑ ஸஹஸ்ரயோஜ॒னேவ॒த⁴ன்வா॑னி தன்மஸி ।</p>
+
+<p>அ॒ஸ்மின்ம॑ஹ॒த்ய॑ர்ண॒வே᳚ந்தரி॑க்ஷே ப॒⁴வா அதி॑⁴ ।
+நீல॑க்³ரீவா: ஷிதி॒கண்டா᳚²: ஷ॒ர்வா அ॒த:⁴, க்ஷ॑மாச॒ரா: ।</p>
+
+<p>நீல॑க்³ரீவா: ஷிதி॒கண்டா॒² தி³வக்³ம்॑ ரு॒த்³ரா உப॑ஷ்ரிதா: ।
+யே வ்ரு॒க்ஷேஷு॑ ஸ॒ஸ்பிஞ்ஜ॑ரா॒ நீல॑க்³ரீவா॒ விலோ॑ஹிதா: ।</p>
+
+<p>யே பூ॒⁴தானா॒மதி॑⁴பதயோ விஷி॒கா²ஸ: கப॒ர்தி³ன: ।
+யே அன்னே॑ஷு வி॒வித்⁴ய॑ந்தி॒ பாத்ரே॑ஷு॒ பிப॑³தோ॒ ஜனான்॑ ।
+யே ப॒தா²ம் ப॑தி॒²ரக்ஷ॑ய ஐலப்³ரு॒தா॑³ ய॒வ்யுத:⁴ ।
+யே தீ॒ர்தா²னி॑ ப்ர॒சர॑ந்தி ஸ்ரு॒காவ॑ந்தோ நிஷ॒ங்கி³ண: ।
+ய ஏ॒தாவ॑ந்தஷ்ச॒ பூ⁴யாக்³ம்॑ஸஷ்ச॒ தி³ஷோ॑ ரு॒த்³ரா வி॑தஸ்தி॒²ரே ।
+தேஷாக்³ம்॑ ஸஹஸ்ரயோஜ॒னேவ॒த⁴ன்வா॑னி தன்மஸி ।
+நமோ॑ ரு॒த்⁴ரேப்⁴யோ॒ யே ப்ரு॑தி॒²வ்யாம் யே᳚ந்தரி॑க்ஷே॒ யே தி॒³வி யேஷா॒மன்னம்॒ வாதோ॑ வ॒ர்​ஷ॒மிஷ॑வ॒ஸ்தேப்⁴யோ॒ த³ஷ॒ ப்ராசீ॒ர்த³ஷ॑ த³க்ஷி॒ணா த³ஷ॑ ப்ர॒தீசீ॒-ர்த³ஷோ-தீ॑³சீ॒-ர்த³ஷோ॒ர்த்⁴வாஸ்தேப்⁴யோ॒ நம॒ஸ்தே நோ॑ ம்ருட³யந்து॒ தே யம் த்³வி॒ஷ்மோ யஷ்ச॑ நோ॒ த்³வேஷ்டி॒ தம் வோ॒ ஜம்பே॑⁴ த³தா⁴மி ॥ 11 ॥</p>
+
+<p>த்ர்ய॑ம்ப³கம் யஜாமஹே ஸுக॒³ந்தி⁴ம் பு॑ஷ்டி॒வர்த॑⁴னம் ।
+உ॒ர்வா॒ரு॒கமி॑வ॒ ப³ந்த॑⁴னான்ம்ரு॒த்யோர்மு॑க்ஷீய॒ மாம்ருதா᳚த் ।
+யோ ரு॒த்³ரோ அ॒க்³னௌ யோ அ॒ப்ஸு ய ஓஷ॑தீ⁴ஷு॒ யோ ரு॒த்³ரோ விஷ்வா॒ பு⁴வ॑னா வி॒வேஷ॒ தஸ்மை॑ ரு॒த்³ராய॒ நமோ॑ அஸ்து ।
+தமு॑ ஷ்டுஹி॒ ய: ஸ்வி॒ஷுஸ்ஸு॒த⁴ன்வா॒ யோ விஷ்வ॑ஸ்ய॒ க்ஷய॑தி பே⁴ஷ॒ஜஸ்ய॑ ।
+யக்ஷ்வா᳚ம॒ஹே ஸௌ᳚மன॒ஸாய॑ ரு॒த்³ரம் நமோ᳚பி⁴ர்தே॒³வமஸு॑ரம் து³வஸ்ய ।
+அ॒யம் மே॒ ஹஸ்தோ॒ ப⁴க॑³வான॒யம் மே॒ ப⁴க॑³வத்தர: ।
+அ॒யம் மே᳚ வி॒ஷ்வபே᳚⁴ஷஜோ॒யக்³ம் ஷி॒வாபி॑⁴மர்​ஷன: ।
+யே தே॑ ஸ॒ஹஸ்ர॑ம॒யுதம்॒ பாஷா॒ ம்ருத்யோ॒ மர்த்யா॑ய॒ ஹந்த॑வே ।
+தான் ய॒ஜ்ஞஸ்ய॑ மா॒யயா॒ ஸர்வா॒னவ॑ யஜாமஹே ।
+ம்ரு॒த்யவே॒ ஸ்வாஹா॑ ம்ரு॒த்யவே॒ ஸ்வாஹா᳚ ।
+ஓம் நமோ ப⁴க³வதே ருத்³ராய விஷ்ணவே ம்ருத்யு॑ர்மே பா॒ஹி ॥
+ப்ராணானாம் க்³ரந்தி²ரஸி ருத்³ரோ மா॑ விஷா॒ந்தக: ।
+தேனான்னேனா᳚ப்யாய॒ஸ்வ ॥
+நமோ ருத்³ராய விஷ்ணவே ம்ருத்யு॑ர்மே பா॒ஹி ॥</p>
+
+<p>ஸதா³ஷி॒வோம் ।</p>
+
+<p>ஓம் ஷாந்தி:  ஷாந்தி:  ஷாந்தி: ।</p>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <span class="site-footer-credits">
+      <a href="/license">Licensed under Creative Commons (CC0)</a>
+    </span>
+  </footer>
+
+  <script>
+    const burgerBtn = document.getElementById('burger-btn');
+    const navClose = document.getElementById('nav-close');
+    const navSidebar = document.getElementById('nav-sidebar');
+    const navOverlay = document.getElementById('nav-overlay');
+    let isNavOpen = false;
+
+    function openNav() {
+      navSidebar.classList.add('open');
+      navOverlay.classList.add('open');
+      isNavOpen = true;
+      burgerBtn.setAttribute('aria-expanded', 'true');
+      // Move focus to close button
+      navClose.focus();
+    }
+
+    function closeNav() {
+      navSidebar.classList.remove('open');
+      navOverlay.classList.remove('open');
+      isNavOpen = false;
+      burgerBtn.setAttribute('aria-expanded', 'false');
+      // Return focus to burger button
+      burgerBtn.focus();
+    }
+
+    burgerBtn.addEventListener('click', () => {
+      isNavOpen ? closeNav() : openNav();
+    });
+
+    navClose.addEventListener('click', closeNav);
+    navOverlay.addEventListener('click', closeNav);
+
+    // Close sidebar when a link is clicked
+    document.querySelectorAll('.nav-sidebar a').forEach(link => {
+      link.addEventListener('click', closeNav);
+    });
+
+    // Keyboard accessibility: ESC to close, Tab management
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isNavOpen) {
+        closeNav();
+      }
+    });
+
+    // Trap focus within sidebar when open
+    document.addEventListener('keydown', (e) => {
+      if (!isNavOpen || e.key !== 'Tab') return;
+
+      const focusableElements = navSidebar.querySelectorAll('button, a');
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      if (e.shiftKey && document.activeElement === firstElement) {
+        e.preventDefault();
+        lastElement.focus();
+      } else if (!e.shiftKey && document.activeElement === lastElement) {
+        e.preventDefault();
+        firstElement.focus();
+      }
+    });
+  </script>
+
+  <!-- Astronomy Engine - NASA JPL Ephemeris (local copy) -->
+  <script src="/assets/js/astronomy.browser.js" defer></script>
+
+  <!-- Astronomy Engine - Fallback CDN if primary fails -->
+  <script>
+    // Try alternative CDN if primary fails
+    window.addEventListener('DOMContentLoaded', function() {
+      if (typeof Astronomy === 'undefined') {
+        console.log('Primary CDN loading, retrying...');
+        // Give it 2 more seconds then try alternative
+        setTimeout(function() {
+          if (typeof Astronomy === 'undefined') {
+            console.error('Astronomy Engine: Failed to load local library.');
+
+            // Show warning message
+            var warningDiv = document.createElement('div');
+            warningDiv.style.cssText = 'background:#fff5f5; border:2px solid #d73a49; padding:15px; margin:15px; border-radius:4px; color:#d73a49; font-family:monospace; font-size:13px;';
+            warningDiv.innerHTML = '<strong>⚠️ Astronomy Engine Load Error</strong><br><br>' +
+              'The Astronomy Engine library failed to load.<br><br>' +
+              '<strong>Troubleshooting:</strong><br>' +
+              '• Check browser console (F12 → Console) for detailed errors<br>' +
+              '• Verify /assets/js/astronomy.browser.js is accessible<br>' +
+              '• Try refreshing the page (Ctrl+R)<br><br>' +
+              'The calculator requires this library to function.';
+
+            var containers = document.querySelectorAll('[id*="panchanga"]');
+            if (containers.length > 0) {
+              containers[0].parentNode.insertBefore(warningDiv, containers[0]);
+            } else {
+              document.body.insertBefore(warningDiv, document.body.firstChild);
+            }
+          }
+        }, 2000);
+      }
+    });
+  </script>
+
+  <!-- Panchanga Calculator Scripts (defer for proper loading order) -->
+  <script src="/assets/js/location-manager.js" defer></script>
+  <script src="/assets/js/panchanga-calculator.js" defer></script>
+
+  <!-- Version Footer -->
+  <footer style="margin-top: 40px; padding: 20px; border-top: 1px solid #e1e4e8; text-align: center; font-size: 12px; color: #666;">
+    <div>Panchanga Calculator v1.0.0-beta.2 • Updated: 2026-05-28</div>
+  </footer>
+
+</body>
+</html>

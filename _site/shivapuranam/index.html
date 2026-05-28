@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Shivapuranam</title>
+
+  <!-- Cayman theme stylesheet (local copy) -->
+  <link rel="stylesheet" href="/assets/css/cayman-theme.css">
+
+  <!-- Custom CSS for burger menu and overrides -->
+  <link rel="stylesheet" href="/assets/css/custom.css">
+
+  <!-- Panchanga Calculator CSS -->
+  <link rel="stylesheet" href="/assets/css/panchanga.css">
+
+  <style>
+    /* Accessibility: Skip to main content link */
+    .skip-to-main {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: #0366d6;
+      color: white;
+      padding: 8px;
+      text-decoration: none;
+      z-index: 100;
+    }
+
+    .skip-to-main:focus {
+      top: 0;
+    }
+
+    /* Burger Menu & Sidebar */
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #f6f8fa;
+      border-bottom: 1px solid #e1e4e8;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .burger-btn {
+      background: none;
+      border: 2px solid transparent;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 4px 8px;
+      color: #24292e;
+      line-height: 1;
+      border-radius: 4px;
+      transition: border-color 0.2s;
+    }
+
+    .burger-btn:hover,
+    .burger-btn:focus {
+      color: #0366d6;
+      border-color: #0366d6;
+      outline: none;
+    }
+
+    .burger-btn:focus-visible {
+      outline: 2px solid #0366d6;
+      outline-offset: 2px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: #24292e;
+    }
+
+    /* Sidebar Navigation */
+    .nav-sidebar {
+      position: fixed;
+      left: -280px;
+      top: 0;
+      width: 280px;
+      height: 100vh;
+      background-color: #fff;
+      border-right: 1px solid #e1e4e8;
+      z-index: 999;
+      transition: left 0.3s ease-in-out;
+      overflow-y: auto;
+      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-sidebar.open {
+      left: 0;
+    }
+
+    .nav-close {
+      background: none;
+      border: 2px solid transparent;
+      font-size: 28px;
+      cursor: pointer;
+      padding: 12px 16px;
+      color: #24292e;
+      line-height: 1;
+      width: 100%;
+      text-align: right;
+      border-radius: 4px;
+      transition: border-color 0.2s;
+    }
+
+    .nav-close:hover,
+    .nav-close:focus {
+      color: #0366d6;
+      border-color: #0366d6;
+      outline: none;
+    }
+
+    .nav-close:focus-visible {
+      outline: 2px solid #0366d6;
+      outline-offset: -4px;
+    }
+
+    .nav-sidebar nav {
+      padding: 16px 0;
+    }
+
+    .nav-sidebar a {
+      display: block;
+      padding: 12px 16px;
+      color: #0366d6;
+      text-decoration: none;
+      border-left: 3px solid transparent;
+      transition: background-color 0.2s, border-left-color 0.2s;
+    }
+
+    .nav-sidebar a:hover,
+    .nav-sidebar a:focus {
+      background-color: #f6f8fa;
+      border-left-color: #0366d6;
+      outline: none;
+    }
+
+    .nav-sidebar a:focus-visible {
+      outline: 2px solid #0366d6;
+      outline-offset: -2px;
+    }
+
+    /* Overlay */
+    .nav-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 998;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .nav-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Main content adjustments */
+    main {
+      margin-top: 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 16px;
+      }
+
+      .nav-sidebar {
+        width: 250px;
+        left: -250px;
+      }
+    }
+
+    /* Reduced motion support */
+    @media (prefers-reduced-motion: reduce) {
+      .nav-sidebar,
+      .nav-overlay {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Accessibility: Skip to main content link -->
+  <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+  <!-- Header with Burger Menu -->
+  <header role="banner">
+    <button class="burger-btn" id="burger-btn" aria-label="Open navigation menu" aria-expanded="false" aria-controls="nav-sidebar">☰</button>
+    <h1>Saivam - Ancient Tamil & Other Spiritual Texts</h1>
+  </header>
+
+  <!-- Sidebar Navigation -->
+  <nav class="nav-sidebar" id="nav-sidebar" aria-label="Main navigation">
+    <button class="nav-close" id="nav-close" aria-label="Close navigation menu">×</button>
+    <nav>
+      
+        <a href="/namakkam/">Sri Rudram Namakam</a>
+      
+        <a href="/chamakkam/">Sri Rudram Chamakam</a>
+      
+        <a href="/shivapuranam/">Shiva Puranam</a>
+      
+        <a href="/purusasuktham/">Purusa Suktham</a>
+      
+        <a href="/srisuktam/">Sri Suktam</a>
+      
+        <a href="/shivavakkiyar/">Shivavakkiyam</a>
+      
+        <a href="/natarajarpathu/">Natarajar Pathu</a>
+      
+        <a href="/nindrathiruthandagam/">Nindra Thiruthandagam</a>
+      
+        <a href="/thiruneetrupathigam/">Thiruneetru Pathigam</a>
+      
+        <a href="/nandhi-pradosha-song/">Nandhi Pradosha Song</a>
+      
+        <a href="/mantrapushpam/">Mantra Pushpam</a>
+      
+        <a href="/arathi/">Arathi</a>
+      
+        <a href="/panchanga/">Panchanga Calculator</a>
+      
+        <a href="/pradoshakalapooja/">Pradosha Kala Pooja</a>
+      
+        <a href="/license/">License</a>
+      
+    </nav>
+  </nav>
+
+  <!-- Overlay -->
+  <div class="nav-overlay" id="nav-overlay" aria-hidden="true"></div>
+
+  <!-- Main content area -->
+  <main class="page-content" id="main-content" aria-label="Content">
+    <div class="wrapper">
+      <table>
+  <thead>
+    <tr>
+      <th>Tamil</th>
+      <th>Transliteration</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>நமச்சிவாய வாஅழ்க நாதன்தாள் வாழ்க<br />இமைப்பொழுதும் என்நெஞ்சில் நீங்காதான் தாள்வாழ்க<br />கோகழி யாண்ட குருமணிதன் தாள்வாழ்க<br />ஆகம மாகிநின் றண்ணிப்பான் தாள்வாழ்க<br />ஏகன் அநேகன் இறைவ னடிவாழ்க 5</td>
+      <td><span class="translit-l10b">Namachivaaya vaazhlga naadhanthaal vaazhga<br />Imaippozhudhum ennnenjil neengaadhaan thaalvaazhga<br />Koghazhi yaantha kurumani than thaalvaazhga<br />Aagama maakinin rannippaan thaalvaazhga<br />Egan anegan iraiva nadivaazhga 5</span></td>
+    </tr>
+    <tr>
+      <td>வேகங் கெடுத்தாண்ட வேந்தனடி வெல்க<br />பிறப்பறுக்கும் பிஞ்ஞகன்றன் பெய்கழல்கள் வெல்க<br />புறத்தார்க்குச் சேயோன்றன் பூங்கழல்கள் வெல்க<br />கரங்குவிவார் உள்மகிழுங் கோன்கழல்கள் வெல்க<br />சிரங்குவிவார் ஓங்குவிக்குஞ் சீரோன் கழல்வெல்க 10</td>
+      <td><span class="translit-l10b">Vēkaṅ keṭuttāṇṭa vēntaṉaṭi velka<br />Piṟappaṟukkum piññakaṉṟaṉ peykaḻalkaḷ velka<br />Puṟattārkkucc cēyōṉṟaṉ pūṅkaḻalkaḷ velka<br />Karaṅkuvivār uḷmakiḻuṅ kōnkaḻalkaḷ velka<br />Ciranguvivār ōṅkuvikkuñ cīrōṉ kaḻalveIka 10</span></td>
+    </tr>
+    <tr>
+      <td>ஈச னடிபோற்றி எந்தை யடிபோற்றி<br />தேச னடிபோற்றி சிவன்சே வடிபோற்றி<br />நேயத்தே நின்ற நிமல னடிபோற்றி<br />மாயப் பிறப்பறுக்கும் மன்ன னடிபோற்றி<br />சீரார் பெருந்துறைநம் தேவ னடிபோற்றி 15</td>
+      <td><span class="translit-l10b">Eesa naṭipōṟṟi entai yaḍipōṟṟi<br />Tēsa naṭipōṟṟi civancē vaḍipōṟṟi<br />Neyattē ninṟa nimala naṭipōṟṟi<br />Māyap piṟappaṟukkum maṉṉa naṭipōṟṟi<br />Sīrār peruntuṟainam tēva naṭipōṟṟi 15</span></td>
+    </tr>
+    <tr>
+      <td>ஆராத இன்பம் அருளுமலை போற்றி<br />சிவனவன்என் சிந்தையுள் நின்ற அதனால்<br />அவனரு ளாலே அவன்தாள் வணங்கிச்<br />சிந்தை மகிழச் சிவபுரா ணந்தன்னை<br />முந்தை வினைமுழுதும் ஓய உரைப்பன்யான் 20</td>
+      <td><span class="translit-l10b">Ārāta inbam aruḷumalai pōṟṟi<br />Sivanavaṉeṉ cintayuḷ niṉṟa ataṉāl<br />Avaṉaru ḷālē avaṉtāḷ vaṇaṅkic<br />Cintai makiḻac civapurā ṇantaṉṉai<br />Muntai vinaimuḻutum Ōya uraippaṉyāṉ 20</span></td>
+    </tr>
+    <tr>
+      <td>கண்ணுதலான் தன்கருணைக் கண்காட்ட வந்தெய்தி<br />எண்ணுதற் கெட்டா எழிலார் கழலிறைஞ்சி<br />விண்ணிறைந்து மண்ணிறைந்து மிக்காய் விளங்கொளியாய்<br />எண்ணிறந் தெல்லை யிலாதானே நின்பெருஞ்சீர்<br />பொல்லா வினையேன் புகழுமா றொன்றறியேன் 25</td>
+      <td><span class="translit-l10b">Kaṇṇutalāṉ taṅkaruṇaik kaṇkāṭṭa vantheyti<br />Eṇṇutaṟ keṭṭā eḻilār kazhaliṟaiñci<br />Viṇṇiṟaintu maṇṇiṟaintu mikkāy viḷangkoḷiyāy<br />Eṇṇiṟan tellai yilātānē ninperuṉcīr<br />Pollā vinaiyēṉ pukazhumā ṟoṉṟaṟiyēṉ 25</span></td>
+    </tr>
+    <tr>
+      <td>புல்லாகிப் பூடாய்ப் புழுவாய் மரமாகிப்<br />பல்விருக மாகிப் பறவையாய்ப் பாம்பாகிக்<br />கல்லாய் மனிதராய்ப் பேயாய்க் கணங்களாய்<br />வல்லசுர ராகி முனிவராய்த் தேவராய்ச்<br />செல்லாஅ நின்றஇத் தாவர சங்கமத்துள் 30</td>
+      <td><span class="translit-l10b">Pullākip pūṭāyp puzuvāy maramākip<br />Palviruga mākip paṟavaiyāyp pāmpākik<br />Kallāy manitharāyp pēyāyk kaṇangaḷāy<br />Vallasura rāki muṉivarāyth tēvarāyc<br />Cellāa ninṟait tāvara saṅgamathuḷ 30</span></td>
+    </tr>
+    <tr>
+      <td>எல்லாப் பிறப்பும் பிறந்திளைத்தேன் எம்பெருமான்<br />மெய்யேஉன் பொன்னடிகள் கண்டின்று வீடுற்றேன்<br />உய்யஎன் உள்ளத்துள் ஓங்கார மாய்நின்ற<br />மெய்யா விமலா விடைப்பாகா வேதங்கள்<br />ஐயா எனஓங்கி ஆழ்ந்தகன்ற நுண்ணியனே 35</td>
+      <td><span class="translit-l10b">Ellaap piṟappum piṟantiḷaittēṉ emperumāṉ<br />Meyyēuṉ poṉnaṭikaḷ kaṇṭiṉṟu vīṭuṟṟēṉ<br />Uyyayeṉ uḷḷattuḷ ōṅkāra māyniṉṟa<br />Meyyā vimalā viṭaippākā vētangkaḷ<br />Ai yā eṉōṅki āḻntakaṉṟa nuṇṇiyaṉē 35</span></td>
+    </tr>
+    <tr>
+      <td>வெய்யாய் தணியாய் இயமான னாம்விமலா<br />பொய்யா யினவெல்லாம் போயகல வந்தருளி<br />மெய்ஞ்ஞான மாகி மிளிர்கின்ற மெய்ச்சுடரே<br />எஞ்ஞானம் இல்லாதேன் இன்பப் பெருமானே<br />அஞ்ஞானம் தன்னை அகல்விக்கும் நல்லறிவே 40</td>
+      <td><span class="translit-l10b">Veyyāy taṇiyāy iyamāṉ nāmvimalā<br />Poyyā yinavellām pōyakala vantaruḷi<br />Meyññāṉa māki miḷirkkiṉṟa meyccuṭarē<br />Eññāṉam illātēṉ iṉbap perumāṉē<br />Aññāṉam taṉṉai akalvikum nallaṟivē 40</span></td>
+    </tr>
+    <tr>
+      <td>ஆக்கம் அளவிறுதி இல்லாய் அனைத்துலகும்<br />ஆக்குவாய் காப்பாய் அழிப்பாய் அருள்தருவாய்<br />போக்குவாய் என்னைப் புகுவிப்பாய் நின்தொழும்பின்<br />நாற்றத்தின் நேரியாய் சேயாய் நணியானே<br />மாற்றம் மனங்கழிய நின்ற மறையோனே 45</td>
+      <td><span class="translit-l10b">Aakkam alavirodhi illai anaitthulakum<br />Aakkuvaai kaappaai azhippaai arultharuvaai<br />Pookkuvaai ennaip puguvippai nindholumpin<br />Naattraththin naeriyaai seyaai naniyanae<br />Maatram manangazhiya nindra maraiyonae 45</span></td>
+    </tr>
+    <tr>
+      <td>கறந்தபால் கன்னலொடு நெய்கலந்தாற் போலச்<br />சிறந்தடியார் சிந்தனையுள் தேனூறி நின்று<br />பிறந்த பிறப்பறுக்கும் எங்கள் பெருமான்<br />நிறங்களோ ரைந்துடையாய் விண்ணோர்க ளேத்த<br />மறைந்திருந்தாய் எம்பெருமான் வல்வினையேன் தன்னை 50</td>
+      <td><span class="translit-l10b">Kaṟanthapāl kannaloṭu neykalanthāṟ pōlac<br />Ciṟanthadiyār cintanaiyuḷ tēnūṟi ninṟu<br />Piṟantha piṟappaṟukkum eṅkaḷ perumāṉ<br />Niṟangkaḷō rainduṭaiyāy viṇṇōrk ḷētta<br />Maṟainthiruntāy emperumāṉ valvinaisēṉ taṉṉai 50</span></td>
+    </tr>
+    <tr>
+      <td>மறைந்திட மூடிய மாய இருளை<br />அறம்பாவம் என்னும் அருங்கயிற்றாற் கட்டிப்<br />புறந்தோல்போர்த் தெங்கும் புழுவழுக்கு மூடி<br />மலஞ்சோரும் ஒன்பது வாயிற் குடிலை<br />மலங்கப் புலனைந்தும் வஞ்சனையைச் செய்ய 55</td>
+      <td><span class="translit-l10b">Maṟaintiḍa mūṭiya māya iruḷai<br />Aṛampāvam eṉṉum aṟuṅkayiṟṟāṟ kaṭṭip<br />Puṟantōlpōrt tēṅkum puḻuvaḻukku mūṭi<br />Malañcōrum oṉpatu vāyiṟ kuṭilai<br />Malaṅkap pulanaintum vañcaṉaiyai c ceyya 55</span></td>
+    </tr>
+    <tr>
+      <td>விலங்கு மனத்தால் விமலா உனக்குக்<br />கலந்தஅன் பாகிக் கசிந்துள் ளுருகும்<br />நலந்தான் இலாத சிறியேற்கு நல்கி<br />நிலந்தன்மேல் வந்தருளி நீள்கழல்கள் காஅட்டி<br />நாயிற் கடையாய்க் கிடந்த அடியேற்குத் 60</td>
+      <td><span class="translit-l10b">Vilanggu manatthāl vimalaa unakkuk<br />Kalanthaṉ pāgik kasinthuḷ ḷurukum<br />Nalantān ilātha siṟiyērku nalgi<br />Nilantanmēl vandaruḷi nīḷkazhalgal kāaṭṭi<br />Nāyiṟ kaṭaiyāyk kiṭandha aḍiyērkut 60</span></td>
+    </tr>
+    <tr>
+      <td>தாயிற் சிறந்த தயாவான தத்துவனே<br />மாசற்ற சோதி மலர்ந்த மலர்ச்சுடரே<br />தேசனே தேனா ரமுதே சிவபுரனே<br />பாசமாம் பற்றறுத்துப் பாரிக்கும் ஆரியனே<br />நேச அருள்புரிந்து நெஞ்சில்வஞ் சங்கெடப் 65</td>
+      <td><span class="translit-l10b">Thāyiṟ ciṟanta tayāvāṉat tattuvaṉē<br />Mācāṟṟa cōti malarnta malarcchuṭarē<br />Tēcaṉē tēnā ramutē civapuraṉē<br />Pācāmām paṟṟaṟuttup pārikkuṁ āriyaṉē<br />Nēca aruḷpuruṉtu neñcilvañ caṅkeṭap 65</span></td>
+    </tr>
+    <tr>
+      <td>பேராது நின்ற பெருங்கருணைப் பேராறே<br />ஆரா அமுதே அளவிலாப் பெம்மானே<br />ஓராதார் உள்ளத் தொளிக்கும் ஒளியானே<br />நீராய் உருக்கியென் ஆருயிராய் நின்றானே<br />இன்பமுந் துன்பமும் இல்லானே உள்ளானே 70</td>
+      <td><span class="translit-l10b">Pērāthu ninra perungaruṇaip pērāṟē<br />Ārā amudhe aḷavilāpp pemmānē<br />Ōrādhār uḷḷath toḷikkum oḷiyānē<br />Nīrāy uruggiyeṉ āruyirāy ninrānē<br />Inpamun tunpamum illānē uḷḷānē 70</span></td>
+    </tr>
+    <tr>
+      <td>அன்பருக் கன்பனே யாவையுமாய் அல்லையுமாஞ்<br />சோதியனே துன்னிருளே தோன்றாப் பெருமையனே<br />ஆதியனே அந்தம் நடுவாகி அல்லானே<br />ஈர்த்தென்னை யாட்கொண்ட எந்தை பெருமானே<br />கூர்த்தமெய்ஞ் ஞானத்தாற் கொண்டுணர்வார் தங்கருத்தின் 75</td>
+      <td><span class="translit-l10b">Anbaruk kanbane yaavaiyumaai allaiyumaanj<br />Sothiyane thunnirule thoonraap perumaiyane<br />Aathiyane antham naduvaagi allaanae<br />Eerthennai yaadkonda enthai perumaanae<br />Koorthameijn gnaanathaar kondunarvaar thangaruththin 75</span></td>
+    </tr>
+    <tr>
+      <td>நோக்கரிய நோக்கே நுணுக்கரிய நுண்ணுணர்வே<br />போக்கும் வரவும் புணர்வுமிலாப் புண்ணியனே<br />காக்குமெங் காவலனே காண்பரிய பேரொளியே<br />ஆற்றின்ப வெள்ளமே அத்தாமிக் காய்நின்ற<br />தோற்றச் சுடரொளியாய்ச் சொல்லாத நுண்ணுணர்வாய் 80</td>
+      <td><span class="translit-l10b">Nokkaraiya nokkē nuṇukkariya nuṇṇuṇarvē<br />Pōkkum varavum puṇarvumilāp puṇṇiyaṉē<br />Kākkumeṅ kāvalaṇē kāṇpariya pēroḷiyē<br />Āṟṟinpa veḷḷamē attāmik kāyniṉṟa<br />Tōṟṟac cuṭaroḷiyāycc sollāta nuṇṇuṇarvāy 80</span></td>
+    </tr>
+    <tr>
+      <td>மாற்றமாம் வையகத்தின் வெவ்வேறே வந்தறிவாம்<br />தேற்றனே தேற்றத் தெளிவேஎன் சிந்தனையுள்<br />ஊற்றான உண்ணா ரமுதே உடையானே<br />வேற்று விகார விடக்குடம்பி னுட்கிடப்ப<br />ஆற்றேன்எம் ஐயா அரனேஓ என்றென்று 85</td>
+      <td><span class="translit-l10b">Māṟṟamām vaiyagattiṉ vevvēṟē vantari vāṁ<br />Tēṟṟaṉē tēṟṟat teḷivē eṉ cintanaiyuḷ<br />Ūṟṟāṉ uṇṇā Ramutē uṭaiyāṉē<br />Vēṟṟu vikāra viṭakkuṭampi ṉuṭkiṭappa<br />Āṟṟēnēm aiyyā araṉēō eṉṟeṉṟu 85</span></td>
+    </tr>
+    <tr>
+      <td>போற்றிப் புகழ்ந்திருந்து பொய்கெட்டு மெய்ஆனார்<br />மீட்டிங்கு வந்து வினைப்பிறவி சாராமே<br />கள்ளப் புலக்குரம்பை கட்டழிக்க வல்லானே<br />நள்ளிருளில் நட்டம் பயின்றாடும் நாதனே<br />தில்லையுட் கூத்தனே தென்பாண்டி நாட்டானே 90</td>
+      <td><span class="translit-l10b">Pōṟṟip pukazhnthirundu poykeṭṭu meyāṉār<br />Mīṭṭiṅku vandu vinaippiṟavi cārāmē<br />Kaḷḷap pulakkurampai kaṭṭaḻikka vallānē<br />Naḷḷiruḷil naṭṭam payiṉṟāḍum nāthānē<br />Tillaiyuṭ kūttaṉē tenpāṇṭi nāṭṭānē 90</span></td>
+    </tr>
+    <tr>
+      <td>அல்லற் பிறவி அறுப்பானே ஓஎன்று<br />சொல்லற் கரியானைச் சொல்லித் திருவடிக்கீழ்ச்<br />சொல்லிய பாட்டின் பொருளுணர்ந்து சொல்லுவார்<br />செல்வர் சிவபுரத்தின் உள்ளார் சிவனடிக்கீழ்ப்<br />பல்லோரும் ஏத்தப் பணிந்து</td>
+      <td><span class="translit-l10b">allaṛ piṟavi aṟuppānē ōeṉṟu<br />collaṛ kariyāṉaic colliṟ tiruvaṭikkīḻc<br />colliya pāṭṭiṉ poruḷuṇaṟntu colluvār<br />celvar civapurattiṉ uḷḷār civanaṭikkīḻp<br />pallōrum ētthap paṇintu 95</span></td>
+    </tr>
+  </tbody>
+</table>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <span class="site-footer-credits">
+      <a href="/license">Licensed under Creative Commons (CC0)</a>
+    </span>
+  </footer>
+
+  <script>
+    const burgerBtn = document.getElementById('burger-btn');
+    const navClose = document.getElementById('nav-close');
+    const navSidebar = document.getElementById('nav-sidebar');
+    const navOverlay = document.getElementById('nav-overlay');
+    let isNavOpen = false;
+
+    function openNav() {
+      navSidebar.classList.add('open');
+      navOverlay.classList.add('open');
+      isNavOpen = true;
+      burgerBtn.setAttribute('aria-expanded', 'true');
+      // Move focus to close button
+      navClose.focus();
+    }
+
+    function closeNav() {
+      navSidebar.classList.remove('open');
+      navOverlay.classList.remove('open');
+      isNavOpen = false;
+      burgerBtn.setAttribute('aria-expanded', 'false');
+      // Return focus to burger button
+      burgerBtn.focus();
+    }
+
+    burgerBtn.addEventListener('click', () => {
+      isNavOpen ? closeNav() : openNav();
+    });
+
+    navClose.addEventListener('click', closeNav);
+    navOverlay.addEventListener('click', closeNav);
+
+    // Close sidebar when a link is clicked
+    document.querySelectorAll('.nav-sidebar a').forEach(link => {
+      link.addEventListener('click', closeNav);
+    });
+
+    // Keyboard accessibility: ESC to close, Tab management
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isNavOpen) {
+        closeNav();
+      }
+    });
+
+    // Trap focus within sidebar when open
+    document.addEventListener('keydown', (e) => {
+      if (!isNavOpen || e.key !== 'Tab') return;
+
+      const focusableElements = navSidebar.querySelectorAll('button, a');
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      if (e.shiftKey && document.activeElement === firstElement) {
+        e.preventDefault();
+        lastElement.focus();
+      } else if (!e.shiftKey && document.activeElement === lastElement) {
+        e.preventDefault();
+        firstElement.focus();
+      }
+    });
+  </script>
+
+  <!-- Astronomy Engine - NASA JPL Ephemeris (local copy) -->
+  <script src="/assets/js/astronomy.browser.js" defer></script>
+
+  <!-- Astronomy Engine - Fallback CDN if primary fails -->
+  <script>
+    // Try alternative CDN if primary fails
+    window.addEventListener('DOMContentLoaded', function() {
+      if (typeof Astronomy === 'undefined') {
+        console.log('Primary CDN loading, retrying...');
+        // Give it 2 more seconds then try alternative
+        setTimeout(function() {
+          if (typeof Astronomy === 'undefined') {
+            console.error('Astronomy Engine: Failed to load local library.');
+
+            // Show warning message
+            var warningDiv = document.createElement('div');
+            warningDiv.style.cssText = 'background:#fff5f5; border:2px solid #d73a49; padding:15px; margin:15px; border-radius:4px; color:#d73a49; font-family:monospace; font-size:13px;';
+            warningDiv.innerHTML = '<strong>⚠️ Astronomy Engine Load Error</strong><br><br>' +
+              'The Astronomy Engine library failed to load.<br><br>' +
+              '<strong>Troubleshooting:</strong><br>' +
+              '• Check browser console (F12 → Console) for detailed errors<br>' +
+              '• Verify /assets/js/astronomy.browser.js is accessible<br>' +
+              '• Try refreshing the page (Ctrl+R)<br><br>' +
+              'The calculator requires this library to function.';
+
+            var containers = document.querySelectorAll('[id*="panchanga"]');
+            if (containers.length > 0) {
+              containers[0].parentNode.insertBefore(warningDiv, containers[0]);
+            } else {
+              document.body.insertBefore(warningDiv, document.body.firstChild);
+            }
+          }
+        }, 2000);
+      }
+    });
+  </script>
+
+  <!-- Panchanga Calculator Scripts (defer for proper loading order) -->
+  <script src="/assets/js/location-manager.js" defer></script>
+  <script src="/assets/js/panchanga-calculator.js" defer></script>
+
+  <!-- Version Footer -->
+  <footer style="margin-top: 40px; padding: 20px; border-top: 1px solid #e1e4e8; text-align: center; font-size: 12px; color: #666;">
+    <div>Panchanga Calculator v1.0.0-beta.2 • Updated: 2026-05-28</div>
+  </footer>
+
+</body>
+</html>
