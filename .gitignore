@@ -1,0 +1,57 @@
+# Jekyll build output (GitHub Pages builds this automatically)
+_site/
+.jekyll-cache/
+.jekyll-metadata
+
+# Ruby/Bundler
+*.gem
+Gemfile.lock
+.bundle/
+vendor/bundle
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+env/
+venv/
+.env
+.venv
+
+# IDE & Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Node.js / npm
+node_modules/
+npm-debug.log
+package-lock.json
+.npm
+
+# Build artifacts
+dist/
+build/
+*.log
+
+# Test coverage
+coverage/
+.nyc_output/
+test-results/
+
+# Temporary files
+*.tmp
+*.bak
+.temp/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Environment
+.env.local
+.env.*.local
