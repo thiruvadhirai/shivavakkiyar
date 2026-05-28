@@ -219,42 +219,75 @@ Complete styling for both widgets.
 
 ## Testing Framework
 
-### Testing Approach
-**Framework**: Vanilla Node.js (zero external dependencies)  
-**File**: `tests/panchanga-calculator.test.js`  
-**Dependencies**: None (Node.js built-in only)  
-**Status**: ✅ 15/15 tests passing (100%)
+### Three-Level Testing Approach
 
-**Why No Test Framework?**
-- Production code is 100% standalone (no npm/Jest required)
-- Tests are development-only (not included in deployment)
-- Simple assert pattern - easy to understand and audit
-- Fast execution without framework overhead
-- No `package.json` needed for the calculator to work
+**1. Unit Tests** (15 tests, <1s)
+- **File**: `tests/panchanga-calculator.test.js`
+- **Framework**: Vanilla Node.js (zero external dependencies)
+- **Purpose**: Test isolated calculation functions with mocked data
+- **Run**: `node tests/panchanga-calculator.test.js`
+- **Tests**: Ayanamsa, Tithi, Nakshatra, Yoga, Karana, Hora, edge cases
 
-**Run Tests:**
+**2. Integration Tests** (70 tests, ~2s)
+- **File**: `tests/panchanga-calculator-integration.test.js`
+- **Purpose**: Test real astronomical formulas and fallbacks
+- **Run**: `node tests/panchanga-calculator-integration.test.js`
+- **Tests**: Real calculations, accuracy, fallback behavior, algorithm validation
+
+**3. E2E Tests** (30+ tests, ~5-30s, browser + mobile)
+- **File**: `tests/e2e.spec.js`
+- **Framework**: Playwright (containerized, optional on host)
+- **Purpose**: Test actual browser UI and user interactions
+- **Run**: `TEST_URL=http://localhost:5080 npx playwright test` (local)
+- **Or**: `podman-compose --profile test up` (containerized)
+- **Tests**: Page load, location input, date picker, calculate button, results, responsiveness, accessibility
+
+**Why Three Levels?**
+- Unit tests: Fast, safe to run anywhere, validates logic
+- Integration tests: Real algorithms without mocking, catches regressions
+- E2E tests: Actual browser behavior, multi-device testing, accessibility
+
+### Containerized Testing (No Host Bloat)
+
 ```bash
-node tests/panchanga-calculator.test.js
+# Start dev server
+podman-compose up -d saivamcloud-dev
+
+# Run E2E tests in isolated container (includes Playwright, Chrome, Firefox)
+podman-compose --profile test up saivamcloud-test
+
+# View results
+cat tests/test-results.json
+open tests/test-results/index.html
 ```
 
-**Expected Output:**
-```
-✅ ALL TESTS PASSED
-Passed: 15/15
-Coverage: 100%
+**Benefits:**
+✓ No npm/Playwright installation on host  
+✓ Isolated test environment  
+✓ Chrome/Firefox bundled in container  
+✓ Reproducible across machines  
+✓ CI/CD ready
+
+### Test Summary
+
+| Suite | Tests | Time | Framework | Environment |
+|-------|-------|------|-----------|-------------|
+| Unit | 15 | <1s | Node.js | Local |
+| Integration | 70 | ~2s | Node.js | Local |
+| E2E | 30+ | 5-30s | Playwright | Local or Container |
+
+**Run All Tests:**
+```bash
+bash tests/run-tests.sh    # Unit + Integration (local)
 ```
 
-**Test Categories:**
-1. **Ayanamsa Calculations** - Drik precession accuracy
-2. **Tithi Calculations** - Against known dates
-3. **Nakshatra Calculations** - Constellation identification
-4. **Yoga/Karana** - Auspicious combinations
-5. **Time Calculations** - Sunrise, sunset, Rahu Kalam
-6. **Edge Cases** - Leap years, month boundaries, hemispheres
-7. **Caching** - LocalStorage read/write
-8. **Geocoding** - Location search validation
+**For Complete Coverage (including E2E):**
+```bash
+podman-compose up -d saivamcloud-dev
+podman-compose --profile test up saivamcloud-test
+```
 
-**Coverage Target:** >80% code paths
+**Reference**: See [TESTING.md](TESTING.md) for complete testing guide
 
 ---
 
@@ -287,18 +320,70 @@ node tests/panchanga-calculator.test.js
 - Builds: Jekyll with all dependencies
 - Exposes: Port 4000 (mapped to 5080 in compose)
 
-**podman-compose.yml**:
-- Service: saivamcloud-dev
-- Build: Current directory (Dockerfile)
-- Mount: Project volume for live reload
-- Env: JEKYLL_ENV=development
+**podman-compose.yml** (Docker Compose Specification v1.0+):
+- Format: Modern Compose Specification (https://docs.docker.com/reference/compose-file/)
+- Services: `saivamcloud-dev` (dev server), `saivamcloud-test` (E2E tests)
+- Build: Explicit Dockerfile paths for each service
+- Volumes: Type-based mounts (bind with propagation control)
+- Networks: Named network with IPAM and MTU configuration
+- Profiles: `test` profile for test container (opt-in via `--profile test`)
+- Healthchecks: Service readiness detection for dependencies
+- Dependencies: Explicit service health dependencies
+- Restart Policy: Automatic restart with backoff (on-failure)
+
+**Compose Specification Format** (Modern, Version-agnostic):
+```yaml
+# Uses Docker Compose Specification v1.0+ (no version field)
+# Reference: https://docs.docker.com/reference/compose-file/
+# Compatible with: Docker Compose 2.0+, Podman 4.0+
+
+services:
+  saivamcloud-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: saivamcloud-dev:latest
+    
+    volumes:
+      - type: bind
+        source: .
+        target: /srv/jekyll
+        bind:
+          propagation: rprivate
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  test-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+```
+
+**Key Features of Specification Format**:
+✓ No version field - uses Specification format directly  
+✓ Explicit mount types (bind, volume, tmpfs)  
+✓ Health checks for service orchestration  
+✓ Service dependencies with conditions  
+✓ Restart policies with backoff  
+✓ Network IPAM configuration  
+✓ Future-proof (no version field means always compatible)  
+✓ Better error messages and validation
 
 **Commands:**
 ```bash
-podman-compose up -d      # Start
-podman-compose logs       # View logs
-podman-compose restart    # Restart
-podman-compose down       # Stop
+podman-compose up -d                    # Start all services
+podman-compose up -d saivamcloud-dev    # Start only dev server
+podman-compose --profile test up        # Start all + test container
+podman-compose logs                     # View logs
+podman-compose restart                  # Restart all
+podman-compose down                     # Stop and remove containers
+podman-compose ps                       # List running containers
 ```
 
 ### Local Access
