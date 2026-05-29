@@ -60,8 +60,9 @@ function getSunLongitude(date, lat, lon) {
   // Use Astronomy Engine for accurate sun longitude
   if (typeof Astronomy !== 'undefined') {
     try {
-      const sunPos = Astronomy.EclipticGeoSun(date);
-      return normalizeDegrees(sunPos.lon);
+      const sunPos = Astronomy.SunPosition(date);
+      // SunPosition returns ecliptic coordinates with 'elon' (ecliptic longitude)
+      return normalizeDegrees(sunPos.elon);
     } catch (e) {
       // Fallback to approximation if Astronomy Engine fails
       console.warn('Astronomy Engine sun calculation failed, using approximation:', e.message);
@@ -91,6 +92,7 @@ function getMoonLongitude(date, lat, lon) {
   if (typeof Astronomy !== 'undefined') {
     try {
       const moonPos = Astronomy.EclipticGeoMoon(date);
+      // EclipticGeoMoon returns ecliptic coordinates with 'lon' (ecliptic longitude)
       return normalizeDegrees(moonPos.lon);
     } catch (e) {
       // Fallback to approximation if Astronomy Engine fails
