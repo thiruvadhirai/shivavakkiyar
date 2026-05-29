@@ -14,12 +14,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Copy and install dependencies
 COPY package.json* ./
-RUN npm install --omit=dev @playwright/test@latest playwright@latest
+RUN npm install @playwright/test@latest playwright@latest
 
-# Install Playwright browsers during build (one-time setup)
-RUN npm exec playwright install chromium firefox
-
-# Install system dependencies for browsers
+# Install system dependencies for browsers FIRST
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libgconf-2-4 \
     libxss1 \
@@ -28,8 +25,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libgbm1 \
     && rm -rf /var/lib/apt/lists/*
 
-# Set environment for Playwright browsers
-ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
+# Install Playwright browsers using the installed binary
+RUN cd /app && \
+    node_modules/.bin/playwright install chromium firefox
 
 # Note: Test files and assets are mounted from source (not copied)
 # This avoids rebuilding the container when code changes
