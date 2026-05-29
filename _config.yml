@@ -15,6 +15,10 @@ exclude:
   - gitstatus.sh
   - .git
   - node_modules
+  - package.json
+  - package-lock.json
+  - .DS_Store
+  
 
 # Ensure markdown files are served as pages
 future: false

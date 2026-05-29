@@ -78,6 +78,8 @@ class PanchangaCalculator {
       if (this.astronomy && this.astronomy.SunPosition) {
         this.log('Using Astronomy Engine SunPosition for sun longitude');
         const time = this.astronomy.MakeTime(date);
+        this.log('MakeTime result:', time);
+
         const pos = this.astronomy.SunPosition(time);
         this.log('SunPosition returned:', pos);
 
@@ -86,7 +88,12 @@ class PanchangaCalculator {
           const ayanamsa = this.getDrikAyanamsa(date);
           const result = this.normalizeDegrees(sunEcl - ayanamsa);
           this.log('Sun longitude calculated via SunPosition:', result);
+          if (typeof result !== 'number' || isNaN(result)) {
+            throw new Error('Sun longitude result is not a valid number: ' + result);
+          }
           return result;
+        } else {
+          console.warn('[Panchanga] SunPosition returned invalid position:', pos);
         }
       }
     } catch (e) {
@@ -100,14 +107,22 @@ class PanchangaCalculator {
 
     // Fallback: approximate sun longitude (moves ~0.9856° per day)
     this.log('Using fallback sun calculation');
-    const j2000 = new Date(2000, 0, 1, 12, 0, 0);
-    const daysSinceJ2000 = (date - j2000) / (1000 * 60 * 60 * 24);
-    const approxSunLon = 280.46 + (0.9856474 * daysSinceJ2000);
-    const ayanamsa = this.getDrikAyanamsa(date);
-    const result = this.normalizeDegrees(approxSunLon - ayanamsa);
-    this.log('Fallback sun longitude:', result);
+    try {
+      const j2000 = new Date(2000, 0, 1, 12, 0, 0);
+      const daysSinceJ2000 = (date - j2000) / (1000 * 60 * 60 * 24);
+      const approxSunLon = 280.46 + (0.9856474 * daysSinceJ2000);
+      const ayanamsa = this.getDrikAyanamsa(date);
+      const result = this.normalizeDegrees(approxSunLon - ayanamsa);
+      this.log('Fallback sun longitude:', result);
 
-    return result;
+      if (typeof result !== 'number' || isNaN(result)) {
+        throw new Error('Fallback sun calculation produced invalid result: ' + result);
+      }
+      return result;
+    } catch (e) {
+      this.logError('CRITICAL: Even fallback sun calculation failed!', e);
+      return 0; // Emergency fallback
+    }
   }
 
   /**
@@ -131,7 +146,12 @@ class PanchangaCalculator {
           const ayanamsa = this.getDrikAyanamsa(date);
           const result = this.normalizeDegrees(moonEcl - ayanamsa);
           this.log('Moon longitude calculated via EclipticGeoMoon:', result);
+          if (typeof result !== 'number' || isNaN(result)) {
+            throw new Error('Moon longitude result is not a valid number: ' + result);
+          }
           return result;
+        } else {
+          console.warn('[Panchanga] EclipticGeoMoon returned invalid position:', moonEcliptic);
         }
       }
     } catch (e) {
@@ -145,13 +165,21 @@ class PanchangaCalculator {
 
     // Fallback: approximate moon longitude (moves ~13° per day, with variation)
     this.log('Using fallback moon calculation');
-    const j2000 = new Date(2000, 0, 1, 12, 0, 0);
-    const daysSinceJ2000 = (date - j2000) / (1000 * 60 * 60 * 24);
-    const moonMeanLon = 218.32 + (13.176358 * daysSinceJ2000);
-    const ayanamsa = this.getDrikAyanamsa(date);
-    const result = this.normalizeDegrees(moonMeanLon - ayanamsa);
-    this.log('Fallback moon longitude:', result);
-    return result;
+    try {
+      const j2000 = new Date(2000, 0, 1, 12, 0, 0);
+      const daysSinceJ2000 = (date - j2000) / (1000 * 60 * 60 * 24);
+      const moonMeanLon = 218.32 + (13.176358 * daysSinceJ2000);
+      const ayanamsa = this.getDrikAyanamsa(date);
+      const result = this.normalizeDegrees(moonMeanLon - ayanamsa);
+      this.log('Fallback moon longitude:', result);
+      if (typeof result !== 'number' || isNaN(result)) {
+        throw new Error('Fallback moon calculation produced invalid result: ' + result);
+      }
+      return result;
+    } catch (e) {
+      this.logError('CRITICAL: Even fallback moon calculation failed!', e);
+      return 0; // Emergency fallback
+    }
   }
 
   /**
