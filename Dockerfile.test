@@ -16,12 +16,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY package.json* ./
 RUN npm install @playwright/test@latest playwright@latest
 
-# Install system dependencies for browsers FIRST
+# Install minimal system dependencies for browsers
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libgconf-2-4 \
     libxss1 \
-    libappindicator1 \
-    libindicator7 \
     libgbm1 \
     && rm -rf /var/lib/apt/lists/*
 
