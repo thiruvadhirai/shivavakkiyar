@@ -553,27 +553,31 @@ class PanchangaCalculator {
     let searchDate = new Date(startDate);
     let daysSearched = 0;
 
-    this.log('findNextPradosha: starting search from', startDate, 'looking for 3 Triyodashi dates');
+    this.log('findNextPradosha: starting search from', startDate, 'looking for 3 Pradosha dates (Triyodashi at sunset)');
 
     while (pradoshaList.length < 3 && daysSearched < maxSearch) {
-      const sunLon = await this.getSunLongitude(searchDate, latitude, longitude);
-      const moonLon = await this.getMoonLongitude(searchDate, latitude, longitude);
-      const tithi = this.calculateTithi(sunLon, moonLon);
+      // Get sunrise and sunset for the day
+      const sunrise = await this.getSunrise(searchDate, latitude, longitude);
+      const sunset = await this.getSunset(searchDate, latitude, longitude);
 
-      this.log(`findNextPradosha: ${searchDate.toISOString()} - Tithi: ${tithi.number} (${tithi.name}) - Phase: ${tithi.phase}`);
+      // Calculate tithi at sunset time (not at midnight)
+      // Pradosha is observed when sunset falls on Triyodashi
+      const sunLonAtSunset = await this.getSunLongitude(sunset.date, latitude, longitude);
+      const moonLonAtSunset = await this.getMoonLongitude(sunset.date, latitude, longitude);
+      const tithiAtSunset = this.calculateTithi(sunLonAtSunset, moonLonAtSunset);
 
-      // Check if this is Triyodashi (13th) - occurs in both Shukla and Krishna paksha
+      this.log(`findNextPradosha: ${searchDate.toISOString()} - Tithi at sunset: ${tithiAtSunset.number} (${tithiAtSunset.name})`);
+
+      // Check if sunset falls on Triyodashi (13th) - occurs in both Shukla and Krishna paksha
       // Shukla Triyodashi = tithi 13, Krishna Triyodashi = tithi 28
-      if (tithi.number === 13 || tithi.number === 28) {
-        const sunrise = await this.getSunrise(searchDate, latitude, longitude);
-        const sunset = await this.getSunset(searchDate, latitude, longitude);
+      if (tithiAtSunset.number === 13 || tithiAtSunset.number === 28) {
         const rahuKalam = this.calculateRahuKalam(sunrise, sunset, searchDate);
 
-        this.log(`findNextPradosha: Found Triyodashi on ${searchDate.toISOString()}`);
+        this.log(`findNextPradosha: Found Pradosha on ${searchDate.toISOString()} (sunset at ${sunset.date.toISOString()})`);
 
         pradoshaList.push({
           date: new Date(searchDate),
-          tithi: tithi,
+          tithi: tithiAtSunset,
           sunrise: sunrise,
           sunset: sunset,
           rahuKalam: rahuKalam,
@@ -588,7 +592,7 @@ class PanchangaCalculator {
       daysSearched++;
     }
 
-    this.log('findNextPradosha: Found', pradoshaList.length, 'Triyodashi dates:', pradoshaList.map(p => p.date.toISOString()));
+    this.log('findNextPradosha: Found', pradoshaList.length, 'Pradosha dates:', pradoshaList.map(p => p.date.toISOString()));
 
     return pradoshaList;
   }
