@@ -6,8 +6,24 @@
     <p class="panchanga-note">Based on Drik Panchang (modern astronomical system with accurate precession)</p>
   </div>
 
-  <!-- Input Section -->
-  <div style="background: #f9f9f9; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
+  <!-- Collapsed View - Shows Pradosha Dates (Default) -->
+  <div id="panchanga-collapsed-view" style="padding: 20px;">
+    <!-- Next 3 Pradosha Dates (Collapsed View) -->
+    <div class="panchanga-pradosha">
+      <div class="panchanga-pradosha-title">📅 Next Pradosha Dates</div>
+      <ul class="panchanga-pradosha-list" id="panchanga-pradosha-list-collapsed">
+        <li style="text-align: center; color: #999;">Loading dates...</li>
+      </ul>
+    </div>
+
+    <!-- Expand Button -->
+    <button class="panchanga-btn" id="panchanga-expand-details-btn" style="width: 100%; margin-top: 15px;">
+      📍 Change Location or Show Full Details
+    </button>
+  </div>
+
+  <!-- Expandable Input Section -->
+  <div id="panchanga-input-section" style="background: #f9f9f9; padding: 15px; border-radius: 4px; margin-bottom: 20px; display: none;">
     <!-- Location Input -->
     <div class="panchanga-location-group">
       <label class="panchanga-location-label">📍 Location</label>
@@ -40,6 +56,11 @@
     <!-- Calculate Button -->
     <button class="panchanga-btn" id="panchanga-calculate-btn" style="width: 100%;">
       Calculate Panchanga
+    </button>
+
+    <!-- Collapse Button -->
+    <button class="panchanga-btn" id="panchanga-collapse-details-btn" style="width: 100%; margin-top: 10px; background-color: #6f42c1;">
+      Collapse
     </button>
   </div>
 
@@ -219,6 +240,36 @@
       document.getElementById('panchanga-current-location').textContent = `📍 ${savedLocation.name} (${savedLocation.latitude.toFixed(4)}, ${savedLocation.longitude.toFixed(4)})`;
     }
 
+    // Collapsed/Expanded view toggle
+    const collapsedView = document.getElementById('panchanga-collapsed-view');
+    const inputSection = document.getElementById('panchanga-input-section');
+    const expandBtn = document.getElementById('panchanga-expand-details-btn');
+    const collapseBtn = document.getElementById('panchanga-collapse-details-btn');
+
+    expandBtn.onclick = () => {
+      collapsedView.style.display = 'none';
+      inputSection.style.display = 'block';
+      locationInput.focus();
+    };
+
+    collapseBtn.onclick = () => {
+      collapsedView.style.display = 'block';
+      inputSection.style.display = 'none';
+    };
+
+    // Auto-load cached location and calculate on page load
+    const autoLoadAndCalculate = async () => {
+      if (savedLocation) {
+        // Set location input value
+        locationInput.value = savedLocation.name;
+        selectedLocation = savedLocation;
+
+        // Automatically calculate for cached location
+        const calculateBtn = document.getElementById('panchanga-calculate-btn');
+        calculateBtn.click();
+      }
+    };
+
     // Location input autocomplete
     let selectedLocation = savedLocation;
     const locationInput = document.getElementById('panchanga-location-input');
@@ -351,7 +402,9 @@
           selectedLocation.longitude
         );
         const pradoshaListEl = document.getElementById('result-pradosha-list');
-        pradoshaListEl.innerHTML = nextPradosha.slice(0, 3).map((pd) => `
+        const pradoshaListCollapsedEl = document.getElementById('panchanga-pradosha-list-collapsed');
+
+        const pradoshaHTML = nextPradosha.slice(0, 3).map((pd) => `
           <li class="panchanga-pradosha-item">
             <div class="panchanga-pradosha-date">${calculator.formatDate(pd.date)}</div>
             <div class="panchanga-pradosha-time">Tithi: ${pd.tithi.name} (${pd.tithi.phase?.toUpperCase?.() || ''})</div>
@@ -359,8 +412,13 @@
           </li>
         `).join('');
 
+        // Update both collapsed and expanded views
+        pradoshaListEl.innerHTML = pradoshaHTML;
+        pradoshaListCollapsedEl.innerHTML = pradoshaHTML;
+
         loadingEl.style.display = 'none';
         resultsEl.style.display = 'block';
+        collapsedView.style.display = 'block';
 
         // Save location if checkbox is checked
         if (document.getElementById('panchanga-save-location-checkbox').checked) {
@@ -384,6 +442,9 @@
         document.getElementById('panchanga-current-location').textContent = 'Cache cleared. Click "Auto-Detect" to begin.';
       }
     };
+
+    // Auto-load and calculate for cached location on page load
+    await autoLoadAndCalculate();
 
     } catch (error) {
       console.error('Widget initialization error:', error);

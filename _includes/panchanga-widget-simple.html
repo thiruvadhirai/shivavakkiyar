@@ -6,8 +6,24 @@
     <p class="panchanga-note">Based on Drik Panchang (modern astronomical system)</p>
   </div>
 
-  <!-- Location Input State -->
-  <div id="panchanga-location-input-state" style="padding: 20px;">
+  <!-- Collapsed View - Shows Pradosha Dates (Default) -->
+  <div id="panchanga-collapsed-view" style="padding: 20px;">
+    <!-- Next 3 Pradosha Dates (Collapsed View) -->
+    <div class="panchanga-pradosha" id="panchanga-dates-collapsed">
+      <div class="panchanga-pradosha-title">📅 Next Pradosha Dates</div>
+      <ul class="panchanga-pradosha-list" id="pradosha-next-list-collapsed">
+        <li style="text-align: center; color: #999;">Loading dates...</li>
+      </ul>
+    </div>
+
+    <!-- Expand Button -->
+    <button class="panchanga-btn" id="panchanga-expand-location-btn" style="width: 100%; margin-top: 15px;">
+      📍 Change Location or Show Full Details
+    </button>
+  </div>
+
+  <!-- Expandable Location Input Section -->
+  <div id="panchanga-location-input-state" style="padding: 20px; display: none;">
     <!-- Version Display (Development) -->
     <div style="background: #f0f0f0; padding: 8px 12px; border-radius: 4px; margin-bottom: 15px; font-size: 11px; color: #666; border-left: 3px solid #0366d6;">
       🔄 Version: <strong>{{ site.data.version.version }}</strong> ({{ site.data.version.date }})
@@ -32,6 +48,11 @@
     <div style="margin-top: 12px;">
       <button class="panchanga-btn" id="panchanga-simple-calculate-btn" style="width: 100%;">Calculate Pradosha Times</button>
     </div>
+
+    <!-- Collapse Button -->
+    <button class="panchanga-btn" id="panchanga-collapse-location-btn" style="width: 100%; margin-top: 10px; background-color: #6f42c1;">
+      Collapse
+    </button>
 
     <div id="panchanga-simple-cached-locations" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e1e4e8;"></div>
   </div>
@@ -187,6 +208,32 @@
 
       let selectedLocation = null;
 
+      // Collapsed/Expanded view toggle
+      const collapsedView = document.getElementById('panchanga-collapsed-view');
+      const expandBtn = document.getElementById('panchanga-expand-location-btn');
+      const collapseBtn = document.getElementById('panchanga-collapse-location-btn');
+
+      expandBtn.onclick = () => {
+        collapsedView.style.display = 'none';
+        locationInputState.style.display = 'block';
+        locationInput.focus();
+      };
+
+      collapseBtn.onclick = () => {
+        collapsedView.style.display = 'block';
+        locationInputState.style.display = 'none';
+      };
+
+      // Auto-load cached location on page load
+      const autoLoadCachedLocation = () => {
+        const storedLocation = locationManager.getStoredLocation();
+        if (storedLocation) {
+          selectedLocation = storedLocation;
+          // Automatically calculate for cached location
+          calculateBtn.click();
+        }
+      };
+
       // Load cached locations and show suggestions
       const loadCachedLocations = () => {
         const cache = locationManager.getGeocodingCache();
@@ -328,7 +375,7 @@
           document.getElementById('hora-number').textContent = `Hour #${p.hora.number}`;
 
           // Rahu Kalam
-          document.getElementById('rahu-time').textContent = `${p.rahuKalam.startTime} to ${p.rahuKalam.endTime}`;
+          document.getElementById('rahu-time').textContent = `${panchanga.times.rahuKalam.startTime} to ${panchanga.times.rahuKalam.endTime}`;
 
           // Times
           document.getElementById('times-sunrise').textContent = panchanga.times.sunrise.timeIST;
@@ -338,7 +385,9 @@
           // Next 3 Pradosha dates
           const nextPradosha = await calculator.findNextPradosha(today, selectedLocation.latitude, selectedLocation.longitude);
           const pradoshaListEl = document.getElementById('pradosha-next-list');
-          pradoshaListEl.innerHTML = nextPradosha.slice(0, 3).map((pd) => `
+          const pradoshaListCollapsedEl = document.getElementById('pradosha-next-list-collapsed');
+
+          const pradoshaHTML = nextPradosha.slice(0, 3).map((pd) => `
             <li class="panchanga-pradosha-item">
               <div class="panchanga-pradosha-date">${calculator.formatDate(pd.date)}</div>
               <div class="panchanga-pradosha-time">Tithi: ${pd.tithi.name} (${pd.tithi.phase?.toUpperCase?.() || ''})</div>
@@ -346,8 +395,13 @@
             </li>
           `).join('');
 
+          // Update both collapsed and expanded views
+          pradoshaListEl.innerHTML = pradoshaHTML;
+          pradoshaListCollapsedEl.innerHTML = pradoshaHTML;
+
           loadingEl.style.display = 'none';
           resultsEl.style.display = 'block';
+          collapsedView.style.display = 'block';
 
           // Reload cached locations
           loadCachedLocations();
@@ -369,8 +423,12 @@
         resultsEl.style.display = 'none';
         loadingEl.style.display = 'none';
         errorEl.style.display = 'none';
+        collapsedView.style.display = 'none';
         locationInput.focus();
       };
+
+      // Auto-load and calculate for cached location on page load
+      autoLoadCachedLocation();
 
     } catch (error) {
       console.error('Widget error:', error);
