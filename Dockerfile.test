@@ -17,7 +17,7 @@ COPY package.json* ./
 RUN npm install --omit=dev @playwright/test@latest playwright@latest
 
 # Install Playwright browsers during build (one-time setup)
-RUN npx playwright install chromium firefox
+RUN npm exec playwright install chromium firefox
 
 # Install system dependencies for browsers
 RUN apt-get update && apt-get install -y --no-install-recommends \
