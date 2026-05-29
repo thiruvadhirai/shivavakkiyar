@@ -16,12 +16,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY package.json* ./
 RUN npm install --omit=dev @playwright/test@latest playwright@latest
 
-# Copy test files and source
-COPY tests/ ./tests/
-COPY assets/js/ ./assets/js/
-COPY assets/css/ ./assets/css/
-COPY _includes/ ./_includes/
-COPY _layouts/ ./_layouts/
+# Note: Test files and assets are mounted from source (not copied)
+# This avoids rebuilding the container when code changes
+# Mounts happen at runtime via podman-compose.yml volumes
 
 # Update Playwright to use system browsers
 RUN npm install -g playwright@latest && \

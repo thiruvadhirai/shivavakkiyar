@@ -44,6 +44,8 @@ services:
       start_period: 10s
 
   # Test Container - E2E Browser Testing
+  # Mounts source for fast testing without rebuilds
+  # Only starts with: podman-compose --profile test up
   saivamcloud-test:
     build:
       context: .
@@ -51,7 +53,7 @@ services:
     image: saivamcloud-test:latest
     container_name: saivamcloud-test
 
-    description: "Playwright E2E testing container (isolated, no host bloat)"
+    description: "Playwright E2E testing container (source-mounted for fast iteration)"
 
     depends_on:
       saivamcloud-dev:
