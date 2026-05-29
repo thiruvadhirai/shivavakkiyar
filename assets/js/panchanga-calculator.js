@@ -75,25 +75,22 @@ class PanchangaCalculator {
     this.log('getSunLongitude called with date:', date, 'lat:', latitude, 'lon:', longitude);
 
     try {
-      // Use SearchSunLongitude to find sun's longitude
-      if (this.astronomy && this.astronomy.SearchSunLongitude) {
-        this.log('Astronomy Engine available, calling SearchSunLongitude(0)');
-        const search = this.astronomy.SearchSunLongitude(0);
-        this.log('SearchSunLongitude returned:', search);
+      if (this.astronomy && this.astronomy.SunPosition) {
+        this.log('Using Astronomy Engine SunPosition for sun longitude');
+        const time = this.astronomy.MakeTime(date);
+        const pos = this.astronomy.SunPosition(time);
+        this.log('SunPosition returned:', pos);
 
-        const sunEvent = search.nextEvent(date);
-        this.log('nextEvent returned:', sunEvent);
-
-        if (sunEvent && sunEvent.lon !== undefined) {
-          const sunEcl = sunEvent.lon;
+        if (pos && pos.elon !== undefined) {
+          const sunEcl = pos.elon;
           const ayanamsa = this.getDrikAyanamsa(date);
           const result = this.normalizeDegrees(sunEcl - ayanamsa);
-          this.log('Sun longitude calculated:', result);
+          this.log('Sun longitude calculated via SunPosition:', result);
           return result;
         }
       }
     } catch (e) {
-      this.logError('SearchSunLongitude failed:', {
+      this.logError('SunPosition failed:', {
         message: e.message,
         name: e.name,
         stack: e.stack,
@@ -121,43 +118,40 @@ class PanchangaCalculator {
    * @returns {number} Longitude in degrees (0-360)
    */
   async getMoonLongitude(date, latitude, longitude) {
+    this.log('getMoonLongitude called with date:', date, 'lat:', latitude, 'lon:', longitude);
+
     try {
-      // Use Equator to get moon position then convert to ecliptic
-      const observer = new this.astronomy.Observer(latitude, longitude, 0);
-      const moonEq = this.astronomy.Equator('MOON', date, observer, true, true);
+      if (this.astronomy && this.astronomy.EclipticGeoMoon) {
+        this.log('Using Astronomy Engine EclipticGeoMoon for moon longitude');
+        const moonEcliptic = this.astronomy.EclipticGeoMoon(date);
+        this.log('EclipticGeoMoon returned:', moonEcliptic);
 
-      // Convert equatorial to ecliptic (approximate)
-      const eclipticObliquity = 23.439291; // degrees
-      const lat = moonEq.dec;
-      const lon = moonEq.ra * 15; // Convert RA from hours to degrees
-
-      const cosObliq = Math.cos(eclipticObliquity * Math.PI / 180);
-      const sinObliq = Math.sin(eclipticObliquity * Math.PI / 180);
-      const tanLat = Math.tan(lat * Math.PI / 180);
-
-      const moonEcl = Math.atan2(
-        Math.sin(lon * Math.PI / 180) * cosObliq - tanLat * sinObliq,
-        Math.cos(lon * Math.PI / 180)
-      ) * 180 / Math.PI;
-
-      const ayanamsa = this.getDrikAyanamsa(date);
-      return this.normalizeDegrees(moonEcl - ayanamsa);
+        if (moonEcliptic && moonEcliptic.elon !== undefined) {
+          const moonEcl = moonEcliptic.elon;
+          const ayanamsa = this.getDrikAyanamsa(date);
+          const result = this.normalizeDegrees(moonEcl - ayanamsa);
+          this.log('Moon longitude calculated via EclipticGeoMoon:', result);
+          return result;
+        }
+      }
     } catch (e) {
-      this.logError('Moon calculation failed:', {
+      this.logError('EclipticGeoMoon failed:', {
         message: e.message,
         name: e.name,
-        stack: e.stack
+        stack: e.stack,
+        fullError: e
       });
-      // Fallback: approximate moon longitude (moves ~13° per day, with variation)
-      this.log('Using fallback moon calculation');
-      const j2000 = new Date(2000, 0, 1, 12, 0, 0);
-      const daysSinceJ2000 = (date - j2000) / (1000 * 60 * 60 * 24);
-      const moonMeanLon = 218.32 + (13.176358 * daysSinceJ2000);
-      const ayanamsa = this.getDrikAyanamsa(date);
-      const result = this.normalizeDegrees(moonMeanLon - ayanamsa);
-      this.log('Fallback moon longitude:', result);
-      return result;
     }
+
+    // Fallback: approximate moon longitude (moves ~13° per day, with variation)
+    this.log('Using fallback moon calculation');
+    const j2000 = new Date(2000, 0, 1, 12, 0, 0);
+    const daysSinceJ2000 = (date - j2000) / (1000 * 60 * 60 * 24);
+    const moonMeanLon = 218.32 + (13.176358 * daysSinceJ2000);
+    const ayanamsa = this.getDrikAyanamsa(date);
+    const result = this.normalizeDegrees(moonMeanLon - ayanamsa);
+    this.log('Fallback moon longitude:', result);
+    return result;
   }
 
   /**
