@@ -81,6 +81,13 @@ services:
       delay: 5s
       max_attempts: 1
 
+    # Run tests from container with: podman-compose --profile test run --rm saivamcloud-test ./tests/run-<type>.sh
+    # Examples:
+    #   ./tests/run-all.sh         - Run unit + integration + E2E
+    #   ./tests/run-unit.sh        - Run unit tests only
+    #   ./tests/run-integration.sh - Run integration tests only
+    #   ./tests/run-e2e.sh         - Run E2E tests only
+
 networks:
   test-network:
     driver: bridge

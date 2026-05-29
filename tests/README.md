@@ -90,38 +90,72 @@ npm run test:e2e:debug
 
 ---
 
-## Running All Tests
+## Running All Tests Locally
 
 ```bash
-# Unit + Integration tests
+# Unit + Integration tests (on host)
 npm run test
 
 # Full suite with coverage
-npm test run test:all
+npm run test:all
 ```
+
+## Running Tests in Container (Unified Approach)
+
+All test types (unit, integration, E2E) run from a single test container for a unified environment.
+
+**Start the test container and run tests:**
+
+```bash
+# Run all tests (unit + integration + E2E)
+podman-compose --profile test run --rm saivamcloud-test ./tests/run-all.sh
+
+# Run individual test suites
+podman-compose --profile test run --rm saivamcloud-test ./tests/run-unit.sh
+podman-compose --profile test run --rm saivamcloud-test ./tests/run-integration.sh
+podman-compose --profile test run --rm saivamcloud-test ./tests/run-e2e.sh
+```
+
+Or use `podman-compose --profile test up` to start containers interactively and keep them running.
 
 ---
 
-## E2E Tests in Docker Container
+## Container Architecture: Unified Testing
 
-**Run tests in isolated Playwright container:**
+### Port Usage Clarification
+- **5080 (External):** For developer testing from Windows/host machine (e.g., `http://<windows or host machine ip address>:5080` or `http://localhost:5080`)
+- **4000 (Internal):** For test automation running in containers (e.g., `http://saivamcloud-dev:4000`)
+
+### Single Test Container for All Test Types
+
+The test container includes:
+- ✅ Node.js runtime (for unit & integration tests)
+- ✅ Playwright (for E2E browser tests)
+- ✅ System browsers: Chromium, Firefox (headless mode for CI/containers)
+- ✅ Source code mount from host (`/` → `/app`) for live iteration
+
+### Network Configuration
+- Both containers (dev + test) share `test-network` bridge
+- Test container accesses dev container via internal DNS: `http://saivamcloud-dev:4000`
+- Environment variable `TEST_URL` automatically set to `http://saivamcloud-dev:4000`
+- Fallback: If TEST_URL not set, defaults to `http://localhost:5080` (for local development)
+
+### Example: Run Tests in Container
 
 ```bash
-# Build test container
-podman build -f Dockerfile.test -t panchanga-test:latest .
+# Start containers with test profile
+podman-compose --profile test up
 
-# Run E2E tests in container
-podman run --rm \
-  --network host \
-  panchanga-test:latest \
-  npm run test:e2e
+# In another terminal, run test scripts
+podman-compose --profile test run --rm saivamcloud-test ./tests/run-all.sh
 ```
 
-**Test configuration:**
-- Uses system-installed browsers (Chromium, Firefox)
-- Headless mode enabled for CI/containers
-- Playwright configured for headless operation
-- Network isolation via `--network host` to access Jekyll server
+Or use individual scripts:
+```bash
+./tests/run-unit.sh        # → podman-compose run ... npm run test:unit
+./tests/run-integration.sh # → podman-compose run ... npm run test:integration
+./tests/run-e2e.sh         # → podman-compose run ... npm run test:e2e
+```
 
 ---
 
