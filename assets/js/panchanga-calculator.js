@@ -27,27 +27,101 @@ class PanchangaCalculator {
   }
 
   /**
-   * Calculate timezone offset in hours from longitude
-   * @param {number} longitude - Geographic longitude in degrees (negative = west)
-   * @returns {number} Timezone offset in hours from UTC (negative for west, positive for east)
+   * Map longitude to IANA timezone names (for Intl API)
+   * Covers major timezones globally
    */
-  getTimezoneOffsetFromLongitude(longitude) {
-    // Each 15 degrees of longitude = 1 hour of timezone
-    // Negative longitude (west) = negative UTC offset
-    // Positive longitude (east) = positive UTC offset
-    let offset = -longitude / 15;
+  getTimezonesForLongitude(longitude) {
+    // Normalized longitude to 0-360 range
+    const lon = ((longitude + 180) % 360 + 360) % 360;
 
-    // Adjust for daylight saving time (rough approximation)
-    // For northern hemisphere: March-October is DST, moving clock forward 1 hour
-    // This makes the UTC offset less negative (closer to zero)
-    // Example: PST (UTC-8) becomes PDT (UTC-7) by subtracting 1 from offset
-    const now = new Date();
-    const month = now.getMonth();
-    if (month >= 2 && month <= 9) { // March to October (DST period)
-      offset -= 1; // Move 1 hour forward (toward UTC)
+    // Map longitude ranges to IANA timezone identifiers
+    // Format: [minLon, maxLon, [timezone names to test]]
+    const timezoneMaps = [
+      // Western US & Canada (UTC-8/-7)
+      [-130, -100, ['America/Los_Angeles', 'America/Denver', 'America/Chicago']],
+      // Eastern US & Canada (UTC-5/-4)
+      [-85, -65, ['America/New_York', 'America/Toronto']],
+      // UK & Western Europe (UTC+0/+1)
+      [-10, 15, ['Europe/London', 'Europe/Paris', 'Europe/Berlin']],
+      // Central Europe (UTC+1/+2)
+      [10, 30, ['Europe/Warsaw', 'Europe/Istanbul']],
+      // India (UTC+5:30, no DST)
+      [70, 90, ['Asia/Kolkata']],
+      // East Asia (UTC+8/+9)
+      [100, 140, ['Asia/Shanghai', 'Asia/Tokyo', 'Asia/Hong_Kong']],
+      // Australia (UTC+8-+10 with varying DST)
+      [110, 160, ['Australia/Sydney', 'Australia/Perth', 'Australia/Melbourne']]
+    ];
+
+    for (const [minLon, maxLon, zones] of timezoneMaps) {
+      if (lon >= minLon && lon <= maxLon) {
+        return zones;
+      }
     }
 
-    return offset;
+    // Fallback: return empty array, will use simple offset calculation
+    return [];
+  }
+
+  /**
+   * Calculate timezone offset in hours from longitude using Intl API for accurate DST detection
+   * @param {number} longitude - Geographic longitude in degrees (negative = west)
+   * @param {Date} date - Date to calculate offset for (DST varies by date)
+   * @returns {number} Timezone offset in hours from UTC
+   */
+  getTimezoneOffsetFromLongitude(longitude, date = new Date()) {
+    // Get likely timezones for this longitude
+    const timezones = this.getTimezonesForLongitude(longitude);
+
+    // Try to detect actual offset using Intl API
+    if (timezones.length > 0) {
+      try {
+        for (const tz of timezones) {
+          try {
+            // Format the date in the target timezone to detect its offset
+            const formatter = new Intl.DateTimeFormat('en-US', {
+              timeZone: tz,
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: false
+            });
+
+            const parts = formatter.formatToParts(date);
+            const tzDate = new Date(Date.UTC(
+              parseInt(parts.find(p => p.type === 'year').value),
+              parseInt(parts.find(p => p.type === 'month').value) - 1,
+              parseInt(parts.find(p => p.type === 'day').value),
+              parseInt(parts.find(p => p.type === 'hour').value),
+              parseInt(parts.find(p => p.type === 'minute').value),
+              parseInt(parts.find(p => p.type === 'second').value)
+            ));
+
+            // Calculate offset: (local_time_as_UTC - UTC_time) = offset in hours
+            // Example: UTC=12:00, local=05:00 PDT (UTC-7) => offset = 05:00-12:00 = -7
+            const offset = (tzDate - date) / (1000 * 60 * 60);
+
+            // Check if offset makes sense (within ±14 hours)
+            if (Math.abs(offset) <= 14) {
+              this.log(`Using Intl API offset for ${tz}: ${offset} hours`);
+              return offset;
+            }
+          } catch (e) {
+            // This timezone name might not be supported, try next
+            continue;
+          }
+        }
+      } catch (e) {
+        this.logError('Intl API timezone detection failed:', e);
+      }
+    }
+
+    // Fallback: simple longitude-based calculation without DST
+    this.log('Falling back to simple longitude-based offset calculation');
+    return -longitude / 15;
   }
 
   /**
@@ -251,7 +325,7 @@ class PanchangaCalculator {
       this.log('Observer created:', observer);
 
       // Convert local date to UTC for search
-      const tzOffset = this.getTimezoneOffsetFromLongitude(longitude);
+      const tzOffset = this.getTimezoneOffsetFromLongitude(longitude, date);
       const utcDate = this.localToUTC(date, tzOffset);
       this.log('Timezone conversion:', { timezone_offset_hours: tzOffset, local_date: date, utc_date: utcDate });
 
@@ -307,7 +381,7 @@ class PanchangaCalculator {
       this.log('Observer created:', observer);
 
       // Convert local date to UTC for search
-      const tzOffset = this.getTimezoneOffsetFromLongitude(longitude);
+      const tzOffset = this.getTimezoneOffsetFromLongitude(longitude, date);
       const utcDate = this.localToUTC(date, tzOffset);
       this.log('Timezone conversion:', { timezone_offset_hours: tzOffset, local_date: date, utc_date: utcDate });
 
@@ -857,8 +931,8 @@ class PanchangaCalculator {
    * @returns {string} Formatted time string HH:MM (local time)
    */
   convertToIST(date, longitude) {
-    // Get local timezone offset from longitude
-    const tzOffset = this.getTimezoneOffsetFromLongitude(longitude);
+    // Get local timezone offset from longitude (accounting for DST on this date)
+    const tzOffset = this.getTimezoneOffsetFromLongitude(longitude, date);
 
     // Convert UTC to local time
     const localDate = new Date(date.getTime() + (tzOffset * 60 * 60 * 1000));

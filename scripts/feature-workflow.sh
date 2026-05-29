@@ -123,21 +123,35 @@ cmd_status() {
 }
 
 cmd_test() {
-  echo -e "${BLUE}Running unit tests...${NC}"
+  echo -e "${BLUE}Running tests in saivamcloud-test container...${NC}"
   echo ""
 
-  if [ -f "tests/panchanga-calculator.test.js" ]; then
-    if node tests/panchanga-calculator.test.js; then
-      echo ""
-      echo -e "${GREEN}✅ All tests passed!${NC}"
-      return 0
-    else
-      echo ""
-      echo -e "${RED}❌ Tests failed!${NC}"
-      return 1
-    fi
-  else
+  if [ ! -f "tests/panchanga-calculator.test.js" ]; then
     echo -e "${RED}Error: Test file not found: tests/panchanga-calculator.test.js${NC}"
+    return 1
+  fi
+
+  # Start containers if not running
+  if ! podman ps --format "{{.Names}}" | grep -q "^saivamcloud-dev$"; then
+    echo -e "${YELLOW}Starting dev container...${NC}"
+    podman-compose up -d saivamcloud-dev
+    sleep 5
+  fi
+
+  if ! podman ps --format "{{.Names}}" | grep -q "^saivamcloud-test$"; then
+    echo -e "${YELLOW}Starting test container...${NC}"
+    podman-compose --profile test up -d saivamcloud-test
+    sleep 3
+  fi
+
+  # Run tests in container (use podman exec directly since podman-compose has issues with profile)
+  if podman exec saivamcloud-test npm test; then
+    echo ""
+    echo -e "${GREEN}✅ All tests passed!${NC}"
+    return 0
+  else
+    echo ""
+    echo -e "${RED}❌ Tests failed!${NC}"
     return 1
   fi
 }

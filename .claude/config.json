@@ -16,16 +16,19 @@
     "versionFormat": "MAJOR.MINOR.PATCH-STAGE.NUM"
   },
   "testing": {
+    "container": "saivamcloud-test",
     "unitTests": {
       "enabled": true,
       "command": "node tests/panchanga-calculator.test.js",
       "framework": "vanilla-node",
+      "container": "saivamcloud-test",
       "required": true
     },
     "integrationTests": {
       "enabled": true,
       "command": "node tests/panchanga-calculator-integration.test.js",
       "framework": "vanilla-node",
+      "container": "saivamcloud-test",
       "required": true
     },
     "e2eTests": {
@@ -33,8 +36,9 @@
       "command": "npm run test:e2e",
       "framework": "playwright",
       "browsers": ["chromium", "firefox"],
+      "container": "saivamcloud-test",
       "required": false,
-      "notes": "E2E tests require browser binaries - optional for local dev"
+      "notes": "E2E tests require browser binaries and running dev server"
     }
   },
   "development": {

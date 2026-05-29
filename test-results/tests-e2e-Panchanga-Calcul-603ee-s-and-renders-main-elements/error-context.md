@@ -6,35 +6,15 @@
 
 # Test info
 
-- Name: tests/e2e.spec.js >> Accessibility >> Calculate Panchanga for 06/12/2026 + Olympia, WA (with console logs)
-- Location: tests/e2e.spec.js:408:3
+- Name: tests/e2e.spec.js >> Panchanga Calculator Page >> Page loads and renders main elements
+- Location: tests/e2e.spec.js:27:3
 
 # Error details
 
 ```
-Test timeout of 30000ms exceeded.
-```
+Error: expect(received).toBeTruthy()
 
-```
-Error: locator.fill: Test timeout of 30000ms exceeded.
-Call log:
-  - waiting for locator('#panchanga-location-input')
-    - locator resolved to <input type="text" id="panchanga-location-input" class="panchanga-location-input" placeholder="Enter city, state, country, or ZIP code"/>
-    - fill("Olympia, Thurston, Washington")
-  - attempting fill action
-    2 × waiting for element to be visible, enabled and editable
-      - element is not visible
-    - retrying fill action
-    - waiting 20ms
-    2 × waiting for element to be visible, enabled and editable
-      - element is not visible
-    - retrying fill action
-      - waiting 100ms
-    58 × waiting for element to be visible, enabled and editable
-       - element is not visible
-     - retrying fill action
-       - waiting 500ms
-
+Received: false
 ```
 
 # Page snapshot
@@ -200,135 +180,138 @@ Call log:
 # Test source
 
 ```ts
-  324 |         await calc.init();
-  325 | 
-  326 |         const date = new Date('2026-05-28');
-  327 |         const lat = 47.08466;  // Olympia, WA
-  328 |         const lon = -123.02958;
-  329 | 
-  330 |         const sunLon = await calc.getSunLongitude(date, lat, lon);
-  331 |         const moonLon = await calc.getMoonLongitude(date, lat, lon);
-  332 |         const tithi = calc.calculateTithi(sunLon, moonLon);
-  333 | 
-  334 |         return {
-  335 |           success: true,
-  336 |           sunLon: parseFloat(sunLon.toFixed(2)),
-  337 |           moonLon: parseFloat(moonLon.toFixed(2)),
-  338 |           tithiNumber: tithi.number,
-  339 |           tithiName: tithi.name
-  340 |         };
-  341 |       } catch (error) {
-  342 |         return {
-  343 |           success: false,
-  344 |           error: error.message
-  345 |         };
-  346 |       }
-  347 |     });
-  348 | 
-  349 |     expect(result.success).toBeTruthy();
-  350 |     expect(result.tithiNumber).toBeGreaterThanOrEqual(1);
-  351 |     expect(result.tithiNumber).toBeLessThanOrEqual(30);
-  352 |     expect(result.tithiName).toBeTruthy();
-  353 |   });
-  354 | 
-  355 |   test('Pradosha widget calculates next 3 Pradosha dates', async ({ page }) => {
-  356 |     await page.goto(`${BASE_URL}/pradoshakalapooja/`, { timeout: TIMEOUT });
-  357 |     await page.waitForLoadState('networkidle');
-  358 | 
-  359 |     // Check if widget container exists
-  360 |     const widgetVisible = await page.locator('[id*="panchanga"]').first().isVisible().catch(() => false);
-  361 |     expect(widgetVisible).toBeTruthy();
-  362 | 
-  363 |     // The widget should load and initialize
-  364 |     await page.waitForTimeout(2000);
-  365 | 
-  366 |     // Check for Pradosha date display
-  367 |     const pradoshaText = page.locator('text=/Pradosha|tithi|date/i').first();
-  368 |     const hasContent = await pradoshaText.isVisible().catch(() => false);
-  369 | 
-  370 |     if (hasContent) {
-  371 |       const text = await pradoshaText.textContent();
-  372 |       expect(text).toBeTruthy();
-  373 |     }
-  374 |   });
-  375 | });
-  376 | 
-  377 | // ============================================================
-  378 | // TEST SUITE: Accessibility
-  379 | // ============================================================
-  380 | 
-  381 | test.describe('Accessibility', () => {
-  382 |   test('Form inputs are keyboard accessible', async ({ page }) => {
-  383 |     await page.goto(`${BASE_URL}/panchanga/`, { timeout: TIMEOUT });
-  384 |     await page.waitForLoadState('networkidle');
-  385 | 
-  386 |     const locationInput = page.locator('#panchanga-location-input');
-  387 | 
-  388 |     // Tab to input
-  389 |     await page.keyboard.press('Tab');
-  390 | 
-  391 |     // Check if input is focused
-  392 |     const focused = await locationInput.evaluate(el => el === document.activeElement);
-  393 |     console.log('Location input focused:', focused);
-  394 |   });
-  395 | 
-  396 |   test('Buttons have accessible labels', async ({ page }) => {
-  397 |     await page.goto(`${BASE_URL}/panchanga/`, { timeout: TIMEOUT });
-  398 |     await page.waitForLoadState('networkidle');
-  399 | 
-  400 |     const calcBtn = page.locator('button:has-text("Calculate")').first();
-  401 |     const text = await calcBtn.textContent();
-  402 | 
-  403 |     expect(text).toBeTruthy();
-  404 |     expect(text.length).toBeGreaterThan(0);
-  405 |   });
-  406 | 
-  407 |   // Test: Specific case - 06/12/2026 + Olympia, WA (known problematic date)
-  408 |   test('Calculate Panchanga for 06/12/2026 + Olympia, WA (with console logs)', async ({ page }) => {
-  409 |     // Capture all console messages
-  410 |     const consoleLogs = [];
-  411 |     page.on('console', msg => {
-  412 |       consoleLogs.push(`[${msg.type()}] ${msg.text()}`);
-  413 |       console.log(`[Browser Console] ${msg.text()}`);
-  414 |     });
-  415 | 
-  416 |     await page.goto(`${BASE_URL}/panchanga/`, { timeout: TIMEOUT });
-  417 |     await page.waitForLoadState('networkidle');
-  418 | 
-  419 |     // Fill in the known problematic case
-  420 |     const locationInput = page.locator('#panchanga-location-input');
-  421 |     const dateInput = page.locator('#panchanga-date-input');
-  422 |     const calcBtn = page.locator('button:has-text("Calculate")').first();
-  423 | 
-> 424 |     await locationInput.fill('Olympia, Thurston, Washington');
-      |                         ^ Error: locator.fill: Test timeout of 30000ms exceeded.
-  425 |     await dateInput.fill('2026-06-12');
-  426 | 
-  427 |     console.log('TEST: Clicking Calculate button for 06/12/2026 + Olympia, WA');
-  428 | 
-  429 |     // Click calculate and wait for results or error
-  430 |     await calcBtn.click();
-  431 | 
-  432 |     // Wait for either success or error message
-  433 |     try {
-  434 |       await page.waitForSelector('#panchanga-result-date, #panchanga-error, [id*="error"]', { timeout: 5000 });
-  435 |     } catch (e) {
-  436 |       console.log('TEST: No result/error element found within 5s');
-  437 |     }
-  438 | 
-  439 |     // Check if calculation succeeded
-  440 |     const resultDate = await page.locator('#panchanga-result-date').isVisible();
-  441 |     const errorMsg = await page.locator('[id*="error"]').isVisible();
-  442 | 
-  443 |     console.log('TEST SUMMARY:');
-  444 |     console.log('- Result visible:', resultDate);
-  445 |     console.log('- Error visible:', errorMsg);
-  446 |     console.log('- Total console messages:', consoleLogs.length);
-  447 |     console.log('- All logs:', consoleLogs);
-  448 | 
-  449 |     // The test passes if we get here without crash
-  450 |     expect(resultDate || errorMsg).toBeTruthy();
-  451 |   });
-  452 | });
-  453 | 
+  1   | /**
+  2   |  * End-to-End Tests for Panchanga Calculator
+  3   |  * Uses Playwright to test actual browser behavior
+  4   |  * Tests: UI rendering, calculations, location search, date picker, error handling
+  5   |  */
+  6   | 
+  7   | import { test, expect } from '@playwright/test';
+  8   | 
+  9   | // Test configuration
+  10  | const BASE_URL = process.env.TEST_URL || 'http://localhost:5080';
+  11  | const TIMEOUT = 10000;
+  12  | 
+  13  | // ============================================================
+  14  | // TEST SUITE: Panchanga Page
+  15  | // ============================================================
+  16  | 
+  17  | test.describe('Panchanga Calculator Page', () => {
+  18  |   test.beforeEach(async ({ page }) => {
+  19  |     // Navigate to panchanga page
+  20  |     await page.goto(`${BASE_URL}/panchanga/`, { timeout: TIMEOUT });
+  21  | 
+  22  |     // Wait for page to load
+  23  |     await page.waitForLoadState('networkidle');
+  24  |   });
+  25  | 
+  26  |   // Test: Page loads and contains basic elements
+  27  |   test('Page loads and renders main elements', async ({ page }) => {
+  28  |     const title = await page.title();
+  29  |     expect(title).toContain('Panchanga');
+  30  | 
+  31  |     // Check main widget container exists
+  32  |     const widget = await page.locator('.panchanga-widget').isVisible();
+> 33  |     expect(widget).toBeTruthy();
+      |                    ^ Error: expect(received).toBeTruthy()
+  34  | 
+  35  |     // Check calculator button exists
+  36  |     const calcBtn = await page.locator('button:has-text("Calculate")').isVisible();
+  37  |     expect(calcBtn).toBeTruthy();
+  38  |   });
+  39  | 
+  40  |   // Test: Location input works
+  41  |   test('Location input accepts text input', async ({ page }) => {
+  42  |     const locationInput = page.locator('#panchanga-location-input');
+  43  | 
+  44  |     // Type location
+  45  |     await locationInput.fill('Chennai, India');
+  46  | 
+  47  |     // Verify text was entered
+  48  |     const value = await locationInput.inputValue();
+  49  |     expect(value).toBe('Chennai, India');
+  50  |   });
+  51  | 
+  52  |   // Test: Date picker works
+  53  |   test('Date picker accepts date input', async ({ page }) => {
+  54  |     const datePicker = page.locator('#panchanga-date-input');
+  55  | 
+  56  |     if (await datePicker.isVisible()) {
+  57  |       // Set a specific date
+  58  |       await datePicker.fill('2026-05-28');
+  59  | 
+  60  |       // Verify date was set
+  61  |       const value = await datePicker.inputValue();
+  62  |       expect(value).toContain('2026');
+  63  |     }
+  64  |   });
+  65  | 
+  66  |   // Test: Calculate button triggers calculation
+  67  |   test('Calculate button initiates panchanga calculation', async ({ page }) => {
+  68  |     const locationInput = page.locator('#panchanga-location-input');
+  69  |     const calcBtn = page.locator('button:has-text("Calculate")');
+  70  | 
+  71  |     // Fill location
+  72  |     await locationInput.fill('New York, USA');
+  73  | 
+  74  |     // Click calculate button
+  75  |     await calcBtn.click();
+  76  | 
+  77  |     // Wait for calculation (may show loading state or results)
+  78  |     try {
+  79  |       await page.waitForTimeout(2000); // Wait for calculation
+  80  | 
+  81  |       // Check for results or error message
+  82  |       const resultArea = page.locator('[class*="result"]');
+  83  |       const errorArea = page.locator('[class*="error"]');
+  84  | 
+  85  |       const resultsVisible = await resultArea.first().isVisible().catch(() => false);
+  86  |       const errorVisible = await errorArea.first().isVisible().catch(() => false);
+  87  | 
+  88  |       // Either results or error should be visible
+  89  |       expect(resultsVisible || errorVisible).toBeTruthy();
+  90  |     } catch (e) {
+  91  |       console.log('Calculation handling test note:', e.message);
+  92  |     }
+  93  |   });
+  94  | 
+  95  |   // Test: Panchanga results display when calculation succeeds
+  96  |   test('Panchanga results display with all components', async ({ page }) => {
+  97  |     const locationInput = page.locator('#panchanga-location-input');
+  98  |     const calcBtn = page.locator('button:has-text("Calculate")');
+  99  | 
+  100 |     // Fill location and calculate
+  101 |     await locationInput.fill('Chennai, India');
+  102 |     await calcBtn.click();
+  103 | 
+  104 |     // Wait for results to appear
+  105 |     try {
+  106 |       const tithiName = page.locator('[id*="tithi-name"], [class*="tithi"]').first();
+  107 |       await tithiName.waitFor({ timeout: TIMEOUT });
+  108 | 
+  109 |       // Check various panchanga elements
+  110 |       const elements = {
+  111 |         tithi: page.locator('text=/Tithi|तिथि/i').first(),
+  112 |         nakshatra: page.locator('text=/Nakshatra|नक्षत्र/i').first(),
+  113 |         yoga: page.locator('text=/Yoga|योग/i').first(),
+  114 |         karana: page.locator('text=/Karana|करण/i').first(),
+  115 |         hora: page.locator('text=/Hora|होरा/i').first()
+  116 |       };
+  117 | 
+  118 |       for (const [key, element] of Object.entries(elements)) {
+  119 |         const visible = await element.isVisible().catch(() => false);
+  120 |         console.log(`${key}: ${visible}`);
+  121 |       }
+  122 |     } catch (e) {
+  123 |       console.log('Results display test timeout/error:', e.message);
+  124 |       // This is acceptable - may indicate calculation failed
+  125 |     }
+  126 |   });
+  127 | 
+  128 |   // Test: Error handling when location not found
+  129 |   test('Shows error message when location cannot be geocoded', async ({ page }) => {
+  130 |     const locationInput = page.locator('#panchanga-location-input');
+  131 |     const calcBtn = page.locator('button:has-text("Calculate")');
+  132 | 
+  133 |     // Try invalid location
 ```
