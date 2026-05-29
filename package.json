@@ -4,14 +4,14 @@
   "description": "Hindu calendar (panchanga) calculator for Jekyll site",
   "type": "module",
   "scripts": {
-    "test": "node tests/panchanga-calculator.test.js && node tests/panchanga-calculator-integration.test.js",
+    "test": "node tests/panchanga-calculator.test.js && node tests/panchanga-calculator-integration.test.cjs",
     "test:e2e": "playwright test tests/e2e.spec.js",
     "test:e2e:debug": "playwright test tests/e2e.spec.js --debug",
     "test:e2e:ui": "playwright test tests/e2e.spec.js --ui",
     "test:coverage": "c8 playwright test tests/e2e.spec.js",
     "test:all": "npm run test && npm run test:coverage",
     "test:unit": "node tests/panchanga-calculator.test.js",
-    "test:integration": "node tests/panchanga-calculator-integration.test.js"
+    "test:integration": "node tests/panchanga-calculator-integration.test.cjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.60.0",

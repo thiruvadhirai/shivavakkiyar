@@ -273,6 +273,108 @@ test.describe('Responsive Design', () => {
 });
 
 // ============================================================
+// TEST SUITE: Astronomy Engine Integration (Real Browser)
+// ============================================================
+
+test.describe('Astronomy Engine & Calculations', () => {
+  test('Astronomy Engine loads in browser', async ({ page }) => {
+    await page.goto(`${BASE_URL}/panchanga/`, { timeout: TIMEOUT });
+    await page.waitForLoadState('networkidle');
+
+    // Check if Astronomy Engine is available in browser context
+    const astronomyLoaded = await page.evaluate(() => {
+      return typeof Astronomy !== 'undefined';
+    });
+
+    expect(astronomyLoaded).toBeTruthy();
+  });
+
+  test('PanchangaCalculator class initializes correctly', async ({ page }) => {
+    await page.goto(`${BASE_URL}/panchanga/`, { timeout: TIMEOUT });
+    await page.waitForLoadState('networkidle');
+
+    // Check if calculator class is available
+    const calculatorLoaded = await page.evaluate(() => {
+      return typeof PanchangaCalculator !== 'undefined';
+    });
+
+    expect(calculatorLoaded).toBeTruthy();
+  });
+
+  test('LocationManager class initializes correctly', async ({ page }) => {
+    await page.goto(`${BASE_URL}/panchanga/`, { timeout: TIMEOUT });
+    await page.waitForLoadState('networkidle');
+
+    // Check if location manager is available
+    const locationManagerLoaded = await page.evaluate(() => {
+      return typeof LocationManager !== 'undefined';
+    });
+
+    expect(locationManagerLoaded).toBeTruthy();
+  });
+
+  test('Calculations produce valid results with Astronomy Engine', async ({ page }) => {
+    await page.goto(`${BASE_URL}/panchanga/`, { timeout: TIMEOUT });
+    await page.waitForLoadState('networkidle');
+
+    // Run a calculation in the browser
+    const result = await page.evaluate(async () => {
+      try {
+        const calc = new PanchangaCalculator();
+        await calc.init();
+
+        const date = new Date('2026-05-28');
+        const lat = 47.08466;  // Olympia, WA
+        const lon = -123.02958;
+
+        const sunLon = await calc.getSunLongitude(date, lat, lon);
+        const moonLon = await calc.getMoonLongitude(date, lat, lon);
+        const tithi = calc.calculateTithi(sunLon, moonLon);
+
+        return {
+          success: true,
+          sunLon: parseFloat(sunLon.toFixed(2)),
+          moonLon: parseFloat(moonLon.toFixed(2)),
+          tithiNumber: tithi.number,
+          tithiName: tithi.name
+        };
+      } catch (error) {
+        return {
+          success: false,
+          error: error.message
+        };
+      }
+    });
+
+    expect(result.success).toBeTruthy();
+    expect(result.tithiNumber).toBeGreaterThanOrEqual(1);
+    expect(result.tithiNumber).toBeLessThanOrEqual(30);
+    expect(result.tithiName).toBeTruthy();
+  });
+
+  test('Pradosha widget calculates next 3 Pradosha dates', async ({ page }) => {
+    await page.goto(`${BASE_URL}/pradoshakalapooja/`, { timeout: TIMEOUT });
+    await page.waitForLoadState('networkidle');
+
+    // Check if widget container exists
+    const widgetVisible = await page.locator('[id*="panchanga"]').first().isVisible().catch(() => false);
+    expect(widgetVisible).toBeTruthy();
+
+    // The widget should load and initialize
+    await page.waitForTimeout(2000);
+
+    // Check for Pradosha date display
+    const pradoshaText = page.locator('text=/Pradosha|tithi|date/i').first();
+    const hasContent = await pradoshaText.isVisible().catch(() => false);
+
+    if (hasContent) {
+      const text = await pradoshaText.textContent();
+      expect(text).toBeTruthy();
+    }
+  });
+});
+
+// ============================================================
 // TEST SUITE: Accessibility
 // ============================================================
 

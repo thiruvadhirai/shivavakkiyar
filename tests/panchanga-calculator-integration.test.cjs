@@ -1,48 +1,18 @@
 /**
- * Panchanga Calculator - Integration Tests
- * Tests the REAL code with actual Astronomy Engine library
- * NOT mocked - tests real calculations and browser functionality
+ * Panchanga Calculator - Integration Tests (Node.js)
+ * Tests pure calculation logic WITHOUT Astronomy Engine
+ *
+ * NOTE: Astronomy Engine tests moved to E2E tests (browser-based with Playwright)
+ * This focuses on calculation functions that work in Node.js environment
  */
 
-// Check if running in Node.js or browser
+const fs = require('fs');
 const isNodeEnv = typeof window === 'undefined';
 
-let Astronomy;
-let PanchangaCalculator;
-let LocationManager;
+console.log('🧪 Loading calculator functions for Node.js integration tests...\n');
 
-// ============================================================
-// SETUP: Load real libraries
-// ============================================================
-
-if (isNodeEnv) {
-  // Node.js environment - require actual files
-  console.log('🧪 Loading real libraries for Node.js integration tests...\n');
-
-  // Try to load Astronomy Engine from npm or local file
-  try {
-    Astronomy = require('../assets/js/astronomy.browser.js');
-    console.log('✓ Loaded astronomy.browser.js');
-  } catch (e) {
-    console.error('❌ Failed to load Astronomy Engine:', e.message);
-    console.error('   Make sure astronomy.browser.js exists in assets/js/');
-    process.exit(1);
-  }
-
-  // Load calculator classes
-  try {
-    // Note: astronomy.browser.js doesn't use export, it defines Astronomy globally
-    // So we need to eval the files or require them differently
-    const fs = require('fs');
-
-    // For integration tests, we'll use approximate calculations
-    // that don't require the complex Astronomy Engine API
-    console.log('✓ Will use fallback calculations in Node.js environment');
-  } catch (e) {
-    console.error('❌ Failed to load calculator:', e.message);
-    process.exit(1);
-  }
-}
+// We'll test the pure calculation functions that don't depend on Astronomy Engine
+// Real Astronomy Engine integration is tested in E2E tests with Playwright
 
 // ============================================================
 // TEST SUITE

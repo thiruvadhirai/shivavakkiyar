@@ -16,9 +16,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY package.json* ./
 RUN npm install --omit=dev @playwright/test@latest playwright@latest
 
-# Copy test files
+# Copy test files and source
 COPY tests/ ./tests/
 COPY assets/js/ ./assets/js/
+COPY assets/css/ ./assets/css/
+COPY _includes/ ./_includes/
+COPY _layouts/ ./_layouts/
 
 # Update Playwright to use system browsers
 RUN npm install -g playwright@latest && \

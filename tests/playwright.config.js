@@ -41,16 +41,25 @@ module.exports = defineConfig({
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
-        launchArgs: ['--disable-blink-features=AutomationControlled'],
+        launchArgs: [
+          '--disable-blink-features=AutomationControlled',
+          '--headless', // Ensure headless mode for CI/containers
+        ],
       },
     },
     {
       name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
+      use: {
+        ...devices['Desktop Firefox'],
+        launchArgs: ['--headless'],
+      },
     },
     {
       name: 'mobile-chrome',
-      use: { ...devices['Pixel 5'] },
+      use: {
+        ...devices['Pixel 5'],
+        launchArgs: ['--headless'],
+      },
     },
   ],
 });
