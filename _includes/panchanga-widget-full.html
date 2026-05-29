@@ -346,7 +346,7 @@
         // Fix timezone issue: valueAsDate returns UTC midnight, but user selected local date
         // Need to convert: selected date at local midnight -> UTC time
         // Use Intl API to get accurate timezone offset (including DST) for the selected date
-        const tzOffset = selectedLocation ? await calculator.getTimezoneOffsetFromLongitude(selectedLocation.longitude, dateValue) : 0;
+        const tzOffset = selectedLocation ? calculator.getTimezoneOffsetFromLongitude(selectedLocation.longitude, dateValue) : 0;
         dateValue = new Date(dateValue.getTime() - tzOffset * 60 * 60 * 1000);
 
         // Calculate panchanga
