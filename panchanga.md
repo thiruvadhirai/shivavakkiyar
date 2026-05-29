@@ -1,85 +1,83 @@
 ---
 layout: default
-custom_heading: "Panchanga Calculator"
-title: "Panchanga Calculator"
+title: Panchanga Calculator - Hindu Calendar
+permalink: /panchanga/
 ---
 
-# 🔮 Panchanga Calculator
+# Panchanga Calculator
 
-A comprehensive Hindu calendar calculator that displays accurate daily astronomical data based on **Drik Panchang** (modern astronomical system).
-
-## What is Panchanga?
-
-**Panchanga** (पञ्चाङ्ग) literally means "five limbs" in Sanskrit. It is the Hindu calendar system that consists of five essential elements:
-
-1. **Tithi** (तिथि) - Lunar day, based on the Moon's position relative to the Sun
-2. **Nakshatra** (नक्षत्र) - Lunar mansion or constellation where the Moon resides
-3. **Yoga** (योग) - Auspiciousness combination determined by Sun and Moon positions
-4. **Karana** (करण) - Half-tithi period, used for determining auspicious times
-5. **Vara** (वार) - Day of the week
-
-Along with these five elements, the panchanga also includes:
-- **Sunrise & Sunset times** (location-specific)
-- **Rahu Kalam** (राहु काल) - Inauspicious time period
-- **Abhijit Muhurta** - Most auspicious time for starting ventures
-- **Planetary Hours** (Hora)
-
-## About Drik Panchang
-
-This calculator uses **Drik Panchang**, a modern astronomical system that:
-- Is based on actual astronomical observations
-- Accounts for current Earth precession (Drik Ayanamsa)
-- Is more accurate than traditional Lahiri Ayanamsa for the 21st century
-- Uses NASA JPL ephemeris data for celestial calculations
-
-**Note:** Results may differ slightly from traditional Tamil/Indian calendars which use the older Lahiri Ayanamsa system.
-
-## How to Use
-
-1. **Enter Location:** Use "Auto-Detect" to automatically detect your location, or type a city, state, country, or ZIP code
-2. **Select Date:** Choose any date you want to calculate panchanga for
-3. **Calculate:** Click "Calculate Panchanga" to see all the astronomical data
-4. **Save Location:** Check the "Save location for next visit" option to remember your location
+Calculate the Hindu calendar (panchanga) for any date and location using the Drik Ayanamsa system.
 
 {% include panchanga-widget-full.html %}
 
-## Understanding Each Element
+---
 
-### Tithi (Lunar Day)
-The lunar day is calculated based on the angular distance between the Sun and Moon. Each tithi spans 12 degrees of arc. A tithi typically lasts 19-26 hours.
+## About Panchanga
 
-### Nakshatra (Lunar Mansion)
-There are 27 nakshatras, each spanning 13.33 degrees of the zodiac. The nakshatra where the Moon resides on a given day influences personality traits and auspiciousness.
+**Panchanga** (पञ्चाङ्ग) literally means "five limbs" in Sanskrit. The **Panchanga** is the Hindu calendar system that divides each day into five main components:
 
-### Yoga
-There are 27 yogas calculated from the combined longitudes of the Sun and Moon. Each yoga lasts approximately 13.33 degrees.
+### **Tithi** (Lunar Day)
+- 30 tithis per lunar month
+- Determined by the angle between Sun and Moon
+- Each tithi is associated with specific auspicious activities
 
-### Karana
-Karanas are half-tithis (60 in total), used in timing important activities like pujas and muhurtas.
+### **Nakshatra** (Lunar Mansion)
+- 27 constellations the Moon passes through
+- Each takes approximately one day to cross
+- Important for planning ceremonies and rituals
 
-### Rahu Kalam
-An inauspicious time period of 1.5 hours that occurs daily. Timing varies by day of the week. Avoid starting important activities during this time.
+### **Yoga** (Auspicious Combination)
+- Combination of Sun and Moon positions
+- 27 yogas create different energy patterns
+- Some are highly auspicious, others require caution
 
-### Abhijit Muhurta
-An auspicious time period of about 48 minutes centered around noon. This is an excellent time for starting new ventures, ceremonies, and important tasks.
+### **Karana** (Half-Tithi)
+- 60 half-day periods in a lunar month
+- Two per tithi
+- Each has specific characteristics for actions
 
-## Location Calculation
-
-All times are calculated based on your specific location:
-- **Sunrise/Sunset times** adjust based on latitude and longitude
-- **Rahu Kalam and Abhijit Muhurta** are location-specific
-- Times are displayed in **IST (Indian Standard Time)** for convenience
-
-Your location is saved in your browser's local storage (not sent to any server) for future visits.
-
-## Important Notes
-
-- ✅ All calculations are performed in your browser - no data is sent to external servers (except Nominatim for location lookup)
-- ✅ Astronomy Engine uses NASA JPL ephemeris data, the gold standard for astronomical calculations
-- ✅ Drik Ayanamsa provides ~±1-3 minutes accuracy for tithi and nakshatra calculations
-- ⚠️ Results are astronomically accurate but may differ from traditional regional calendars
-- ⚠️ For precise muhurta selection for important ceremonies, consult with a qualified Hindu priest or traditional astrologer
+### **Hora** (Planetary Hour)
+- 24-hour cycle divided into planetary hours
+- Each hour is ruled by a different planet
+- Important for timing specific activities
 
 ---
 
-**Curious about Pradosha?** [Learn about Pradosha Kalam](pradoshakalapooja.md) - the most auspicious time for Shiva worship.
+## Additional Calculations
+
+### **Rahu Kalam** (Inauspicious Time)
+- 90-minute period each day
+- Time of day varies by day of week
+- Considered unsuitable for important activities
+
+### **Abhijit Muhurta** (Auspicious Time)
+- 48-minute window around noon
+- Considered highly auspicious
+- Good for starting important endeavors
+
+### **Pradosha Times** (Worship Period)
+- Occurs twice monthly on the 13th lunar day
+- 3-hour window around sunset
+- Sacred time for Shiva worship
+
+---
+
+## Using the Calculator
+
+1. **Enter your location** - City, State, or Coordinates
+2. **Select a date** - Today or any date you wish to calculate
+3. **Click Calculate** - Results will appear instantly
+
+The calculator uses the **Drik Ayanamsa**, the most accurate modern system for Hindu calendar calculations, based on actual astronomical observations.
+
+---
+
+## Data Sources
+
+- **Astronomy Engine** - NASA JPL ephemeris data
+- **Drik Ayanamsa** - Modern precession correction (~24.14° for 2026)
+- **Nominatim API** - OpenStreetMap geocoding
+
+---
+
+*Last Updated: May 28, 2026*
