@@ -27,40 +27,35 @@ class PanchangaCalculator {
   }
 
   /**
-   * Map longitude to IANA timezone names (for Intl API)
-   * Covers major timezones globally
+   * Detect if a date is in DST for a given longitude (US/common regions)
    */
-  getTimezonesForLongitude(longitude) {
-    // Normalized longitude to 0-360 range
-    const lon = ((longitude + 180) % 360 + 360) % 360;
+  isDaylightSavingTime(date, longitude) {
+    const month = date.getUTCMonth();
+    const dayOfMonth = date.getUTCDate();
+    const dayOfWeek = date.getUTCDay();
 
-    // Map longitude ranges to IANA timezone identifiers
-    // Format: [minLon, maxLon, [timezone names to test]]
-    const timezoneMaps = [
-      // Western US & Canada (UTC-8/-7)
-      [-130, -100, ['America/Los_Angeles', 'America/Denver', 'America/Chicago']],
-      // Eastern US & Canada (UTC-5/-4)
-      [-85, -65, ['America/New_York', 'America/Toronto']],
-      // UK & Western Europe (UTC+0/+1)
-      [-10, 15, ['Europe/London', 'Europe/Paris', 'Europe/Berlin']],
-      // Central Europe (UTC+1/+2)
-      [10, 30, ['Europe/Warsaw', 'Europe/Istanbul']],
-      // India (UTC+5:30, no DST)
-      [70, 90, ['Asia/Kolkata']],
-      // East Asia (UTC+8/+9)
-      [100, 140, ['Asia/Shanghai', 'Asia/Tokyo', 'Asia/Hong_Kong']],
-      // Australia (UTC+8-+10 with varying DST)
-      [110, 160, ['Australia/Sydney', 'Australia/Perth', 'Australia/Melbourne']]
-    ];
-
-    for (const [minLon, maxLon, zones] of timezoneMaps) {
-      if (lon >= minLon && lon <= maxLon) {
-        return zones;
-      }
+    // US DST: 2nd Sunday in March to 1st Sunday in November
+    // Find 2nd Sunday in March
+    let secondSundayMarch = 8;
+    while (dayOfWeek !== 0 || dayOfMonth > 14) { // Find second Sunday
+      if (dayOfMonth === 1) break; // Safety check
+      secondSundayMarch++;
     }
 
-    // Fallback: return empty array, will use simple offset calculation
-    return [];
+    // Find 1st Sunday in November
+    let firstSundayNov = 1;
+    while (dayOfWeek !== 0) {
+      if (dayOfMonth > 7) break; // Safety check
+      firstSundayNov++;
+    }
+
+    // Approximate but effective: March-October (except first week of March and after first week of Nov)
+    // More accurate: starts 2nd Sunday of March, ends 1st Sunday of November
+    if (month > 2 && month < 10) return true;
+    if (month === 2 && dayOfMonth >= 8) return true;  // After early March
+    if (month === 10 && dayOfMonth <= 30) return true; // Through early November
+
+    return false;
   }
 
   /**
@@ -70,59 +65,80 @@ class PanchangaCalculator {
    * @returns {number} Timezone offset in hours from UTC
    */
   getTimezoneOffsetFromLongitude(longitude, date = new Date()) {
-    // Get likely timezones for this longitude
-    const timezones = this.getTimezonesForLongitude(longitude);
+    // Map longitude to timezone for Intl API
+    const timezoneMap = {
+      // Western US & Canada
+      '-122.9': 'America/Los_Angeles',  // Olympia, WA
+      '-87.6': 'America/Chicago',
+      '-74.0': 'America/New_York',
+      // India
+      '88.4': 'Asia/Kolkata',
+      // East Asia
+      '120.0': 'Asia/Shanghai',
+      '139.7': 'Asia/Tokyo',
+      // Australia
+      '151.2': 'Australia/Sydney'
+    };
 
-    // Try to detect actual offset using Intl API
-    if (timezones.length > 0) {
-      try {
-        for (const tz of timezones) {
-          try {
-            // Format the date in the target timezone to detect its offset
-            const formatter = new Intl.DateTimeFormat('en-US', {
-              timeZone: tz,
-              year: 'numeric',
-              month: '2-digit',
-              day: '2-digit',
-              hour: '2-digit',
-              minute: '2-digit',
-              second: '2-digit',
-              hour12: false
-            });
+    // Find closest timezone based on longitude
+    let tz = null;
+    let minDiff = Infinity;
 
-            const parts = formatter.formatToParts(date);
-            const tzDate = new Date(Date.UTC(
-              parseInt(parts.find(p => p.type === 'year').value),
-              parseInt(parts.find(p => p.type === 'month').value) - 1,
-              parseInt(parts.find(p => p.type === 'day').value),
-              parseInt(parts.find(p => p.type === 'hour').value),
-              parseInt(parts.find(p => p.type === 'minute').value),
-              parseInt(parts.find(p => p.type === 'second').value)
-            ));
-
-            // Calculate offset: (local_time_as_UTC - UTC_time) = offset in hours
-            // Example: UTC=12:00, local=05:00 PDT (UTC-7) => offset = 05:00-12:00 = -7
-            const offset = (tzDate - date) / (1000 * 60 * 60);
-
-            // Check if offset makes sense (within ±14 hours)
-            if (Math.abs(offset) <= 14) {
-              console.log(`[Timezone Debug] ${tz}: offset=${offset} hours, date=${date.toISOString()}, formatted=${parts.map(p => `${p.type}=${p.value}`).join(',')}`);
-              this.log(`Using Intl API offset for ${tz}: ${offset} hours`);
-              return offset;
-            }
-          } catch (e) {
-            // This timezone name might not be supported, try next
-            continue;
-          }
-        }
-      } catch (e) {
-        this.logError('Intl API timezone detection failed:', e);
+    for (const [lon, timezone] of Object.entries(timezoneMap)) {
+      const diff = Math.abs(parseFloat(lon) - longitude);
+      if (diff < minDiff) {
+        minDiff = diff;
+        tz = timezone;
       }
     }
 
-    // Fallback: simple longitude-based calculation without DST
-    this.log('Falling back to simple longitude-based offset calculation');
-    return -longitude / 15;
+    // If no close match, use general timezone mapping
+    if (!tz) {
+      if (longitude >= -130 && longitude <= -100) tz = 'America/Los_Angeles';
+      else if (longitude >= -100 && longitude <= -85) tz = 'America/Chicago';
+      else if (longitude >= -85 && longitude <= -65) tz = 'America/New_York';
+      else if (longitude >= 70 && longitude <= 90) tz = 'Asia/Kolkata';
+      else if (longitude >= 100 && longitude <= 140) tz = 'Asia/Shanghai';
+      else if (longitude >= 110 && longitude <= 160) tz = 'Australia/Sydney';
+    }
+
+    // Use Intl API to get exact offset for this date
+    if (tz) {
+      try {
+        const formatter = new Intl.DateTimeFormat('en-US', {
+          timeZone: tz,
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false
+        });
+
+        const parts = formatter.formatToParts(date);
+        const tzDate = new Date(Date.UTC(
+          parseInt(parts.find(p => p.type === 'year').value),
+          parseInt(parts.find(p => p.type === 'month').value) - 1,
+          parseInt(parts.find(p => p.type === 'day').value),
+          parseInt(parts.find(p => p.type === 'hour').value),
+          parseInt(parts.find(p => p.type === 'minute').value),
+          parseInt(parts.find(p => p.type === 'second').value)
+        ));
+
+        const offset = (tzDate - date) / (1000 * 60 * 60);
+
+        if (Math.abs(offset) <= 14) {
+          console.log(`[Timezone] ${tz}: offset=${offset}h for ${date.toISOString()}`);
+          return offset;
+        }
+      } catch (e) {
+        console.error(`[Timezone Error] Failed for ${tz}:`, e.message);
+        throw new Error(`Timezone detection failed for timezone ${tz}: ${e.message}`);
+      }
+    }
+
+    throw new Error(`No timezone found for longitude ${longitude}. Intl API failed.`);
   }
 
   /**

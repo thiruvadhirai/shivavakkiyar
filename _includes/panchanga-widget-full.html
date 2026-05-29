@@ -347,6 +347,12 @@
         // Need to convert: selected date at local midnight -> UTC time
         // Use Intl API to get accurate timezone offset (including DST) for the selected date
         const tzOffset = selectedLocation ? calculator.getTimezoneOffsetFromLongitude(selectedLocation.longitude, dateValue) : 0;
+        console.log('[Date Picker Debug]', {
+          selected_date: dateValue.toISOString(),
+          location: selectedLocation?.name,
+          timezone_offset: tzOffset,
+          adjusted_date: new Date(dateValue.getTime() - tzOffset * 60 * 60 * 1000).toISOString()
+        });
         dateValue = new Date(dateValue.getTime() - tzOffset * 60 * 60 * 1000);
 
         // Calculate panchanga
