@@ -359,11 +359,12 @@ class PanchangaCalculator {
     const tithiNumber = Math.floor(angle / 12) + 1;
     const tithiPercent = ((angle % 12) / 12) * 100;
 
-    const tithiName = this.getTithiName(tithiNumber);
+    const tithiData = this.getTithiName(tithiNumber);
 
     return {
       number: tithiNumber,
-      name: tithiName,
+      name: tithiData.name,
+      tamil: tithiData.tamil,
       phase: tithiNumber <= 15 ? 'shukla' : 'krishna',
       percent: Math.round(tithiPercent),
       angle: angle
@@ -446,7 +447,19 @@ class PanchangaCalculator {
     const planets = ['Sun', 'Venus', 'Mercury', 'Moon', 'Saturn', 'Jupiter', 'Mars'];
 
     // Calculate hours since sunrise
-    const hoursSinceSunrise = (dateTime - sunrise.date) / (1000 * 60 * 60);
+    // Use sunrise time as the base (start of day) if dateTime is midnight
+    // Otherwise calculate from dateTime to determine current hora
+    let baseTime = sunrise.date;
+
+    // If dateTime appears to be midnight (for full panchanga calculation),
+    // start from sunrise. Otherwise use dateTime.
+    if (dateTime.getHours() === 0 && dateTime.getMinutes() === 0) {
+      baseTime = sunrise.date;
+    } else {
+      baseTime = dateTime;
+    }
+
+    const hoursSinceSunrise = Math.abs((baseTime - sunrise.date) / (1000 * 60 * 60));
     const horaNumber = Math.floor(hoursSinceSunrise % 24) + 1;
     const planetIndex = (horaNumber - 1) % 7;
 
@@ -540,16 +553,23 @@ class PanchangaCalculator {
     let searchDate = new Date(startDate);
     let daysSearched = 0;
 
+    this.log('findNextPradosha: starting search from', startDate, 'looking for 3 Triyodashi dates');
+
     while (pradoshaList.length < 3 && daysSearched < maxSearch) {
       const sunLon = await this.getSunLongitude(searchDate, latitude, longitude);
       const moonLon = await this.getMoonLongitude(searchDate, latitude, longitude);
       const tithi = this.calculateTithi(sunLon, moonLon);
 
-      // Check if this is Triyodashi (13th)
-      if (tithi.number === 13) {
+      this.log(`findNextPradosha: ${searchDate.toISOString()} - Tithi: ${tithi.number} (${tithi.name}) - Phase: ${tithi.phase}`);
+
+      // Check if this is Triyodashi (13th) - occurs in both Shukla and Krishna paksha
+      // Shukla Triyodashi = tithi 13, Krishna Triyodashi = tithi 28
+      if (tithi.number === 13 || tithi.number === 28) {
         const sunrise = await this.getSunrise(searchDate, latitude, longitude);
         const sunset = await this.getSunset(searchDate, latitude, longitude);
         const rahuKalam = this.calculateRahuKalam(sunrise, sunset, searchDate);
+
+        this.log(`findNextPradosha: Found Triyodashi on ${searchDate.toISOString()}`);
 
         pradoshaList.push({
           date: new Date(searchDate),
@@ -567,6 +587,8 @@ class PanchangaCalculator {
       searchDate.setDate(searchDate.getDate() + 1);
       daysSearched++;
     }
+
+    this.log('findNextPradosha: Found', pradoshaList.length, 'Triyodashi dates:', pradoshaList.map(p => p.date.toISOString()));
 
     return pradoshaList;
   }
