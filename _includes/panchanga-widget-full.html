@@ -229,8 +229,18 @@
 
     await calculator.init();
 
-    // Set date to today
-    const today = new Date();
+    // Check URL for date parameter (e.g., ?date=2026-06-12)
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlDate = urlParams.get('date');
+    let today = new Date();
+
+    if (urlDate) {
+      // Parse the date string (format: YYYY-MM-DD)
+      const [year, month, day] = urlDate.split('-').map(Number);
+      today = new Date(year, month - 1, day); // month is 0-indexed in Date constructor
+      console.log('[Panchanga] Loading date from URL parameter:', urlDate, 'parsed as:', today.toISOString());
+    }
+
     document.getElementById('panchanga-date-input').valueAsDate = today;
 
     // Restore saved location
@@ -263,8 +273,10 @@
         // Set location input value
         locationInput.value = savedLocation.name;
         selectedLocation = savedLocation;
+      }
 
-        // Automatically calculate for cached location
+      // Automatically calculate if we have a saved location or URL date parameter
+      if (savedLocation || urlDate) {
         const calculateBtn = document.getElementById('panchanga-calculate-btn');
         calculateBtn.click();
       }
