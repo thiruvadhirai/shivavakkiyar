@@ -244,24 +244,7 @@ class PanchangaCalculator {
       });
     }
 
-    // Fallback: approximate sun longitude (moves ~0.9856° per day)
-    this.log('Using fallback sun calculation');
-    try {
-      const j2000 = new Date(2000, 0, 1, 12, 0, 0);
-      const daysSinceJ2000 = (date - j2000) / (1000 * 60 * 60 * 24);
-      const approxSunLon = 280.46 + (0.9856474 * daysSinceJ2000);
-      const ayanamsa = this.getDrikAyanamsa(date);
-      const result = this.normalizeDegrees(approxSunLon - ayanamsa);
-      this.log('Fallback sun longitude:', result);
-
-      if (typeof result !== 'number' || isNaN(result)) {
-        throw new Error('Fallback sun calculation produced invalid result: ' + result);
-      }
-      return result;
-    } catch (e) {
-      this.logError('CRITICAL: Even fallback sun calculation failed!', e);
-      return 0; // Emergency fallback
-    }
+    throw new Error('Astronomy Engine SunPosition failed. Cannot calculate sun longitude without accurate ephemeris data.');
   }
 
   /**
@@ -303,23 +286,7 @@ class PanchangaCalculator {
       });
     }
 
-    // Fallback: approximate moon longitude (moves ~13° per day, with variation)
-    this.log('Using fallback moon calculation');
-    try {
-      const j2000 = new Date(2000, 0, 1, 12, 0, 0);
-      const daysSinceJ2000 = (date - j2000) / (1000 * 60 * 60 * 24);
-      const moonMeanLon = 218.32 + (13.176358 * daysSinceJ2000);
-      const ayanamsa = this.getDrikAyanamsa(date);
-      const result = this.normalizeDegrees(moonMeanLon - ayanamsa);
-      this.log('Fallback moon longitude:', result);
-      if (typeof result !== 'number' || isNaN(result)) {
-        throw new Error('Fallback moon calculation produced invalid result: ' + result);
-      }
-      return result;
-    } catch (e) {
-      this.logError('CRITICAL: Even fallback moon calculation failed!', e);
-      return 0; // Emergency fallback
-    }
+    throw new Error('Astronomy Engine EclipticGeoMoon failed. Cannot calculate moon longitude without accurate ephemeris data.');
   }
 
   /**
