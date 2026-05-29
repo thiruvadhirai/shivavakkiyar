@@ -218,6 +218,8 @@
       collapseBtn.onclick = () => {
         collapsedView.style.display = 'block';
         locationInputState.style.display = 'none';
+        // Keep results visible (which includes location display with Change link)
+        resultsEl.style.display = 'block';
       };
 
       // Auto-load cached location on page load
@@ -380,7 +382,6 @@
 
           // Next 3 Pradosha dates
           const nextPradosha = await calculator.findNextPradosha(today, selectedLocation.latitude, selectedLocation.longitude);
-          const pradoshaListEl = document.getElementById('pradosha-next-list');
           const pradoshaListCollapsedEl = document.getElementById('pradosha-next-list-collapsed');
 
           const pradoshaHTML = nextPradosha.slice(0, 3).map((pd) => `
@@ -391,26 +392,33 @@
             </li>
           `).join('');
 
-          // Update both collapsed and expanded views
-          pradoshaListEl.innerHTML = pradoshaHTML;
-          pradoshaListCollapsedEl.innerHTML = pradoshaHTML;
+          // Update collapsed view
+          if (pradoshaListCollapsedEl) {
+            pradoshaListCollapsedEl.innerHTML = pradoshaHTML;
+          }
 
           // Check if today is Pradosha (first date in nextPradosha is today)
-          const isTodayPradosha = nextPradosha.length > 0 &&
-                                  nextPradosha[0].date.toDateString() === today.toDateString();
+          // Compare dates properly - use local date strings with careful timezone handling
+          const todayDateStr = new Date(today.getFullYear(), today.getMonth(), today.getDate()).toDateString();
+          const firstPradoshaDateStr = nextPradosha.length > 0 ?
+            new Date(nextPradosha[0].date.getFullYear(), nextPradosha[0].date.getMonth(), nextPradosha[0].date.getDate()).toDateString() :
+            null;
+          const isTodayPradosha = firstPradoshaDateStr === todayDateStr;
 
           const pradoshaTodaySection = document.getElementById('panchanga-pradosha-today-section');
           const expandBtnToday = document.getElementById('panchanga-expand-btn-today');
           const expandableContentToday = document.getElementById('panchanga-expandable-content-today');
 
-          if (isTodayPradosha) {
+          if (isTodayPradosha && pradoshaTodaySection && expandableContentToday) {
             // Show Pradosha today section
             pradoshaTodaySection.style.display = 'block';
             document.getElementById('pradosha-location').textContent = selectedLocation.name;
 
             // Populate full panchanga details in expandable section
             const detailsTemplate = document.getElementById('panchanga-full-details-template');
-            expandableContentToday.innerHTML = detailsTemplate.innerHTML;
+            if (detailsTemplate) {
+              expandableContentToday.innerHTML = detailsTemplate.innerHTML;
+            }
 
             // Toggle expand/collapse for Pradosha day details
             expandBtnToday.onclick = () => {
@@ -418,7 +426,7 @@
               expandableContentToday.style.display = isOpen ? 'none' : 'block';
               document.getElementById('panchanga-expand-icon-today').textContent = isOpen ? '▼' : '▲';
             };
-          } else {
+          } else if (pradoshaTodaySection) {
             pradoshaTodaySection.style.display = 'none';
           }
 
