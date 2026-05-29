@@ -221,6 +221,20 @@ podman-compose down
 - **Load Time**: <2 seconds on 4G
 - **Calculation Time**: <500ms per location
 
+## Development Conventions
+
+### Git Commit Messages
+- **Format**: Clear, descriptive messages focused on what and why
+- **No footers**: Never include `Co-Authored-By:` or similar metadata in commit messages
+- **Body**: Use bullet points for detailed changes when needed
+- **Example**: 
+  ```
+  Fix: Adjust Pradosha dates from UTC to local timezone
+  
+  Pradosha dates are calculated in UTC but should display in the
+  user's local timezone. Convert UTC dates by adding timezone offset.
+  ```
+
 ## Future Enhancements
 - [ ] Add Ayanamsa comparison (Drik vs Lahiri)
 - [ ] Support for different calendar systems

@@ -96,6 +96,11 @@
       "rule": "Use descriptive commit messages",
       "format": "First line: what and why. Body: detailed explanation if needed.",
       "example": "Add E2E testing infrastructure with Playwright\n\n- Implement Playwright test suite\n- Add containerized testing\n- Configure code coverage"
+    },
+    "noCommitFooters": {
+      "rule": "NEVER include Co-Authored-By or similar footers in commit messages",
+      "reason": "Commit message should contain project context only, not metadata about who generated the code",
+      "enforcement": "Footers are automatically stripped from commits before pushing"
     }
   },
   "shortcuts": {
