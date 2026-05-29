@@ -615,17 +615,18 @@ class PanchangaCalculator {
 
   /**
    * Find next Pradosha dates (Triyodashi - 13th lunar day)
-   * Returns array of next 3 Pradosha occurrences
-   * @param {Date} startDate
+   * Checks if startDate has Pradosha first, then searches for future ones
+   * @param {Date} startDate - Date to check first, then search after for more Pradoshas
    * @param {number} latitude
    * @param {number} longitude
    * @param {number} maxSearch - Maximum days to search (default 60)
-   * @returns {Promise<Array>} Array of {date: Date, tithi: Object, sunrise: Object, sunset: Object, rahuKalam: Object}
+   * @returns {Promise<Array>} Array of {date: Date, tithi: Object, sunrise: Object, sunset: Object, rahuKalam: Object, isPradoshaToday: boolean}
    */
   async findNextPradosha(startDate, latitude, longitude, maxSearch = 60) {
     const pradoshaList = [];
     let searchDate = new Date(startDate);
     let daysSearched = 0;
+    let isPradoshaToday = false;
 
     this.log('findNextPradosha: starting search from', startDate, 'looking for 3 Pradosha dates (Triyodashi at sunset)');
 
@@ -649,7 +650,7 @@ class PanchangaCalculator {
 
         this.log(`findNextPradosha: Found Pradosha on ${searchDate.toISOString()} (sunset at ${sunset.date.toISOString()})`);
 
-        pradoshaList.push({
+        const pradoshaData = {
           date: new Date(searchDate),
           tithi: tithiAtSunset,
           sunrise: sunrise,
@@ -657,8 +658,16 @@ class PanchangaCalculator {
           rahuKalam: rahuKalam,
           // Pradosha time: 1.5 hours before and after sunset
           pradoshaStart: new Date(sunset.date.getTime() - 90 * 60 * 1000),
-          pradoshaEnd: new Date(sunset.date.getTime() + 90 * 60 * 1000)
-        });
+          pradoshaEnd: new Date(sunset.date.getTime() + 90 * 60 * 1000),
+          isPradoshaToday: daysSearched === 0
+        };
+
+        pradoshaList.push(pradoshaData);
+
+        // Mark if the first found Pradosha is on the startDate
+        if (daysSearched === 0) {
+          isPradoshaToday = true;
+        }
       }
 
       // Move to next day
@@ -666,7 +675,7 @@ class PanchangaCalculator {
       daysSearched++;
     }
 
-    this.log('findNextPradosha: Found', pradoshaList.length, 'Pradosha dates:', pradoshaList.map(p => p.date.toISOString()));
+    this.log('findNextPradosha: Found', pradoshaList.length, 'Pradosha dates:', pradoshaList.map(p => p.date.toISOString()), 'isPradoshaToday:', isPradoshaToday);
 
     return pradoshaList;
   }
