@@ -16,17 +16,24 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY package.json* ./
 RUN npm install --omit=dev @playwright/test@latest playwright@latest
 
+# Install Playwright browsers during build (one-time setup)
+RUN npx playwright install chromium firefox
+
+# Install system dependencies for browsers
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libgconf-2-4 \
+    libxss1 \
+    libappindicator1 \
+    libindicator7 \
+    libgbm1 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set environment for Playwright browsers
+ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
+
 # Note: Test files and assets are mounted from source (not copied)
 # This avoids rebuilding the container when code changes
 # Mounts happen at runtime via podman-compose.yml volumes
-
-# Update Playwright to use system browsers
-RUN npm install -g playwright@latest && \
-    PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 playwright install-deps
-
-# Set environment for system browsers
-ENV PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium
-ENV PLAYWRIGHT_FIREFOX_EXECUTABLE_PATH=/usr/bin/firefox-esr
 
 # Default command: run E2E tests
 CMD ["npm", "run", "test:e2e"]
