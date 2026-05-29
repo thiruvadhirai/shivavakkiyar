@@ -16,9 +16,9 @@
       </ul>
     </div>
 
-    <!-- Expand Button -->
-    <button class="panchanga-btn" id="panchanga-expand-location-btn" style="width: 100%; margin-top: 15px;">
-      📍 Change Location or Show Full Details
+    <!-- Expand Button - Only shows if location not selected -->
+    <button class="panchanga-btn" id="panchanga-expand-location-btn" style="width: 100%; margin-top: 15px; display: none;">
+      📍 Select Location
     </button>
   </div>
 
@@ -68,104 +68,100 @@
 
   <!-- Results -->
   <div id="panchanga-results" style="display: none;">
-    <!-- Current Pradosha Timing -->
-    <div class="panchanga-pradosha">
-      <div class="panchanga-pradosha-title">🔯 Pradosha Time Today</div>
-      <div class="panchanga-pradosha-list">
-        <div class="panchanga-pradosha-item">
-          <div class="panchanga-pradosha-time">Sunset Time: <strong id="pradosha-sunset">--:--</strong></div>
-          <div class="panchanga-pradosha-time" style="margin-top: 5px;">Pradosha Window: <strong id="pradosha-window">--:-- to --:--</strong> (1.5 hours before & after sunset)</div>
+    <!-- Current Pradosha Timing (only shown on Pradosha day) -->
+    <div id="panchanga-pradosha-today-section" style="display: none;">
+      <div class="panchanga-pradosha">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div class="panchanga-pradosha-title" style="margin: 0;">🔯 Pradosha Today @ <span id="pradosha-location">--</span></div>
+          <!-- Expandable Full Panchanga Details (only on Pradosha day) -->
+          <button class="panchanga-expand-btn" id="panchanga-expand-btn-today" style="padding: 6px 12px; font-size: 12px; background: #f0f0f0; border: 1px solid #ddd; border-radius: 4px; cursor: pointer;">
+            <span class="panchanga-expand-icon" id="panchanga-expand-icon-today">▼</span> Details
+          </button>
+        </div>
+        <div class="panchanga-pradosha-list">
+          <div class="panchanga-pradosha-item">
+            <div class="panchanga-pradosha-time">Sunset Time: <strong id="pradosha-sunset">--:--</strong></div>
+            <div class="panchanga-pradosha-time" style="margin-top: 5px;">Pradosha Window: <strong id="pradosha-window">--:-- to --:--</strong> (1.5 hours before & after sunset)</div>
+          </div>
         </div>
       </div>
+
+      <!-- Full Panchanga Details (Expandable - only on Pradosha day) -->
+      <div id="panchanga-expandable-content-today" style="display: none; margin-top: 15px; padding-top: 15px; border-top: 1px solid #e1e4e8;"></div>
     </div>
 
-    <!-- Location display -->
+    <!-- Location display with Change link -->
     <div style="font-size: 12px; color: #666; margin-bottom: 15px;">
       📍 Location: <span id="panchanga-location-display">--</span>
       <button class="panchanga-btn-text" id="panchanga-change-location-btn" style="margin-left: 10px;">Change</button>
     </div>
 
-    <!-- Next 3 Pradosha Dates -->
-    <div class="panchanga-pradosha">
-      <div class="panchanga-pradosha-title">📅 Next Pradosha Dates</div>
-      <ul class="panchanga-pradosha-list" id="pradosha-next-list">
-        <li style="text-align: center; color: #999;">Loading next dates...</li>
-      </ul>
-    </div>
+    <!-- Full Panchanga Details (displayed in collapsible on Pradosha day) -->
+    <div id="panchanga-full-details-template" style="display: none;">
+      <!-- Tithi -->
+      <div class="panchanga-card" style="border-left: 4px solid #0366d6;">
+        <div class="panchanga-card-title">Tithi (Lunar Day)</div>
+        <div class="panchanga-card-subtitle" id="tithi-name">--</div>
+        <div class="panchanga-card-meta" id="tithi-phase">--</div>
+        <div class="panchanga-progress-bar">
+          <div class="panchanga-progress-fill" id="tithi-progress" style="width: 0%"></div>
+        </div>
+        <div class="panchanga-card-subtitle" id="tithi-percent" style="font-size: 12px; margin-top: 5px;">0% complete</div>
+      </div>
 
-    <!-- Expandable Full Panchanga -->
-    <div class="panchanga-expandable">
-      <button class="panchanga-expand-btn" id="panchanga-expand-btn" onclick="document.getElementById('panchanga-expandable-content').classList.toggle('open'); document.getElementById('panchanga-expand-icon').classList.toggle('open');">
-        <span class="panchanga-expand-icon" id="panchanga-expand-icon">▼</span>
-        Show Full Panchanga Details
-      </button>
+      <!-- Nakshatra -->
+      <div class="panchanga-card" style="border-left: 4px solid #6f42c1;">
+        <div class="panchanga-card-title">Nakshatra (Constellation)</div>
+        <div class="panchanga-card-subtitle" id="nakshatra-name">--</div>
+        <div class="panchanga-card-meta" id="nakshatra-tamil">--</div>
+        <div class="panchanga-progress-bar">
+          <div class="panchanga-progress-fill" id="nakshatra-progress" style="width: 0%"></div>
+        </div>
+        <div class="panchanga-card-subtitle" id="nakshatra-percent" style="font-size: 12px; margin-top: 5px;">0% complete</div>
+      </div>
 
-      <div class="panchanga-expandable-content" id="panchanga-expandable-content">
-        <!-- Tithi -->
-        <div class="panchanga-card" style="border-left: 4px solid #0366d6;">
-          <div class="panchanga-card-title">Tithi (Lunar Day)</div>
-          <div class="panchanga-card-subtitle" id="tithi-name">--</div>
-          <div class="panchanga-card-meta" id="tithi-phase">--</div>
-          <div class="panchanga-progress-bar">
-            <div class="panchanga-progress-fill" id="tithi-progress" style="width: 0%"></div>
+      <!-- Yoga -->
+      <div class="panchanga-card" style="border-left: 4px solid #28a745;">
+        <div class="panchanga-card-title">Yoga (Auspiciousness)</div>
+        <div class="panchanga-card-subtitle" id="yoga-name">--</div>
+        <div class="panchanga-card-meta" id="yoga-tamil">--</div>
+      </div>
+
+      <!-- Karana -->
+      <div class="panchanga-card" style="border-left: 4px solid #dc3545;">
+        <div class="panchanga-card-title">Karana (Half Tithi)</div>
+        <div class="panchanga-card-subtitle" id="karana-name">--</div>
+        <div class="panchanga-card-meta" id="karana-tamil">--</div>
+      </div>
+
+      <!-- Hora -->
+      <div class="panchanga-card" style="border-left: 4px solid #fd7e14;">
+        <div class="panchanga-card-title">Hora (Planetary Hour)</div>
+        <div class="panchanga-card-subtitle" id="hora-planet">--</div>
+        <div class="panchanga-card-meta" id="hora-number">--</div>
+      </div>
+
+      <!-- Rahu Kalam -->
+      <div class="panchanga-card" style="border-left: 4px solid #e83e8c;">
+        <div class="panchanga-card-title">Rahu Kalam (Inauspicious)</div>
+        <div class="panchanga-card-subtitle" id="rahu-time">--:-- to --:--</div>
+      </div>
+
+      <!-- Times Section -->
+      <div class="panchanga-times">
+        <div class="panchanga-times-label">Times</div>
+        <div class="panchanga-times-grid">
+          <div class="panchanga-time-item">
+            <div class="panchanga-time-label">Sunrise</div>
+            <div class="panchanga-time-value" id="times-sunrise">--:--</div>
           </div>
-          <div class="panchanga-card-subtitle" id="tithi-percent" style="font-size: 12px; margin-top: 5px;">0% complete</div>
-        </div>
-
-        <!-- Nakshatra -->
-        <div class="panchanga-card" style="border-left: 4px solid #6f42c1;">
-          <div class="panchanga-card-title">Nakshatra (Constellation)</div>
-          <div class="panchanga-card-subtitle" id="nakshatra-name">--</div>
-          <div class="panchanga-card-meta" id="nakshatra-tamil">--</div>
-          <div class="panchanga-progress-bar">
-            <div class="panchanga-progress-fill" id="nakshatra-progress" style="width: 0%"></div>
+          <div class="panchanga-time-item">
+            <div class="panchanga-time-label">Sunset</div>
+            <div class="panchanga-time-value" id="times-sunset">--:--</div>
           </div>
-          <div class="panchanga-card-subtitle" id="nakshatra-percent" style="font-size: 12px; margin-top: 5px;">0% complete</div>
-        </div>
-
-        <!-- Yoga -->
-        <div class="panchanga-card" style="border-left: 4px solid #28a745;">
-          <div class="panchanga-card-title">Yoga (Auspiciousness)</div>
-          <div class="panchanga-card-subtitle" id="yoga-name">--</div>
-          <div class="panchanga-card-meta" id="yoga-tamil">--</div>
-        </div>
-
-        <!-- Karana -->
-        <div class="panchanga-card" style="border-left: 4px solid #dc3545;">
-          <div class="panchanga-card-title">Karana (Half Tithi)</div>
-          <div class="panchanga-card-subtitle" id="karana-name">--</div>
-          <div class="panchanga-card-meta" id="karana-tamil">--</div>
-        </div>
-
-        <!-- Hora -->
-        <div class="panchanga-card" style="border-left: 4px solid #fd7e14;">
-          <div class="panchanga-card-title">Hora (Planetary Hour)</div>
-          <div class="panchanga-card-subtitle" id="hora-planet">--</div>
-          <div class="panchanga-card-meta" id="hora-number">--</div>
-        </div>
-
-        <!-- Rahu Kalam -->
-        <div class="panchanga-card" style="border-left: 4px solid #e83e8c;">
-          <div class="panchanga-card-title">Rahu Kalam (Inauspicious)</div>
-          <div class="panchanga-card-subtitle" id="rahu-time">--:-- to --:--</div>
-        </div>
-
-        <!-- Times Section -->
-        <div class="panchanga-times">
-          <div class="panchanga-times-label">Times</div>
-          <div class="panchanga-times-grid">
-            <div class="panchanga-time-item">
-              <div class="panchanga-time-label">Sunrise</div>
-              <div class="panchanga-time-value" id="times-sunrise">--:--</div>
-            </div>
-            <div class="panchanga-time-item">
-              <div class="panchanga-time-label">Sunset</div>
-              <div class="panchanga-time-value" id="times-sunset">--:--</div>
-            </div>
-            <div class="panchanga-time-item">
-              <div class="panchanga-time-label">Abhijit Muhurta</div>
-              <div class="panchanga-time-value" id="times-abhijit">--:-- to --:--</div>
-            </div>
+          <div class="panchanga-time-item">
+            <div class="panchanga-time-label">Abhijit Muhurta</div>
+            <div class="panchanga-time-value" id="times-abhijit">--:-- to --:--</div>
           </div>
         </div>
       </div>
@@ -398,6 +394,33 @@
           // Update both collapsed and expanded views
           pradoshaListEl.innerHTML = pradoshaHTML;
           pradoshaListCollapsedEl.innerHTML = pradoshaHTML;
+
+          // Check if today is Pradosha (first date in nextPradosha is today)
+          const isTodayPradosha = nextPradosha.length > 0 &&
+                                  nextPradosha[0].date.toDateString() === today.toDateString();
+
+          const pradoshaTodaySection = document.getElementById('panchanga-pradosha-today-section');
+          const expandBtnToday = document.getElementById('panchanga-expand-btn-today');
+          const expandableContentToday = document.getElementById('panchanga-expandable-content-today');
+
+          if (isTodayPradosha) {
+            // Show Pradosha today section
+            pradoshaTodaySection.style.display = 'block';
+            document.getElementById('pradosha-location').textContent = selectedLocation.name;
+
+            // Populate full panchanga details in expandable section
+            const detailsTemplate = document.getElementById('panchanga-full-details-template');
+            expandableContentToday.innerHTML = detailsTemplate.innerHTML;
+
+            // Toggle expand/collapse for Pradosha day details
+            expandBtnToday.onclick = () => {
+              const isOpen = expandableContentToday.style.display === 'block';
+              expandableContentToday.style.display = isOpen ? 'none' : 'block';
+              document.getElementById('panchanga-expand-icon-today').textContent = isOpen ? '▼' : '▲';
+            };
+          } else {
+            pradoshaTodaySection.style.display = 'none';
+          }
 
           loadingEl.style.display = 'none';
           resultsEl.style.display = 'block';
