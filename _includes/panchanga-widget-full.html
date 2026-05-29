@@ -411,7 +411,7 @@
         const pradoshaListCollapsedEl = document.getElementById('panchanga-pradosha-list-collapsed');
 
         const pradoshaHTML = nextPradosha.slice(0, 3).map((pd) => `
-          <li class="panchanga-pradosha-item">
+          <li class="panchanga-pradosha-item" style="cursor: pointer;" onclick="document.getElementById('panchanga-date-input').value = '${pd.date.toISOString().split('T')[0]}'; document.getElementById('panchanga-calculate-btn').click(); return false;">
             <div class="panchanga-pradosha-date">${calculator.formatDate(pd.date)}</div>
             <div class="panchanga-pradosha-time">Tithi: ${pd.tithi.name} (${pd.tithi.phase?.toUpperCase?.() || ''})</div>
             <div class="panchanga-pradosha-time" style="margin-top: 3px;">Pradosha: ${calculator.formatTime(pd.pradoshaStart.getHours(), pd.pradoshaStart.getMinutes())} to ${calculator.formatTime(pd.pradoshaEnd.getHours(), pd.pradoshaEnd.getMinutes())}</div>
