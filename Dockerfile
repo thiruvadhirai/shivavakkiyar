@@ -12,6 +12,8 @@ WORKDIR /srv/jekyll
 # Install Jekyll and bundler
 RUN gem install jekyll bundler
 
+ENV LISTEN_DIRS=/srv/jekyll/_posts:/srv/jekyll/_includes:/srv/jekyll/assets:/srv/jekyll/panchanga.md
+
 # Expose port
 EXPOSE 4000
 
