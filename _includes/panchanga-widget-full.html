@@ -338,10 +338,15 @@
         resultsEl.style.display = 'none';
         errorEl.style.display = 'none';
 
-        const dateValue = document.getElementById('panchanga-date-input').valueAsDate;
+        let dateValue = document.getElementById('panchanga-date-input').valueAsDate;
         if (!dateValue) {
           throw new Error('Please select a date');
         }
+
+        // Fix timezone issue: valueAsDate returns UTC midnight, but user selected local date
+        // Adjust by adding timezone offset to get the correct local date at midnight
+        const tzOffset = selectedLocation ? (selectedLocation.longitude / 15) : 0;
+        dateValue = new Date(dateValue.getTime() + tzOffset * 60 * 60 * 1000);
 
         // Calculate panchanga
         const panchanga = await calculator.calculateFullPanchanga(

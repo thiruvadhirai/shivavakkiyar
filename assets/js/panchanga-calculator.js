@@ -851,17 +851,21 @@ class PanchangaCalculator {
   }
 
   /**
-   * Convert UTC date to IST (Indian Standard Time)
+   * Convert UTC date to local time based on longitude
    * @param {Date} date - UTC date
-   * @param {number} longitude - For reference (IST is UTC+5:30)
-   * @returns {string} Formatted time string HH:MM IST
+   * @param {number} longitude - Geographic longitude to determine timezone
+   * @returns {string} Formatted time string HH:MM (local time)
    */
   convertToIST(date, longitude) {
-    // IST is UTC+5:30
-    const istDate = new Date(date.getTime() + (5.5 * 60 * 60 * 1000));
-    const hours = String(istDate.getUTCHours()).padStart(2, '0');
-    const minutes = String(istDate.getUTCMinutes()).padStart(2, '0');
-    return `${hours}:${minutes} IST`;
+    // Get local timezone offset from longitude
+    const tzOffset = this.getTimezoneOffsetFromLongitude(longitude);
+
+    // Convert UTC to local time
+    const localDate = new Date(date.getTime() + (tzOffset * 60 * 60 * 1000));
+    const hours = String(localDate.getUTCHours()).padStart(2, '0');
+    const minutes = String(localDate.getUTCMinutes()).padStart(2, '0');
+
+    return `${hours}:${minutes}`;
   }
 
   /**
