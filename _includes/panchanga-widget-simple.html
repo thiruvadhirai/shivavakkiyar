@@ -323,12 +323,23 @@
           // Save location to cache
           locationManager.saveLocationToStorage(selectedLocation);
 
-          // Calculate for today (midnight in selected location's timezone)
-          const todayLocal = new Date();
-          todayLocal.setHours(0, 0, 0, 0);
-          // Convert from local midnight to UTC midnight in the selected location
-          const tzOffset = calculator.getTimezoneOffsetFromLongitude(selectedLocation.longitude, todayLocal);
-          const today = new Date(todayLocal.getTime() - tzOffset * 60 * 60 * 1000);
+          // Calculate for today (current date in selected location's timezone)
+          const now = new Date();
+
+          // Figure out what date it is in the selected location
+          // Get timezone offset for the selected location
+          const tzOffset = calculator.getTimezoneOffsetFromLongitude(selectedLocation.longitude, now);
+
+          // Adjust current UTC time to local time in selected location
+          const localTime = new Date(now.getTime() + tzOffset * 60 * 60 * 1000);
+
+          // Get the date in the selected location's timezone
+          const year = localTime.getUTCFullYear();
+          const month = localTime.getUTCMonth();
+          const day = localTime.getUTCDate();
+
+          // Create midnight of that date in UTC
+          const today = new Date(Date.UTC(year, month, day, 0, 0, 0));
 
           const panchanga = await calculator.calculateFullPanchanga(
             today,
