@@ -63,4 +63,8 @@ build/
 *.bak
 .git/hooks/post-commit.bak
 
+# Test artifacts
+test-results/
+.playwright/
+
 _site/
