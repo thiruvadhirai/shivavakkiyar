@@ -403,4 +403,50 @@ test.describe('Accessibility', () => {
     expect(text).toBeTruthy();
     expect(text.length).toBeGreaterThan(0);
   });
+
+  // Test: Specific case - 06/12/2026 + Olympia, WA (known problematic date)
+  test('Calculate Panchanga for 06/12/2026 + Olympia, WA (with console logs)', async ({ page }) => {
+    // Capture all console messages
+    const consoleLogs = [];
+    page.on('console', msg => {
+      consoleLogs.push(`[${msg.type()}] ${msg.text()}`);
+      console.log(`[Browser Console] ${msg.text()}`);
+    });
+
+    await page.goto(`${BASE_URL}/panchanga/`, { timeout: TIMEOUT });
+    await page.waitForLoadState('networkidle');
+
+    // Fill in the known problematic case
+    const locationInput = page.locator('#panchanga-location-input');
+    const dateInput = page.locator('#panchanga-date-input');
+    const calcBtn = page.locator('button:has-text("Calculate")').first();
+
+    await locationInput.fill('Olympia, Thurston, Washington');
+    await dateInput.fill('2026-06-12');
+
+    console.log('TEST: Clicking Calculate button for 06/12/2026 + Olympia, WA');
+
+    // Click calculate and wait for results or error
+    await calcBtn.click();
+
+    // Wait for either success or error message
+    try {
+      await page.waitForSelector('#panchanga-result-date, #panchanga-error, [id*="error"]', { timeout: 5000 });
+    } catch (e) {
+      console.log('TEST: No result/error element found within 5s');
+    }
+
+    // Check if calculation succeeded
+    const resultDate = await page.locator('#panchanga-result-date').isVisible();
+    const errorMsg = await page.locator('[id*="error"]').isVisible();
+
+    console.log('TEST SUMMARY:');
+    console.log('- Result visible:', resultDate);
+    console.log('- Error visible:', errorMsg);
+    console.log('- Total console messages:', consoleLogs.length);
+    console.log('- All logs:', consoleLogs);
+
+    // The test passes if we get here without crash
+    expect(resultDate || errorMsg).toBeTruthy();
+  });
 });
