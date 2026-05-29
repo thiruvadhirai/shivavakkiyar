@@ -9,6 +9,11 @@ class PanchangaCalculator {
     this.DRIK_AYANAMSA_2000 = 23.856389; // degrees
     this.J2000_DATE = new Date(2000, 0, 1, 12, 0, 0); // J2000 epoch
 
+    // Astronomy Engine constants
+    this.ASTRONOMY_SUN = 'Sun';
+    this.DIRECTION_RISE = 1;
+    this.DIRECTION_SET = -1;
+
     this.initialized = false;
     this.astronomy = null;
   }
@@ -19,6 +24,54 @@ class PanchangaCalculator {
 
   logError(...args) {
     console.error('[Panchanga Error]', ...args);
+  }
+
+  /**
+   * Calculate timezone offset in hours from longitude
+   * @param {number} longitude - Geographic longitude in degrees (negative = west)
+   * @returns {number} Timezone offset in hours from UTC (negative for west, positive for east)
+   */
+  getTimezoneOffsetFromLongitude(longitude) {
+    // Each 15 degrees of longitude = 1 hour of timezone
+    // Negative longitude (west) = negative UTC offset
+    // Positive longitude (east) = positive UTC offset
+    let offset = -longitude / 15;
+
+    // Adjust for daylight saving time (rough approximation)
+    // For northern hemisphere: March-October is DST, moving clock forward 1 hour
+    // This makes the UTC offset less negative (closer to zero)
+    // Example: PST (UTC-8) becomes PDT (UTC-7) by subtracting 1 from offset
+    const now = new Date();
+    const month = now.getMonth();
+    if (month >= 2 && month <= 9) { // March to October (DST period)
+      offset -= 1; // Move 1 hour forward (toward UTC)
+    }
+
+    return offset;
+  }
+
+  /**
+   * Convert local time to UTC given timezone offset
+   * @param {Date} localDate - Date in local time
+   * @param {number} timezoneOffset - Offset from UTC in hours
+   * @returns {Date} Equivalent UTC date
+   */
+  localToUTC(localDate, timezoneOffset) {
+    const utcDate = new Date(localDate);
+    utcDate.setHours(utcDate.getHours() - timezoneOffset);
+    return utcDate;
+  }
+
+  /**
+   * Convert UTC time to local time given timezone offset
+   * @param {Date} utcDate - Date in UTC
+   * @param {number} timezoneOffset - Offset from UTC in hours
+   * @returns {Date} Equivalent local date
+   */
+  utcToLocal(utcDate, timezoneOffset) {
+    const localDate = new Date(utcDate);
+    localDate.setHours(localDate.getHours() + timezoneOffset);
+    return localDate;
   }
 
   /**
@@ -193,26 +246,45 @@ class PanchangaCalculator {
       throw new Error('Astronomy Engine not available for sunrise calculation');
     }
 
-    const observer = new this.astronomy.Observer(latitude, longitude, 0);
-    const time = this.astronomy.MakeTime(date);
+    try {
+      const observer = new this.astronomy.Observer(latitude, longitude, 0);
+      this.log('Observer created:', observer);
 
-    // Search for sunrise: direction 1 = Rise
-    const riseEvent = this.astronomy.SearchRiseSet('SUN', observer, 1, time, 1);
+      // Convert local date to UTC for search
+      const tzOffset = this.getTimezoneOffsetFromLongitude(longitude);
+      const utcDate = this.localToUTC(date, tzOffset);
+      this.log('Timezone conversion:', { timezone_offset_hours: tzOffset, local_date: date, utc_date: utcDate });
 
-    if (!riseEvent) {
-      throw new Error('Could not calculate sunrise - check latitude/longitude and date');
+      const time = this.astronomy.MakeTime(utcDate);
+      this.log('Time object created for UTC:', time);
+
+      // Search for sunrise: direction 1 = Rise
+      this.log('Calling SearchRiseSet with:', { body: this.ASTRONOMY_SUN, direction: this.DIRECTION_RISE });
+      const riseEvent = this.astronomy.SearchRiseSet(this.ASTRONOMY_SUN, observer, this.DIRECTION_RISE, time, 1);
+
+      if (!riseEvent) {
+        throw new Error('Could not calculate sunrise - check latitude/longitude and date');
+      }
+
+      this.log('Sunrise from Astronomy Engine:', {
+        riseEvent: riseEvent,
+        has_date: riseEvent && !!riseEvent.date,
+        date_iso: riseEvent?.date?.toISOString?.()
+      });
+
+      const sunriseDate = new Date(riseEvent.date.toISOString());
+      const istTime = this.convertToIST(sunriseDate, longitude);
+
+      return {
+        date: sunriseDate,
+        timeIST: istTime,
+        hours: sunriseDate.getHours(),
+        minutes: sunriseDate.getMinutes()
+      };
+    } catch (e) {
+      this.logError('getSunrise failed:', e.message, e);
+      throw e;
     }
-
-    this.log('Sunrise from Astronomy Engine:', riseEvent);
-    const sunriseDate = new Date(riseEvent.date.toISOString());
-    const istTime = this.convertToIST(sunriseDate, longitude);
-
-    return {
-      date: sunriseDate,
-      timeIST: istTime,
-      hours: sunriseDate.getHours(),
-      minutes: sunriseDate.getMinutes()
-    };
   }
 
   /**
@@ -230,26 +302,45 @@ class PanchangaCalculator {
       throw new Error('Astronomy Engine not available for sunset calculation');
     }
 
-    const observer = new this.astronomy.Observer(latitude, longitude, 0);
-    const time = this.astronomy.MakeTime(date);
+    try {
+      const observer = new this.astronomy.Observer(latitude, longitude, 0);
+      this.log('Observer created:', observer);
 
-    // Search for sunset: direction -1 = Set
-    const setEvent = this.astronomy.SearchRiseSet('SUN', observer, -1, time, 1);
+      // Convert local date to UTC for search
+      const tzOffset = this.getTimezoneOffsetFromLongitude(longitude);
+      const utcDate = this.localToUTC(date, tzOffset);
+      this.log('Timezone conversion:', { timezone_offset_hours: tzOffset, local_date: date, utc_date: utcDate });
 
-    if (!setEvent) {
-      throw new Error('Could not calculate sunset - check latitude/longitude and date');
+      const time = this.astronomy.MakeTime(utcDate);
+      this.log('Time object created for UTC:', time);
+
+      // Search for sunset: direction -1 = Set
+      this.log('Calling SearchRiseSet with:', { body: this.ASTRONOMY_SUN, direction: this.DIRECTION_SET });
+      const setEvent = this.astronomy.SearchRiseSet(this.ASTRONOMY_SUN, observer, this.DIRECTION_SET, time, 1);
+
+      if (!setEvent) {
+        throw new Error('Could not calculate sunset - check latitude/longitude and date');
+      }
+
+      this.log('Sunset from Astronomy Engine:', {
+        setEvent: setEvent,
+        has_date: setEvent && !!setEvent.date,
+        date_iso: setEvent?.date?.toISOString?.()
+      });
+
+      const sunsetDate = new Date(setEvent.date.toISOString());
+      const istTime = this.convertToIST(sunsetDate, longitude);
+
+      return {
+        date: sunsetDate,
+        timeIST: istTime,
+        hours: sunsetDate.getHours(),
+        minutes: sunsetDate.getMinutes()
+      };
+    } catch (e) {
+      this.logError('getSunset failed:', e.message, e);
+      throw e;
     }
-
-    this.log('Sunset from Astronomy Engine:', setEvent);
-    const sunsetDate = new Date(setEvent.date.toISOString());
-    const istTime = this.convertToIST(sunsetDate, longitude);
-
-    return {
-      date: sunsetDate,
-      timeIST: istTime,
-      hours: sunsetDate.getHours(),
-      minutes: sunsetDate.getMinutes()
-    };
   }
 
   /**
@@ -408,20 +499,31 @@ class PanchangaCalculator {
    * @returns {Object} {startTime: string, endTime: string}
    */
   calculateAbhijitMuhurta(sunrise, sunset) {
-    // Abhijit is approximately at noon, 48 minutes duration
-    const dayDurationMs = sunset.date - sunrise.date;
-    const noonTime = new Date(sunrise.date.getTime() + dayDurationMs / 2);
+    try {
+      if (!sunrise || !sunset) {
+        throw new Error('Sunrise or sunset not provided to calculateAbhijitMuhurta');
+      }
+      if (!sunrise.date || !sunset.date) {
+        throw new Error(`Invalid sunrise/sunset objects: sunrise=${JSON.stringify(sunrise)}, sunset=${JSON.stringify(sunset)}`);
+      }
 
-    const abhijitDurationMinutes = 48;
-    const abhijitStart = new Date(noonTime.getTime() - (abhijitDurationMinutes / 2) * 60 * 1000);
-    const abhijitEnd = new Date(noonTime.getTime() + (abhijitDurationMinutes / 2) * 60 * 1000);
+      const dayDurationMs = sunset.date - sunrise.date;
+      const noonTime = new Date(sunrise.date.getTime() + dayDurationMs / 2);
 
-    return {
-      startTime: this.formatTime(abhijitStart.getHours(), abhijitStart.getMinutes()),
-      endTime: this.formatTime(abhijitEnd.getHours(), abhijitEnd.getMinutes()),
-      startDate: abhijitStart,
-      endDate: abhijitEnd
-    };
+      const abhijitDurationMinutes = 48;
+      const abhijitStart = new Date(noonTime.getTime() - (abhijitDurationMinutes / 2) * 60 * 1000);
+      const abhijitEnd = new Date(noonTime.getTime() + (abhijitDurationMinutes / 2) * 60 * 1000);
+
+      return {
+        startTime: this.formatTime(abhijitStart.getHours(), abhijitStart.getMinutes()),
+        endTime: this.formatTime(abhijitEnd.getHours(), abhijitEnd.getMinutes()),
+        startDate: abhijitStart,
+        endDate: abhijitEnd
+      };
+    } catch (e) {
+      this.logError('calculateAbhijitMuhurta failed:', e.message);
+      throw e;
+    }
   }
 
   /**
@@ -480,7 +582,20 @@ class PanchangaCalculator {
     const sunLon = await this.getSunLongitude(date, latitude, longitude);
     const moonLon = await this.getMoonLongitude(date, latitude, longitude);
     const sunrise = await this.getSunrise(date, latitude, longitude);
-    const sunset = await this.getSunset(date, latitude, longitude);
+    let sunset = await this.getSunset(date, latitude, longitude);
+
+    // Fix sunset date if it's on the wrong day (can happen with timezone conversions)
+    // Sunset should always be after sunrise on the same local day
+    if (sunset.date < sunrise.date) {
+      this.log('Sunset date is before sunrise, adding 1 day to sunset');
+      const correctedSunsetDate = new Date(sunset.date);
+      correctedSunsetDate.setDate(correctedSunsetDate.getDate() + 1);
+      sunset = {
+        ...sunset,
+        date: correctedSunsetDate,
+        timeIST: this.convertToIST(correctedSunsetDate, longitude)
+      };
+    }
 
     const tithi = this.calculateTithi(sunLon, moonLon);
     const nakshatra = this.calculateNakshatra(moonLon);
@@ -490,7 +605,7 @@ class PanchangaCalculator {
     const rahuKalam = this.calculateRahuKalam(sunrise, sunset, date);
     const abhijitMuhurta = this.calculateAbhijitMuhurta(sunrise, sunset);
 
-    return {
+    const result = {
       date: date,
       location: {
         latitude: latitude,
@@ -515,6 +630,18 @@ class PanchangaCalculator {
         abhijitMuhurta: abhijitMuhurta
       }
     };
+
+    this.log('calculateFullPanchanga result structure:', {
+      panchanga_keys: Object.keys(result.panchanga),
+      times_keys: Object.keys(result.times),
+      times_sunrise: result.times.sunrise,
+      times_sunset: result.times.sunset,
+      times_rahuKalam: result.times.rahuKalam,
+      times_abhijitMuhurta: result.times.abhijitMuhurta,
+      panchanga_hora: result.panchanga.hora
+    });
+
+    return result;
   }
 
   // ==================== NAME & DATA LOOKUPS ====================
