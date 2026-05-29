@@ -196,8 +196,8 @@ class PanchangaCalculator {
     const observer = new this.astronomy.Observer(latitude, longitude, 0);
     const time = this.astronomy.MakeTime(date);
 
-    // Search for sunrise: Direction.Rise
-    const riseEvent = this.astronomy.SearchRiseSet('SUN', observer, this.astronomy.Direction.Rise, time, 1);
+    // Search for sunrise: direction 1 = Rise
+    const riseEvent = this.astronomy.SearchRiseSet('SUN', observer, 1, time, 1);
 
     if (!riseEvent) {
       throw new Error('Could not calculate sunrise - check latitude/longitude and date');
@@ -233,8 +233,8 @@ class PanchangaCalculator {
     const observer = new this.astronomy.Observer(latitude, longitude, 0);
     const time = this.astronomy.MakeTime(date);
 
-    // Search for sunset: Direction.Set
-    const setEvent = this.astronomy.SearchRiseSet('SUN', observer, this.astronomy.Direction.Set, time, 1);
+    // Search for sunset: direction -1 = Set
+    const setEvent = this.astronomy.SearchRiseSet('SUN', observer, -1, time, 1);
 
     if (!setEvent) {
       throw new Error('Could not calculate sunset - check latitude/longitude and date');
