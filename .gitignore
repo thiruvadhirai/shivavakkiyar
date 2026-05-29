@@ -62,3 +62,5 @@ build/
 *.tmp
 *.bak
 .git/hooks/post-commit.bak
+
+_site/
