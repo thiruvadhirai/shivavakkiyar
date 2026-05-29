@@ -11,15 +11,10 @@ class PanchangaCalculator {
 
     this.initialized = false;
     this.astronomy = null;
-
-    // Enable verbose logging: localStorage.setItem('panchanga-verbose', 'true') in console
-    this.verbose = localStorage.getItem('panchanga-verbose') === 'true';
   }
 
   log(...args) {
-    if (this.verbose) {
-      console.log('[Panchanga Debug]', ...args);
-    }
+    console.log('[Panchanga]', ...args);
   }
 
   logError(...args) {
