@@ -106,6 +106,7 @@ class PanchangaCalculator {
 
             // Check if offset makes sense (within ±14 hours)
             if (Math.abs(offset) <= 14) {
+              console.log(`[Timezone Debug] ${tz}: offset=${offset} hours, date=${date.toISOString()}, formatted=${parts.map(p => `${p.type}=${p.value}`).join(',')}`);
               this.log(`Using Intl API offset for ${tz}: ${offset} hours`);
               return offset;
             }
