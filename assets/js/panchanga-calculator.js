@@ -201,6 +201,7 @@ class PanchangaCalculator {
     return {
       number: tithiNumber,
       name: tithiName,
+      phase: tithiNumber <= 15 ? 'shukla' : 'krishna',
       percent: Math.round(tithiPercent),
       angle: angle
     };
