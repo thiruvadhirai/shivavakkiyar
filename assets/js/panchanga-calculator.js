@@ -186,27 +186,62 @@ class PanchangaCalculator {
    * @returns {Object} {date: Date, timeIST: string}
    */
   async getSunrise(date, latitude, longitude) {
-    // Simple sunrise calculation using sunrise formula
-    const J2000 = 2451545.0;
-    const jd = this.getJulianDate(date);
-    const dayOfYear = this.getDayOfYear(date);
+    this.log('getSunrise called with lat:', latitude, 'lon:', longitude);
 
-    // Sunrise hour (approximate, valid for ±60° latitude)
-    const n = dayOfYear + ((6 - longitude / 15) / 24);
-    const J = n + 0.0172 * Math.sin(0.2163108 + 2 * Math.atan(0.9671574 * Math.tan(0.00860 * (dayOfYear - 186))));
+    try {
+      // Use Astronomy Engine for accurate sunrise calculation
+      if (this.astronomy && this.astronomy.SearchRiseSet) {
+        const observer = new this.astronomy.Observer(latitude, longitude, 0);
+        const time = this.astronomy.MakeTime(date);
 
-    const sunriseHours = 6.0 - Math.acos(-Math.tan(latitude * Math.PI / 180) * Math.tan(23.44 * Math.PI / 180 * Math.sin(2 * Math.PI * (dayOfYear - 1) / 365.25))) / Math.PI * 12;
+        // Search for sunrise: Direction.Rise
+        const riseEvent = this.astronomy.SearchRiseSet('SUN', observer, this.astronomy.Direction.Rise, time, 1);
 
-    const sunriseDate = new Date(date);
-    sunriseDate.setUTCHours(Math.floor(sunriseHours), Math.round((sunriseHours % 1) * 60), 0, 0);
+        if (riseEvent) {
+          this.log('Sunrise from Astronomy Engine:', riseEvent);
+          const sunriseDate = new Date(riseEvent.date.toISOString());
+          const istTime = this.convertToIST(sunriseDate, longitude);
+          return {
+            date: sunriseDate,
+            timeIST: istTime,
+            hours: sunriseDate.getHours(),
+            minutes: sunriseDate.getMinutes()
+          };
+        }
+      }
+    } catch (e) {
+      this.logError('Astronomy Engine sunrise failed:', e);
+    }
 
-    const istTime = this.convertToIST(sunriseDate, longitude);
-    return {
-      date: sunriseDate,
-      timeIST: istTime,
-      hours: sunriseDate.getHours(),
-      minutes: sunriseDate.getMinutes()
-    };
+    // Fallback: mathematical approximation
+    this.log('Using fallback sunrise calculation');
+    try {
+      const dayOfYear = this.getDayOfYear(date);
+      const latRad = latitude * Math.PI / 180;
+      const decRad = 23.44 * Math.PI / 180 * Math.sin(2 * Math.PI * (dayOfYear - 1) / 365.25);
+      const cosH = -Math.tan(latRad) * Math.tan(decRad);
+
+      let sunriseHours = 6;
+      if (cosH <= 1 && cosH >= -1) {
+        sunriseHours = 6.0 - Math.acos(cosH) / Math.PI * 12;
+      }
+
+      const sunriseDate = new Date(date);
+      sunriseDate.setUTCHours(Math.floor(sunriseHours), Math.round((sunriseHours % 1) * 60), 0, 0);
+
+      const istTime = this.convertToIST(sunriseDate, longitude);
+      return {
+        date: sunriseDate,
+        timeIST: istTime,
+        hours: sunriseDate.getHours(),
+        minutes: sunriseDate.getMinutes()
+      };
+    } catch (e) {
+      this.logError('All sunrise calculations failed:', e);
+      const fallbackDate = new Date(date);
+      fallbackDate.setUTCHours(6, 0, 0, 0);
+      return { date: fallbackDate, timeIST: '06:00', hours: 6, minutes: 0 };
+    }
   }
 
   /**
@@ -217,21 +252,62 @@ class PanchangaCalculator {
    * @returns {Object} {date: Date, timeIST: string}
    */
   async getSunset(date, latitude, longitude) {
-    // Simple sunset calculation (approximate)
-    const dayOfYear = this.getDayOfYear(date);
+    this.log('getSunset called with lat:', latitude, 'lon:', longitude);
 
-    const sunsetHours = 18.0 + Math.acos(-Math.tan(latitude * Math.PI / 180) * Math.tan(23.44 * Math.PI / 180 * Math.sin(2 * Math.PI * (dayOfYear - 1) / 365.25))) / Math.PI * 12;
+    try {
+      // Use Astronomy Engine for accurate sunset calculation
+      if (this.astronomy && this.astronomy.SearchRiseSet) {
+        const observer = new this.astronomy.Observer(latitude, longitude, 0);
+        const time = this.astronomy.MakeTime(date);
 
-    const sunsetDate = new Date(date);
-    sunsetDate.setUTCHours(Math.floor(sunsetHours), Math.round((sunsetHours % 1) * 60), 0, 0);
+        // Search for sunset: Direction.Set
+        const setEvent = this.astronomy.SearchRiseSet('SUN', observer, this.astronomy.Direction.Set, time, 1);
 
-    const istTime = this.convertToIST(sunsetDate, longitude);
-    return {
-      date: sunsetDate,
-      timeIST: istTime,
-      hours: sunsetDate.getHours(),
-      minutes: sunsetDate.getMinutes()
-    };
+        if (setEvent) {
+          this.log('Sunset from Astronomy Engine:', setEvent);
+          const sunsetDate = new Date(setEvent.date.toISOString());
+          const istTime = this.convertToIST(sunsetDate, longitude);
+          return {
+            date: sunsetDate,
+            timeIST: istTime,
+            hours: sunsetDate.getHours(),
+            minutes: sunsetDate.getMinutes()
+          };
+        }
+      }
+    } catch (e) {
+      this.logError('Astronomy Engine sunset failed:', e);
+    }
+
+    // Fallback: mathematical approximation
+    this.log('Using fallback sunset calculation');
+    try {
+      const dayOfYear = this.getDayOfYear(date);
+      const latRad = latitude * Math.PI / 180;
+      const decRad = 23.44 * Math.PI / 180 * Math.sin(2 * Math.PI * (dayOfYear - 1) / 365.25);
+      const cosH = -Math.tan(latRad) * Math.tan(decRad);
+
+      let sunsetHours = 18;
+      if (cosH <= 1 && cosH >= -1) {
+        sunsetHours = 18.0 + Math.acos(cosH) / Math.PI * 12;
+      }
+
+      const sunsetDate = new Date(date);
+      sunsetDate.setUTCHours(Math.floor(sunsetHours % 24), Math.round((sunsetHours % 1) * 60), 0, 0);
+
+      const istTime = this.convertToIST(sunsetDate, longitude);
+      return {
+        date: sunsetDate,
+        timeIST: istTime,
+        hours: sunsetDate.getHours(),
+        minutes: sunsetDate.getMinutes()
+      };
+    } catch (e) {
+      this.logError('All sunset calculations failed:', e);
+      const fallbackDate = new Date(date);
+      fallbackDate.setUTCHours(18, 0, 0, 0);
+      return { date: fallbackDate, timeIST: '18:00', hours: 18, minutes: 0 };
+    }
   }
 
   /**
