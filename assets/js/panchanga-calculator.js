@@ -136,8 +136,9 @@ class PanchangaCalculator {
         const moonEcliptic = this.astronomy.EclipticGeoMoon(date);
         this.log('EclipticGeoMoon returned:', moonEcliptic);
 
-        if (moonEcliptic && moonEcliptic.elon !== undefined) {
-          const moonEcl = moonEcliptic.elon;
+        // EclipticGeoMoon returns Spherical object with 'lon' property, not 'elon'
+        if (moonEcliptic && moonEcliptic.lon !== undefined) {
+          const moonEcl = moonEcliptic.lon;
           const ayanamsa = this.getDrikAyanamsa(date);
           const result = this.normalizeDegrees(moonEcl - ayanamsa);
           this.log('Moon longitude calculated via EclipticGeoMoon:', result);
