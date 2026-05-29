@@ -104,6 +104,22 @@
     "runTests": "npm test",
     "runE2ETests": "npm run test:e2e"
   },
+  "automatedTools": {
+    "git": {
+      "gitStatus": {
+        "autoPermit": true,
+        "script": "gitstatus.sh",
+        "modes": ["all"],
+        "notes": "Git status checks always auto-permitted in any mode"
+      },
+      "gitCommit": {
+        "autoPermit": true,
+        "script": "gitcommit.sh",
+        "modes": ["edit"],
+        "notes": "Git commits auto-permitted in edit mode only; requires permission in plan/ask modes"
+      }
+    }
+  },
   "reminders": {
     "beforeMakingChanges": "Are you on a feature branch? If not, run: ./scripts/feature-workflow.sh start <feature-name>",
     "afterMakingChanges": "Did you run tests? Run: ./scripts/feature-workflow.sh test",
