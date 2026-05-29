@@ -8,6 +8,14 @@ permalink: /:basename/
 include:
   - license.md
 
+# Exclude files from watch to prevent infinite rebuild loops
+exclude:
+  - VERSION
+  - gitcommit.sh
+  - gitstatus.sh
+  - .git
+  - node_modules
+
 # Ensure markdown files are served as pages
 future: false
 
