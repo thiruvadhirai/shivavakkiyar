@@ -485,6 +485,13 @@
       // Auto-load and calculate for cached location on page load
       autoLoadCachedLocation();
 
+      // If no cached location, show the "Select Location" button
+      if (!selectedLocation) {
+        expandBtn.style.display = 'block';
+        locationInputState.style.display = 'none';
+        collapsedView.style.display = 'block';
+      }
+
     } catch (error) {
       console.error('Widget error:', error);
       errorEl.style.display = 'block';
