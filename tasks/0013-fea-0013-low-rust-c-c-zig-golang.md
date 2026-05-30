@@ -12,11 +12,9 @@ raci:
   accountable: Vairam
   consulted: []
   informed: []
-parent_task: (none - independent task)
 linked_tasks: []
 blocked_by: [0012]
 related: []
----
 
 # Description
 
