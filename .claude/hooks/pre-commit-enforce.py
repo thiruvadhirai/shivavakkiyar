@@ -66,8 +66,8 @@ def main():
         # Can't determine branch, allow
         return 0
 
-    # Allow commits on feature branches
-    if branch.startswith('feature/'):
+    # Allow commits on feature and requirement branches
+    if branch.startswith(('feature/', 'requirement/')):
         return 0
 
     # Allow commits during merge operations
