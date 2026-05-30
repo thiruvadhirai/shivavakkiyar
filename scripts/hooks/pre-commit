@@ -55,20 +55,20 @@ git add "$VERSION_FILE" 2>/dev/null || true
 # PART 2: Task ID Validation
 # ============================================================
 
-# Only validate if commit message file exists and we're not amending
+# Only validate if commit message file exists
 if [ ! -f "$COMMIT_MSG_FILE" ]; then
   exit 0
 fi
 
-# Skip validation for merge commits
-if git merge --no-commit --no-ff >/dev/null 2>&1; then
+# Skip validation for merge commits (merging feature branch to main)
+if git rev-parse -q --verify MERGE_HEAD >/dev/null 2>&1; then
   exit 0
 fi
 
 # Read commit message
 COMMIT_MSG=$(cat "$COMMIT_MSG_FILE" 2>/dev/null)
 
-# Allow empty commits (initial or some special cases)
+# Allow empty commits
 if [ -z "$COMMIT_MSG" ]; then
   exit 0
 fi
@@ -76,18 +76,15 @@ fi
 # Check if commit message contains a task ID reference
 # Valid patterns: "Fixes #0001", "#0001", "Task #0001", etc.
 if ! echo "$COMMIT_MSG" | grep -qE '#[0-9]{4}|Fixes #[0-9]{4}|Task #[0-9]{4}'; then
-  echo "❌ Commit message must reference a task ID (e.g., 'Fixes #0001' or '#0001')" >&2
+  echo "❌ Commit message must reference a task ID" >&2
+  echo "" >&2
+  echo "Valid patterns:" >&2
+  echo "  - Fixes #0001" >&2
+  echo "  - Task #0001" >&2
+  echo "  - Fix: description ... Fixes #0001" >&2
   echo "" >&2
   echo "Your commit message:" >&2
-  echo "$COMMIT_MSG" >&2
-  echo "" >&2
-  echo "Add a task ID reference. Example:" >&2
-  echo "  Fix null-check crash in widget" >&2
-  echo "" >&2
-  echo "  - Add optional chaining" >&2
-  echo "  - Handle undefined location" >&2
-  echo "" >&2
-  echo "  Fixes #0001" >&2
+  echo "  $COMMIT_MSG" >&2
   echo "" >&2
   exit 1
 fi

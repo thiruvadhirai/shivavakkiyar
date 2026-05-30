@@ -90,6 +90,12 @@ cmd_start() {
     git checkout -b "$feature_branch"
   fi
 
+  # Install/update git hooks
+  if [ -f "scripts/setup-hooks.sh" ]; then
+    bash scripts/setup-hooks.sh 2>/dev/null || true
+    echo ""
+  fi
+
   echo -e "${GREEN}✅ Switched to: $feature_branch${NC}"
   echo -e "   Version: $(get_current_version)"
   echo ""
