@@ -409,9 +409,8 @@ If any of these are true, **STOP and re-read this guide**:
 ## 📚 Related Documentation
 
 - **CLAUDE.md** - Project overview and architecture
-- **SKILLS.md** - Technical skill documentation
+- **.claude/SKILLS.md** - Technical skill documentation
 - **TESTING.md** - Complete testing guide
-- **.claude/config.json** - This workflow in machine-readable format
 
 ---
 

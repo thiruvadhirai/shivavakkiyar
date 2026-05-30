@@ -29,12 +29,11 @@ podman-compose --version
 ```
 /home/jsnadmin/apps/shivavakkiyar/
 ├── .claude/
-│   ├── config.json              ← Project configuration (THIS FILE)
 │   ├── WORKFLOW.md              ← Mandatory workflow guide (READ THIS!)
-│   └── DEVELOPMENT.md           ← This file
+│   ├── DEVELOPMENT.md           ← This file
+│   └── SKILLS.md                ← Technical skills & infrastructure
 │
 ├── CLAUDE.md                    ← Main project documentation
-├── SKILLS.md                    ← Technical skills & infrastructure
 ├── TESTING.md                   ← Complete testing guide
 ├── VERSION                      ← Semantic version (1.0.0-beta.2)
 │
@@ -448,10 +447,9 @@ vim _includes/panchanga-widget-full.html
 | File | Purpose |
 |------|---------|
 | [CLAUDE.md](../CLAUDE.md) | Project overview, architecture, features |
-| [SKILLS.md](../SKILLS.md) | Technical skills, infrastructure details |
+| [.claude/SKILLS.md](./SKILLS.md) | Technical skills, infrastructure details |
 | [TESTING.md](../TESTING.md) | Complete testing strategy and guide |
 | [.claude/WORKFLOW.md](./WORKFLOW.md) | Development workflow (READ THIS!) |
-| [.claude/config.json](./config.json) | Machine-readable project config |
 | [WIDGET_BUG_FIXES.md](../WIDGET_BUG_FIXES.md) | Known widget issues and fixes |
 
 ---
@@ -527,7 +525,7 @@ No additional deployment needed!
 
 - **Issues**: Check GitHub Issues for known problems
 - **Documentation**: See files in `.claude/` and project root
-- **Configuration**: Edit `.claude/config.json` for project settings
+- **Workflow**: Read `.claude/WORKFLOW.md` for development process
 
 **Remember:** Always follow the workflow. Always test. Always commit with the script.
 

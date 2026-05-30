@@ -5,13 +5,13 @@
 ```
 shivavakkiyar/
 ├── .claude/                          # Project documentation & configuration
-│   ├── config.json                   # Project rules & shortcuts
 │   ├── WORKFLOW.md                   # Mandatory development workflow
 │   ├── DEVELOPMENT.md                # Setup & development guide
 │   ├── SKILLS.md                     # Technical stack & domain knowledge
 │   ├── features.json                 # Feature inventory & test coverage
 │   ├── architecture.md               # This file - file relationships
-│   └── file-impacts.md               # Change impact tracking
+│   ├── file-impacts.md               # Change impact tracking
+│   └── settings.json                 # Claude Code configuration
 │
 ├── assets/
 │   ├── js/
