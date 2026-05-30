@@ -38,7 +38,10 @@ env/
 .venv
 
 # IDE
-.vscode/
+# VS Code user settings are ignored, but project-wide configs are tracked
+.vscode/*
+!.vscode/extensions.json       # Project-wide extension recommendations
+!.vscode/settings.json         # Project-wide LSP and formatter settings
 .idea/
 *.swp
 *.swo
