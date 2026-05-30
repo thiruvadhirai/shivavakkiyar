@@ -1,12 +1,13 @@
 ---
 id: 0016
 title: Add cancel task workflow command
-status: open
+status: done
 impact: High
 priority: 040
 complexity: "1-2 hours"
 assignee: Claude
 created: 2026-05-30
+completed: 2026-05-30
 raci:
   responsible: Claude
   accountable: Vairam
