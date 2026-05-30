@@ -7,14 +7,17 @@
       "Bash(podman-compose *)",
       "Bash(podman ps *)",
       "Bash(podman exec saivamcloud-test *)",
-      "Bash(git status)",
-      "Bash(git log *)",
-      "Bash(git diff *)",
-      "Bash(git branch *)",
-      "Bash(git show *)",
-      "Bash(cat VERSION)",
-      "Bash(cat .claude/session.json)",
-      "Bash(find . -name * -not -path ./.git/*)"
+      "Bash(git *)",
+      "Bash(grep *)",
+      "Bash(ls *)",
+      "Bash(cat *)",
+      "Bash(find *)",
+      "Bash(rm *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Write",
+      "Edit",
+      "Read"
     ]
   },
   "hooks": {
