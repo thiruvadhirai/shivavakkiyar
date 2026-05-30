@@ -1,7 +1,7 @@
 ---
 id: 0014
 title: Fix Deprecated Ruby VSCode Extension Recommendation
-status: open
+status: cancelled
 impact: Medium
 priority: 040
 complexity: "less than 1 hour"
