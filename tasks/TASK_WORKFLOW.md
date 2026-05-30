@@ -291,6 +291,7 @@ git worktree remove ../shivavakkiyar-req
 | `open` | Not started | New task just created |
 | `in-progress` | Being worked on | Someone is actively coding it |
 | `on-hold` | Blocked or waiting | Waiting for something external (another task, info, approval) |
+| `cancelled` | Never implemented | Task descoped, requirement changed, or no longer needed |
 | `done` | Complete and merged | Code is in main, all tests pass |
 
 ---
@@ -647,6 +648,7 @@ None — this is a standalone bug fix.
 
 - Task files are committed to git — they're part of project history
 - Task IDs never change (immutable), but priorities can be re-calculated
-- If a task becomes obsolete, mark it `done` with a note in the completed date, don't delete it
+- If a task is **never implemented**, mark it `cancelled` (descoped, requirement changed, no longer needed, etc.)
+- If a feature is **shipped then removed**, that's a different lifecycle (document in task notes, then mark `done`)
 - RACI matrix makes accountability clear (no "someone should do this")
 - Deviation tasks allow flexible prioritization without disrupting task IDs
