@@ -14,10 +14,29 @@ exclude:
   - gitcommit.sh
   - gitstatus.sh
   - .git
+  - .gitignore
   - node_modules
   - package.json
   - package-lock.json
   - .DS_Store
+  - .claude/
+  - scripts/
+  - requirements.txt
+  - Dockerfile
+  - podman-compose.yml
+  - tasks/
+  - docs/
+  - tests/
+  - "*.test.js"
+  - "*.test.cjs"
+  - "*.spec.js"
+  - .playwright/
+  - playwright-report/
+  - test-results/
+  - CLAUDE.md
+  - WORKFLOW_VERIFICATION.md
+  - WORKFLOW_IMPLEMENTATION_SUMMARY.md
+  - README-scripts.md
   
 
 # Ensure markdown files are served as pages
