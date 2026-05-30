@@ -4,8 +4,6 @@
     "ms-python.vscode-pylance",
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
-    "ms-vscode.extension-pack-for-java",
-    "rebornix.ruby",
-    "wingrunr21.vscode-ruby"
+    "Shopify.ruby-lsp"
   ]
 }
