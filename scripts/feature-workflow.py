@@ -34,7 +34,9 @@ Commands:
 import os
 import sys
 import subprocess
+import re
 from pathlib import Path
+from datetime import date
 
 # Colors
 GREEN = '\033[0;32m'
@@ -386,7 +388,6 @@ class WorkflowManager:
 
     def _create_bdd_task_file(self, task_id, req_name, sub_of=None, depends_on=None, blocks=None):
         """Create a starter task file with BDD acceptance criteria template."""
-        from datetime import date
         tasks_dir = Path('tasks')
         tasks_dir.mkdir(exist_ok=True)
 
