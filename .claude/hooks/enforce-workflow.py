@@ -5,14 +5,49 @@ UserPromptSubmit Hook - Enforce development workflow BEFORE token generation
 This hook runs before Claude processes any prompt.
 It checks for workflow requirements and blocks prompts that don't meet them.
 
+Auto-detects project venv:
+- If ./venv exists → uses venv python
+- Otherwise → uses system python (PATH)
+
 Stdin: JSON with prompt text
 Exit 0: Allow prompt
 Exit 1: Block prompt
 """
 
 import sys
+import os
 import json
 import re
+from pathlib import Path
+
+def use_project_venv_if_available():
+    """Re-execute using project venv python if available."""
+    # Find project root (script is at .claude/hooks/enforce-workflow.py)
+    script_dir = Path(__file__).parent.parent.parent
+    venv_python = script_dir / "venv" / "bin" / "python3"
+
+    # Only proceed if venv exists and we're not already using it
+    if not venv_python.exists():
+        return  # Project venv doesn't exist, use system python
+
+    # Check if we're already using the venv python
+    try:
+        current_executable = Path(sys.executable).resolve()
+        venv_executable = venv_python.resolve()
+        if current_executable == venv_executable:
+            return  # Already using venv python
+    except Exception:
+        return  # Can't resolve, use current python
+
+    # Re-execute with venv python
+    try:
+        os.execv(str(venv_python), [str(venv_python)] + sys.argv)
+    except Exception:
+        # If execv fails, continue with current python
+        pass
+
+# Auto-detect and use project venv if available
+use_project_venv_if_available()
 
 def main():
     """Enforce workflow requirements on user prompt."""
