@@ -1,17 +1,46 @@
-#!/bin/bash
-# Git Pre-Commit Hook - Block commits to main branch
-# This hook prevents direct commits to main, enforcing feature branch workflow
+#!/usr/bin/env python3
+"""
+Git Pre-Commit Hook - Block commits to main branch
 
-BRANCH=$(git rev-parse --abbrev-ref HEAD)
+This hook prevents direct commits to main, enforcing feature branch workflow.
+Exit 0: Allow commit
+Exit 1: Block commit
+"""
 
-# Allow commits on feature branches
-if [[ "$BRANCH" =~ ^feature/ ]]; then
-  exit 0
-fi
+import sys
+import subprocess
 
-# Block all commits to main
-if [ "$BRANCH" = "main" ]; then
-  cat >&2 << 'EOF'
+def get_current_branch():
+    """Get current git branch."""
+    try:
+        result = subprocess.run(
+            ['git', 'rev-parse', '--abbrev-ref', 'HEAD'],
+            capture_output=True, text=True, check=True
+        )
+        return result.stdout.strip()
+    except Exception:
+        # If we can't get branch, allow (git might be broken)
+        return None
+
+def main():
+    """Enforce feature branch requirement."""
+    branch = get_current_branch()
+
+    if not branch:
+        # Can't determine branch, allow
+        return 0
+
+    # Allow commits on feature branches
+    if branch.startswith('feature/'):
+        return 0
+
+    # Allow commits during merge operations
+    if branch == 'MERGE_HEAD' or branch.startswith('merge-'):
+        return 0
+
+    # Block all commits to main
+    if branch == 'main':
+        error_message = """
 ╔════════════════════════════════════════════════════════════════╗
 ║              ❌ WORKFLOW VIOLATION: Direct main commit         ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -49,12 +78,15 @@ WORKFLOW REQUIRED:
 
 ═══════════════════════════════════════════════════════════════════
 
-Current branch: $BRANCH
+Current branch: {branch}
 Required: feature/* or merge commit from feature branch
 
-EOF
-  exit 1
-fi
+"""
+        print(error_message.format(branch=branch), file=sys.stderr)
+        return 1
 
-# For other branches, allow (could be temporary or experimental)
-exit 0
+    # For other branches, allow (could be temporary or experimental)
+    return 0
+
+if __name__ == "__main__":
+    sys.exit(main())
