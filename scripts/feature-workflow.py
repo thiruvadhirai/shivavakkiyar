@@ -187,9 +187,8 @@ class WorkflowManager:
         self.log("Committing...", BLUE)
 
         # Commit with message
-        full_message = f"{message}\n\nCo-Authored-By: Claude Haiku 4.5 <noreply@anthropic.com>"
         try:
-            self.run_command(f'git commit -m "{full_message}"')
+            self.run_command(f'git commit -m "{message}"')
         except subprocess.CalledProcessError:
             self.log("Commit failed", RED)
             sys.exit(1)
