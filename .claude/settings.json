@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./scripts/feature-workflow.sh *)",
+      "Bash(./scripts/push-to-github.sh)",
+      "Bash(./scripts/bump-session.sh)",
+      "Bash(podman-compose *)",
+      "Bash(podman ps *)",
+      "Bash(podman exec saivamcloud-test *)",
+      "Bash(git status)",
+      "Bash(git log *)",
+      "Bash(git diff *)",
+      "Bash(git branch *)",
+      "Bash(git show *)",
+      "Bash(cat VERSION)",
+      "Bash(cat .claude/session.json)",
+      "Bash(find . -name * -not -path ./.git/*)"
+    ]
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash scripts/bump-session.sh"
+          }
+        ]
+      }
+    ]
+  }
+}

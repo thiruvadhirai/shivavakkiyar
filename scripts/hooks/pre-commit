@@ -1,0 +1,95 @@
+#!/bin/bash
+# Pre-commit hook: version increment + task ID validation
+# 1. Auto-increment VERSION file
+# 2. Validate commit message references a task (#NNNN)
+# Format: MAJOR.MINOR.PATCH-STAGE.NUM (e.g., 1.0.0-beta.2 → 1.0.0-beta.3)
+
+VERSION_FILE="VERSION"
+COMMIT_MSG_FILE="${1:-.git/COMMIT_EDITMSG}"  # From git, or from param
+
+# ============================================================
+# PART 1: Version Increment
+# ============================================================
+
+# Exit if VERSION file doesn't exist
+[ -f "$VERSION_FILE" ] || exit 0
+
+# Read current version
+current=$(cat "$VERSION_FILE")
+
+# Validate format before processing
+if ! [[ "$current" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z]+\.[0-9]+)?$ ]]; then
+    echo "Warning: VERSION file has invalid format: $current" >&2
+    echo "Expected format: X.Y.Z or X.Y.Z-STAGE.NUM" >&2
+    exit 0
+fi
+
+# Check if this is a stage version (has dash)
+if [[ "$current" == *"-"* ]]; then
+    # Split on the dash: "1.0.0" and "beta.2"
+    version_nums="${current%-*}"      # Everything before the dash (e.g., "1.0.0")
+    stage_part="${current##*-}"       # Everything after the dash (e.g., "beta.2")
+
+    # Split stage_part on the dot: "beta" and "2"
+    stage="${stage_part%.*}"          # Everything before the dot (e.g., "beta")
+    num_part="${stage_part##*.}"      # Everything after the dot (e.g., "2")
+
+    # Safely increment the number
+    new_num=$((num_part + 1))
+
+    # Build new version (e.g., "1.0.0-beta.3")
+    new_version="${version_nums}-${stage}.${new_num}"
+else
+    # Not a stage version - just increment patch
+    # e.g., "1.0.0" → "1.0.0-beta.1"
+    new_version="${current}-beta.1"
+fi
+
+# Update VERSION file
+echo "$new_version" > "$VERSION_FILE"
+
+# Stage the updated VERSION file (adds it to current commit)
+git add "$VERSION_FILE" 2>/dev/null || true
+
+# ============================================================
+# PART 2: Task ID Validation
+# ============================================================
+
+# Only validate if commit message file exists and we're not amending
+if [ ! -f "$COMMIT_MSG_FILE" ]; then
+  exit 0
+fi
+
+# Skip validation for merge commits
+if git merge --no-commit --no-ff >/dev/null 2>&1; then
+  exit 0
+fi
+
+# Read commit message
+COMMIT_MSG=$(cat "$COMMIT_MSG_FILE" 2>/dev/null)
+
+# Allow empty commits (initial or some special cases)
+if [ -z "$COMMIT_MSG" ]; then
+  exit 0
+fi
+
+# Check if commit message contains a task ID reference
+# Valid patterns: "Fixes #0001", "#0001", "Task #0001", etc.
+if ! echo "$COMMIT_MSG" | grep -qE '#[0-9]{4}|Fixes #[0-9]{4}|Task #[0-9]{4}'; then
+  echo "❌ Commit message must reference a task ID (e.g., 'Fixes #0001' or '#0001')" >&2
+  echo "" >&2
+  echo "Your commit message:" >&2
+  echo "$COMMIT_MSG" >&2
+  echo "" >&2
+  echo "Add a task ID reference. Example:" >&2
+  echo "  Fix null-check crash in widget" >&2
+  echo "" >&2
+  echo "  - Add optional chaining" >&2
+  echo "  - Handle undefined location" >&2
+  echo "" >&2
+  echo "  Fixes #0001" >&2
+  echo "" >&2
+  exit 1
+fi
+
+exit 0
