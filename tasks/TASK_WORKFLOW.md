@@ -36,6 +36,49 @@ All development work starts with a task definition. This ensures alignment, prev
 
 ---
 
+## FEA:/BUG: Quick Entry Format
+
+When you have a new feature idea or bug to capture, use this structured prompt format to automatically trigger requirement branch creation:
+
+```
+FEA: <description or numbered list>
+BUG: <description or numbered list>
+```
+
+### Examples
+
+**Single item:**
+```
+FEA: Add dark mode toggle to the calculator widget
+BUG: Calculator crashes when longitude is exactly 180 degrees
+```
+
+**Numbered list (creates multiple independent tasks):**
+```
+FEA: 1. Add dark mode 2. Add print stylesheet 3. Add accessibility contrast check
+BUG: 1. Crashes at 180° longitude 2. Wrong tithi at midnight DST boundary
+```
+
+**Sub-tasks (all items belong to parent task):**
+```
+FEA0010: 1. Python LSP support 2. JavaScript LSP support
+BUG0009: 1. Fix bug in main flow 2. Fix edge case
+```
+
+### How It Works
+
+The `UserPromptSubmit` hook intercepts FEA:/BUG: prompts and:
+1. Parses items into a numbered list
+2. Generates branch name suggestions: `requirement/fea-0011-item-slug`
+3. Provides relationship type options: new / sub-task / depends-on / blocks
+4. Shows exact commands to run
+
+You then run the suggested commands. Each requirement automatically generates a task file with BDD-style acceptance criteria.
+
+**Note**: FEA:/BUG: prompts are intentionally blocked — they are a structured entry point, not a way to bypass task workflow. The hook's deny message tells you exactly what commands to run next.
+
+---
+
 ## Task File Format
 
 Create files as: `tasks/NNNN-kebab-case-title.md` (where NNNN is a sequential ID like 0001, 0002, etc.)
@@ -59,6 +102,7 @@ raci:                                           # RACI matrix
   accountable: Vairam                           # who's ultimately accountable?
   consulted: []                                 # who provides input?
   informed: []                                  # who needs to know?
+parent_task: (optional, parent task ID if this is a sub-requirement)
 linked_tasks: []                                # task IDs this depends on
 blocked_by: []                                  # task IDs blocking this one
 related: []                                     # GitHub issues or external refs
@@ -94,12 +138,29 @@ Where in the codebase? What files? Link to docs/.
 
 # Acceptance Criteria
 
-Define DONE as a checklist:
+**New tasks (0011 onward)** should use BDD Scenario format:
 
+```markdown
+## Scenario: [Scenario Name]
+- **Given** [the initial context or precondition]
+- **When** [the action or event occurs]
+- **Then** [the expected observable outcome]
+
+## Scenario: [Another Scenario]
+- **Given** [another starting condition]
+- **When** [action or event]
+- **Then** [expected result]
+```
+
+**Why BDD?** Scenarios are testable and unambiguous. "Given/When/Then" forces you to specify preconditions, action, and result. Natural to convert into test cases.
+
+**Legacy tasks** (0001-0010) use checkboxes—no need to convert:
+```markdown
 - [ ] Widget handles undefined panchanga gracefully
 - [ ] No console errors when calculation fails
 - [ ] E2E tests pass
 - [ ] Error message displays to user
+```
 
 # Test Plan
 
@@ -183,6 +244,42 @@ Run when:
 
 # Auto-update during planning (when exiting plan mode):
 # Claude internally calls this
+```
+
+---
+
+## Dependency Relationship Types
+
+When creating a requirement, specify how it relates to existing tasks:
+
+| Flag | Frontmatter field | Meaning |
+|------|-------------------|---------|
+| `--sub-of <id>` | `parent_task: <id>` | This is a sub-requirement of another task |
+| `--depends-on <id>` | `blocked_by: [<id>]` | This cannot start until that task completes |
+| `--blocks <id>` | (noted in body) | This task, when done, unblocks that task |
+
+**Example**: Create sub-requirements of task 0010
+```bash
+./scripts/feature-workflow.py requirement fea-0011-python-lsp --sub-of 0010
+./scripts/feature-workflow.py requirement fea-0012-js-lsp --sub-of 0010
+```
+
+**View dependency tree:**
+```bash
+./scripts/feature-workflow.py requirement list
+```
+
+**When on a feature/* branch** (mid-feature sub-requirement):
+Use a worktree to isolate the sub-feature work:
+```bash
+# Create a new worktree for the sub-requirement
+git worktree add ../shivavakkiyar-req requirement/fea-0013-sub-feature
+
+# (Optional) Spawn a sub-agent to work on it
+# [Feature planned for future: spawn-subagent CLI command]
+
+# When done, remove the worktree
+git worktree remove ../shivavakkiyar-req
 ```
 
 ---
