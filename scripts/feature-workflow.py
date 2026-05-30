@@ -8,6 +8,7 @@ Usage:
     ./scripts/feature-workflow.py test
     ./scripts/feature-workflow.py commit "<message>"
     ./scripts/feature-workflow.py finish
+    ./scripts/feature-workflow.py cancel <task-id>
     ./scripts/feature-workflow.py status
     ./scripts/feature-workflow.py list
     ./scripts/feature-workflow.py requirement <requirement-name> [--sub-of <task-id>] [--depends-on <task-id>] [--blocks <task-id>]
@@ -22,6 +23,7 @@ Commands:
     list                   - List all feature branches
     finish                 - Auto-run tests, merge feature to main and delete feature branch
     clean                  - Delete all feature branches except current
+    cancel <task-id>       - Cancel a task (marks as cancelled, commits, merges to main)
     requirement <name>     - Create requirement branch with auto-generated BDD task file
                             Options:
                               --sub-of <task-id>     - This is a sub-requirement of another task
@@ -370,6 +372,84 @@ class WorkflowManager:
         else:
             self.log("No branches to delete", BLUE)
 
+    def cmd_cancel(self, task_id):
+        """Cancel a task (mark as cancelled, commit, and merge to main)."""
+        if not task_id:
+            self.log("Error: Task ID required", RED)
+            self.log("Usage: ./scripts/feature-workflow.py cancel <task-id>")
+            sys.exit(1)
+
+        # Normalize task ID (handle both '0014' and '14')
+        task_id = f'{int(task_id):04d}' if task_id.isdigit() else task_id
+
+        # Find the task file
+        tasks_dir = Path('tasks')
+        task_file = None
+        for f in tasks_dir.glob(f'{task_id}-*.md'):
+            task_file = f
+            break
+
+        if not task_file:
+            self.log(f"Error: Task file not found for task #{task_id}", RED)
+            self.log(f"Expected: tasks/{task_id}-*.md")
+            sys.exit(1)
+
+        # Check current status
+        content = task_file.read_text()
+        status_match = re.search(r'^status:\s*(\S+)', content, re.MULTILINE)
+        if status_match:
+            current_status = status_match.group(1)
+            if current_status == 'cancelled':
+                self.log(f"Error: Task {task_id} is already cancelled", YELLOW)
+                sys.exit(1)
+            if current_status == 'done':
+                self.log(f"Warning: Task {task_id} is already done", YELLOW)
+                response = input("Continue with cancellation? (y/n) ")
+                if response.lower() != 'y':
+                    sys.exit(0)
+
+        # Create requirement/cancel-XXXX branch
+        current_branch = self.get_current_branch()
+        if current_branch != self.main_branch:
+            self.log(f"Switching to {self.main_branch} first...", YELLOW)
+            self.run_command(f"git checkout {self.main_branch}")
+
+        cancel_branch = f"requirement/cancel-{task_id}"
+        self.log(f"Creating cancel branch: {cancel_branch}", BLUE)
+        self.run_command(f"git checkout -b {cancel_branch}")
+
+        # Update task status to cancelled
+        new_content = re.sub(
+            r'^status:\s*\S+',
+            'status: cancelled',
+            content,
+            flags=re.MULTILINE
+        )
+        # Remove completed date if present
+        new_content = re.sub(
+            r'^completed:\s*\S+\n',
+            '',
+            new_content,
+            flags=re.MULTILINE
+        )
+        task_file.write_text(new_content)
+
+        self.log(f"Updated task file: {task_file.name}", BLUE)
+
+        # Commit the change
+        self.run_command(f"git add {task_file}")
+        commit_msg = f"Task: Cancel task {task_id}\n\nFixes #{task_id}"
+        self.run_command(f"git commit -m '{commit_msg}'")
+        self.log(f"✅ Committed: Task {task_id} cancelled", GREEN)
+
+        # Merge back to main
+        self.log(f"Merging to {self.main_branch}...", BLUE)
+        self.run_command(f"git checkout {self.main_branch}")
+        self.run_command(f"git merge --ff-only {cancel_branch}")
+        self.run_command(f"git branch -d {cancel_branch}")
+
+        self.log(f"✅ Task {task_id} cancelled and merged to main", GREEN)
+
     def _extract_task_id(self, req_name):
         """Extract NNNN task ID from requirement name like 'fea-0011-critical-lsp'."""
         m = re.search(r'(\d{4})', req_name)
@@ -675,6 +755,9 @@ TBD
                 self.cmd_list()
             elif command == "clean":
                 self.cmd_clean()
+            elif command == "cancel":
+                task_id = args[0] if args else None
+                self.cmd_cancel(task_id)
             elif command == "requirement":
                 if args and args[0] == "finish":
                     self.cmd_requirement_finish()
