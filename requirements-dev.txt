@@ -1,0 +1,10 @@
+# Development & IDE tooling dependencies
+# Install with: pip install -r requirements-dev.txt
+
+# Python Language Server Protocol (LSP) - IDE autocomplete, linting, type checking
+python-lsp-server==1.9.0
+pylsp-mypy==0.6.8
+
+# Optional: For better CLI experience (not required)
+# click==8.1.7
+# colorama==0.4.6  # For Windows color support
