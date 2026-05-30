@@ -1,0 +1,14 @@
+# Workflow scripts dependencies
+# Minimal dependencies - mostly uses Python standard library
+# Click is optional for better CLI ergonomics, but not required
+
+# Pinned versions for reproducibility
+# Keep minimal to reduce package bloat
+
+# Optional: For better CLI experience
+# click==8.1.7
+# colorama==0.4.6  # For Windows color support
+
+# Development (not installed by default)
+# pytest==7.4.0
+# pytest-cov==4.1.0
