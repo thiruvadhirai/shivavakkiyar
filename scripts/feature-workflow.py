@@ -10,15 +10,19 @@ Usage:
     ./scripts/feature-workflow.py finish
     ./scripts/feature-workflow.py status
     ./scripts/feature-workflow.py list
+    ./scripts/feature-workflow.py requirement <requirement-name>
+    ./scripts/feature-workflow.py requirement finish
 
 Commands:
-    start <name>    - Create and switch to feature/name branch
-    status          - Show current branch and version
-    test            - Run unit tests in container
-    commit <msg>    - Commit changes (auto-increments version via hook)
-    list            - List all feature branches
-    finish          - Merge feature to main and delete feature branch
-    clean           - Delete all feature branches except current
+    start <name>           - Create and switch to feature/name branch
+    status                 - Show current branch and version
+    test                   - Run unit tests in container
+    commit <msg>           - Commit changes (auto-increments version via hook)
+    list                   - List all feature branches
+    finish                 - Auto-run tests, merge feature to main and delete feature branch
+    clean                  - Delete all feature branches except current
+    requirement <name>     - Create requirement branch for defining specs
+    requirement finish     - Merge requirement to main (no tests required)
 """
 
 import os
@@ -199,8 +203,22 @@ class WorkflowManager:
         self.log("✅ Commit successful!", GREEN)
         self.log(f"   New version: {new_version}")
 
+    def run_tests_silent(self):
+        """Run tests silently, return True if pass, False if fail."""
+        try:
+            result = subprocess.run(
+                "podman exec saivamcloud-test npm test",
+                shell=True,
+                capture_output=True,
+                timeout=300,
+                text=True
+            )
+            return result.returncode == 0
+        except Exception:
+            return False
+
     def cmd_finish(self):
-        """Finish feature branch."""
+        """Finish feature branch - AUTO-RUN TESTS BEFORE MERGE."""
         current_branch = self.get_current_branch()
 
         if current_branch == self.main_branch:
@@ -213,6 +231,22 @@ class WorkflowManager:
             sys.exit(1)
 
         self.log(f"Finishing feature branch: {current_branch}", BLUE)
+        print()
+
+        # Auto-run tests BEFORE merge
+        self.log("Running tests before merge...", BLUE)
+        print()
+
+        if not self.run_tests_silent():
+            self.log("❌ Tests FAILED - merge blocked", RED)
+            print()
+            self.log("Fix failing tests and try again:", YELLOW)
+            print("  1. Make fixes on feature branch")
+            print("  2. Run: ./scripts/feature-workflow.py commit '...'")
+            print("  3. Run: ./scripts/feature-workflow.py finish")
+            return
+
+        self.log("✅ Tests PASSED - proceeding with merge", GREEN)
         print()
 
         # Show commits to be merged
@@ -328,6 +362,88 @@ class WorkflowManager:
         else:
             self.log("No branches to delete", BLUE)
 
+    def cmd_requirement(self, req_name):
+        """Create a requirement branch for defining specs."""
+        if not req_name:
+            self.log("Error: Requirement name required", RED)
+            self.log("Usage: ./scripts/feature-workflow.py requirement <requirement-name>")
+            sys.exit(1)
+
+        requirement_branch = f"requirement/{req_name}"
+        current_branch = self.get_current_branch()
+
+        if current_branch != self.main_branch:
+            self.log(f"Switching to {self.main_branch} first...", YELLOW)
+            self.run_command(f"git checkout {self.main_branch}")
+
+        self.log(f"Creating requirement branch: {requirement_branch}", BLUE)
+        self.run_command(f"git checkout -b {requirement_branch}")
+
+        self.log(f"✅ Switched to: {requirement_branch}", GREEN)
+        print()
+        self.log("Next steps:", YELLOW)
+        print("  1. Create task file: tasks/000X-description.md")
+        print("  2. Document requirements/spec")
+        print("  3. Commit: ./scripts/feature-workflow.py commit '...'")
+        print("  4. Finish: ./scripts/feature-workflow.py requirement finish")
+
+    def cmd_requirement_finish(self):
+        """Merge requirement to main (no tests required)."""
+        current_branch = self.get_current_branch()
+
+        if not current_branch.startswith("requirement/"):
+            self.log("Error: Not on requirement/* branch", RED)
+            self.log(f"Current branch: {current_branch}")
+            sys.exit(1)
+
+        self.log(f"Finishing requirement: {current_branch}", BLUE)
+        print()
+
+        # Show commits to be merged
+        print("Commits to merge:")
+        commits = self.run_command(
+            f"git log {self.main_branch}...HEAD --oneline",
+            capture=True
+        )
+        for line in commits.split('\n'):
+            if line:
+                print(f"  {line}")
+
+        print()
+        response = input("Continue? (y/n) ").strip().lower()
+        if response != 'y':
+            print("Aborted.")
+            return
+
+        print()
+        self.log("Merging to main...", BLUE)
+
+        # Switch to main
+        self.run_command(f"git checkout {self.main_branch}")
+
+        # Merge requirement branch (no tests for requirements)
+        try:
+            self.run_command(
+                f'git merge "{current_branch}" -m "Merge {current_branch} into main"'
+            )
+            self.log("✅ Merged successfully", GREEN)
+        except subprocess.CalledProcessError:
+            self.log("❌ Merge conflict!", RED)
+            print("Resolve conflicts and run:")
+            print("  git add . && git commit")
+            sys.exit(1)
+
+        # Delete requirement branch
+        print()
+        self.log(f"Deleting requirement branch: {current_branch}", BLUE)
+        self.run_command(f"git branch -d {current_branch}")
+
+        print()
+        self.log("✅ Requirement merged and deleted", GREEN)
+        print()
+        self.log("Next: Create feature branch to implement", YELLOW)
+        print(f"  ./scripts/feature-workflow.py start {current_branch.replace('requirement/', '')}")
+
     def setup_hooks(self):
         """Setup git hooks."""
         setup_script = Path("scripts/setup-hooks.py")
@@ -366,6 +482,11 @@ class WorkflowManager:
                 self.cmd_list()
             elif command == "clean":
                 self.cmd_clean()
+            elif command == "requirement":
+                if args and args[0] == "finish":
+                    self.cmd_requirement_finish()
+                else:
+                    self.cmd_requirement(args[0] if args else None)
             elif command in ["-h", "--help", "help"]:
                 self.show_help()
             else:
