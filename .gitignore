@@ -61,10 +61,16 @@ build/
 # Temporary files
 *.tmp
 *.bak
+*.log
 .git/hooks/post-commit.bak
 
 # Test artifacts
 test-results/
 .playwright/
+playwright-report/
+
+# Claude session files (developer-specific, not shared)
+.claude/session.json
+.claude/session-data.json
 
 _site/
