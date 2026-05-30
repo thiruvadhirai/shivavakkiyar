@@ -1,12 +1,13 @@
 ---
 id: 0015
 title: Add cancelled status to task workflow
-status: open
+status: done
 impact: Medium
 priority: 050
 complexity: "less than 1 hour"
 assignee: Claude
 created: 2026-05-30
+completed: 2026-05-30
 raci:
   responsible: Claude
   accountable: Vairam
