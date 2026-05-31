@@ -47,10 +47,7 @@ def main():
     # Display each file
     for file_path in json_files:
         try:
-            path_obj = Path(file_path)
-
             # Print header with file info
-            stat_info = path_obj.stat()
             print(f"=== {file_path} ===")
 
             # Print first 20 lines
