@@ -15,6 +15,8 @@
       "Bash(rm *)",
       "Bash(head *)",
       "Bash(tail *)",
+      "Bash(python3 *)",
+      "Bash(chmod *)",
       "Write",
       "Edit",
       "Read"
