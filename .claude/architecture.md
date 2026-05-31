@@ -1,5 +1,7 @@
 # Project Architecture - File Organization & Relationships
 
+**For step-by-step setup and development procedures**, see [DEVELOPMENT.md](./DEVELOPMENT.md).
+
 ## Directory Structure
 
 ```

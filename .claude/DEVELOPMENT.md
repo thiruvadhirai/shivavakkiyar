@@ -2,6 +2,8 @@
 
 This guide helps you set up and work with the Panchanga Calculator project locally.
 
+**📚 For understanding file relationships and dependencies**, see [architecture.md](./architecture.md).
+
 ---
 
 ## 🛠️ Prerequisites
@@ -230,6 +232,8 @@ If tests fail:
 ---
 
 ## 🐳 Container Management
+
+**See [architecture.md](./architecture.md) for the complete build & deployment pipeline diagram.**
 
 ### Dev Container (Jekyll)
 
