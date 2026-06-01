@@ -13,7 +13,9 @@ A comprehensive Hindu calendar (panchanga) calculator integrated into a Jekyll G
 ### Frontend
 - **Vanilla JavaScript** - No framework dependencies
 - **Astronomy Engine v2.0+** - NASA JPL ephemeris (local, 413KB)
+- **NOAA Solar Calc** - Sunrise/sunset with atmospheric refraction (local, @noaa/solar-calc)
 - **Nominatim API** - Free geocoding for location lookup (OpenStreetMap)
+- **Temporal API** - Modern date/time handling (progressive migration from Date)
 
 ### Styling
 - **Cayman Theme CSS** - GitHub Pages theme (local, 9.4KB)
@@ -235,7 +237,79 @@ podman-compose down
   user's local timezone. Convert UTC dates by adding timezone offset.
   ```
 
+## Temporal API Migration (In Progress)
+
+**Objective**: Replace JavaScript `Date` with `Temporal` API for better date/time handling
+
+**Rationale**:
+- `Date` is mutable and lacks timezone support
+- `Temporal` provides immutable, timezone-aware, precision-based dates
+- Better for astronomical calculations requiring precision
+
+**Critical Pre-Condition: Validation Analysis Required**
+
+⚠️ **BEFORE** applying Temporal to astronomy.browser.js, establish baseline understanding:
+
+### 1. NOAA Calculator Validation (Task 0028a - New)
+**Compare**: NOAA Calculator (with Temporal) vs NOAA Official Sources
+
+Comparisons to run:
+- NOAA Calculator results vs NOAA Online Spreadsheet (https://gml.noaa.gov/grad/solcalc/)
+- NOAA Calculator results vs NOAA API (https://api.weather.gov/)
+- Multiple test dates: winter solstice, summer solstice, equinoxes, random dates
+- Multiple locations: equator, 47°N (Olympia), 70°N (high latitude), southern hemisphere
+
+Output: Discrepancy report showing ±X minutes accuracy
+
+### 2. Astronomy Engine vs NOAA Comparison (Task 0028b - New)
+**Compare**: Astronomy Engine (current) vs NOAA Calculator
+
+Comparisons to run:
+- Sunrise/sunset times: Astronomy Engine vs NOAA
+- Document systematic differences (±X minutes)
+- Identify if difference is due to:
+  - Refraction not applied in Astronomy Engine
+  - Different atmospheric models
+  - Precision (millisecond vs nanosecond)
+  - Timezone handling differences
+
+Output: Discrepancy analysis + root cause investigation
+
+### 3. Decision Gate
+**Only after validation**:
+- If NOAA Calculator ≤ ±1 minute vs NOAA official → proceed with Temporal migration
+- If discrepancy > ±1 minute → investigate root cause before migration
+- If Astronomy Engine can't meet tolerance → switch to NOAA library (Task 0028)
+
+**Scope**:
+1. ✅ panchanga-calculator.js - Add Temporal.PlainDate support (phase 1)
+2. ⏳ astronomy.browser.js - **GATED**: Requires validation first → Replace Date with Temporal in ephemeris calculations
+3. ⏳ location-manager.js - Use Temporal for caching timestamps
+4. ⏳ noaa-calculator.js - Use Temporal for sunrise/sunset times
+
+**Timeline**: Progressive migration - maintain Date support during transition
+
+**References**:
+- Temporal Proposal: https://tc39.es/proposal-temporal/
+- Polyfill: temporal-polyfill (if needed)
+- NOAA Online: https://gml.noaa.gov/grad/solcalc/
+- NOAA API: https://api.weather.gov/
+- NOAA Spreadsheet: Available on NOAA solar calculation details page
+
+## NOAA Library Integration
+
+**Library**: @noaa/solar-calc (hebcal/noaa)  
+**Source**: https://github.com/hebcal/noaa  
+**Status**: Planned - copy to local assets
+
+**Why**: 
+- Official NOAA sunrise/sunset calculations
+- Atmospheric refraction built-in
+- Validated against NOAA's official calculator
+
 ## Future Enhancements
+- [ ] Replace custom NOAA refraction with @noaa/solar-calc library
+- [ ] Complete Temporal API migration (Date → Temporal)
 - [ ] Add Ayanamsa comparison (Drik vs Lahiri)
 - [ ] Support for different calendar systems
 - [ ] Historical panchang data

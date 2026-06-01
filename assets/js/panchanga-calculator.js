@@ -14,6 +14,10 @@ class PanchangaCalculator {
     this.DIRECTION_RISE = 1;
     this.DIRECTION_SET = -1;
 
+    // NOAA standard atmospheric refraction (visible upper limb of sun)
+    // = 34 arcminutes (atmospheric refraction) + 16 arcminutes (solar disk radius)
+    this.STANDARD_REFRACTION = 0.833; // degrees
+
     this.initialized = false;
     this.astronomy = null;
   }
@@ -182,6 +186,49 @@ class PanchangaCalculator {
       console.error('Failed to initialize Astronomy Engine:', error);
       throw error;
     }
+  }
+
+  /**
+   * Calculate atmospheric refraction correction based on solar elevation angle
+   * Based on NOAA Solar Calculation methodology (Meeus, Astronomical Algorithms)
+   * @param {number} elevationDegrees - Solar elevation angle in degrees above horizon
+   * @returns {number} Refraction correction in degrees
+   */
+  getAtmosphericRefraction(elevationDegrees) {
+    const h = elevationDegrees;
+
+    // Case 1: High sun (85° to 90°) - no refraction at zenith
+    if (h >= 85) {
+      return 0;
+    }
+
+    // Case 2: Normal sun (5° to 85°) - standard NOAA formula
+    // Refraction = (1/3600) * ((58.1/tan(h)) - (0.07/tan³(h)) + (0.000086/tan⁵(h)))
+    if (h >= 5) {
+      const tanH = Math.tan((h * Math.PI) / 180);
+      const refraction =
+        58.1 / tanH -
+        0.07 / Math.pow(tanH, 3) +
+        0.000086 / Math.pow(tanH, 5);
+      return refraction / 3600; // Convert arcseconds to degrees
+    }
+
+    // Case 3: Low sun (-0.575° to 5°) - polynomial formula near horizon
+    // Refraction = (1/3600) * (1735 - 518.2*h + 103.4*h² - 12.79*h³ + 0.711*h⁴)
+    if (h >= -0.575) {
+      const refraction =
+        1735 -
+        518.2 * h +
+        103.4 * h * h -
+        12.79 * h * h * h +
+        0.711 * h * h * h * h;
+      return refraction / 3600; // Convert arcseconds to degrees
+    }
+
+    // Case 4: Very low sun (< -0.575°) - below horizon
+    // Refraction = (1/3600) * (-20.774/tan(h))
+    const tanH = Math.tan((h * Math.PI) / 180);
+    return (-20.774 / tanH) / 3600; // Convert arcseconds to degrees
   }
 
   /**
@@ -960,7 +1007,12 @@ class PanchangaCalculator {
   }
 }
 
-// Export for use in other scripts
+// Export for use in other scripts (CommonJS)
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = PanchangaCalculator;
+}
+
+// Export for ES modules (Jest testing)
+if (typeof exports === 'object' && typeof window === 'undefined') {
+  globalThis.PanchangaCalculator = PanchangaCalculator;
 }

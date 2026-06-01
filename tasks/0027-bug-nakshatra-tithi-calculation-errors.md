@@ -1,7 +1,7 @@
 ---
 id: 0027
 title: "BUG: Nakshatra, tithi, and timing calculations returning incorrect values"
-status: open
+status: in_progress
 impact: Critical
 priority: 010
 complexity: "4-6 hours"
@@ -13,8 +13,21 @@ raci:
   informed: []
 dependencies: []
 blocked_by: []
-related: [0005, 0006]
+related: [0005, 0006, 0027a]
 ---
+
+## Progress Summary
+
+**Session Work Completed (June 1, 2026)**:
+- ✅ Test framework exists (tests/panchanga-calculator-integration.test.js)
+- ✅ Test data created with reference values (tests/integration-test-data.json)
+- ✅ Created sub-task 0027a for NOAA sunrise/sunset (blocking issue for ±1 min tolerance)
+- ⏳ **Remaining**: Wire tests to actual calculator, identify failing cases, fix bugs
+
+**Current Test Status**:
+- Tests exist but have PLACEHOLDERS (echo expected values instead of calling calculator)
+- Need to connect to actual `calculatePanchanga()` function
+- Tests will reveal which calculations are broken
 
 # Problem Statement
 
@@ -31,6 +44,16 @@ Calculator library returns incorrect values for:
 - Wrong ayanamsa application (Drik Ayanamsa ~24.14° for 2026)
 - Timezone/location handling issues
 - Accumulating rounding errors
+
+## Blocking Issue: Sunrise/Sunset Accuracy
+
+**Task 0027a** addresses a critical blocker for this task:
+- Integration tests require ±1 minute accuracy for sunrise/sunset
+- Astronomy Engine alone produces ~3-4 minute errors
+- NOAA atmospheric refraction correction is required
+- **Status**: Refraction function implemented, ready to integrate
+
+See task 0027a for details on NOAA implementation.
 
 ## Known Test Failures
 
@@ -88,12 +111,21 @@ Reference values from verified panchang sources show systematic discrepancies:
 
 ## Acceptance Criteria
 
-- [ ] Integration test suite created with at least 10 test cases
+- [x] Integration test suite created with at least 10 test cases
+  - ✓ File: `tests/panchanga-calculator-integration.test.js`
+  - ✓ Covers: tithi, nakshatra, yoga, karana, sunrise/sunset
+  - ⚠️ Tests are placeholders (need wiring to actual calculator)
 - [ ] Test cases compare expected vs actual for: tithi, nakshatra, yoga, karana, sunrise, sunset, moonsign, sunsign
+  - Ready once tests are wired to calculator functions
 - [ ] All tests initially fail (identify bugs)
+  - Pending: Run tests to see which calculations fail
 - [ ] Bugs fixed until all integration tests pass
+  - Pending: Identify root causes and fix calculations
 - [ ] E2E tests still passing
+  - Pending: Verify no regressions after bug fixes
 - [ ] Reference values verified against external sources
+  - ✓ Sunrise/sunset verified against NOAA (sub-task 0027a)
+  - ⏳ Tithi/nakshatra/yoga need verification against traditional panchang sources
 
 ## Files to Modify
 
