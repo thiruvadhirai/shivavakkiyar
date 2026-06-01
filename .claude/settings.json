@@ -1,9 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(./scripts/feature-workflow.sh *)",
-      "Bash(./scripts/push-to-github.sh)",
-      "Bash(./scripts/bump-session.sh)",
+      "Bash(python3 ./scripts/feature-workflow.py *)",
+      "Bash(python3 ./scripts/push-to-github.py)",
+      "Bash(python3 ./scripts/bump-session.py)",
       "Bash(podman-compose *)",
       "Bash(podman ps *)",
       "Bash(podman exec saivamcloud-test *)",
@@ -39,7 +39,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash scripts/bump-session.sh"
+            "command": "python3 scripts/bump-session.py"
           }
         ]
       }
