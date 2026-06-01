@@ -17,11 +17,12 @@ import os
 import subprocess
 from pathlib import Path
 
+# Get project root from environment or derive from script location
+PROJECT_ROOT = Path(os.getenv('PROJECT_ROOT', Path(__file__).parent.parent.parent))
+
 def use_project_venv_if_available():
     """Re-execute using project venv python if available."""
-    # Find project root (script is at .claude/hooks/pre-commit-enforce.py)
-    script_dir = Path(__file__).parent.parent.parent
-    venv_python = script_dir / "venv" / "bin" / "python3"
+    venv_python = PROJECT_ROOT / "venv" / "bin" / "python3"
 
     # Only proceed if venv exists and we're not already using it
     if not venv_python.exists():

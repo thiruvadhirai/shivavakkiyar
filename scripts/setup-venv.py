@@ -16,7 +16,8 @@ from pathlib import Path
 
 def main():
     """Create and setup virtual environment."""
-    project_dir = Path(__file__).parent.parent
+    # Get project root from environment or derive from script location
+    project_dir = Path(os.getenv('PROJECT_ROOT', Path(__file__).parent.parent))
     venv_dir = project_dir / "venv"
 
     print(f"Project directory: {project_dir}")

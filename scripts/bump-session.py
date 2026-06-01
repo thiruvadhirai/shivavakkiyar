@@ -17,13 +17,16 @@ Or manually:
 
 import sys
 import json
+import os
 from pathlib import Path
 from datetime import datetime
 
 
 def main():
     """Bump session counter."""
-    session_file = Path(".claude/session.json")
+    # Get project root from environment or use current directory
+    project_root = Path(os.getenv('PROJECT_ROOT', os.getcwd()))
+    session_file = project_root / ".claude/session.json"
 
     # Ensure .claude directory exists
     session_file.parent.mkdir(parents=True, exist_ok=True)

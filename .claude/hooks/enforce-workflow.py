@@ -21,11 +21,14 @@ import re
 import subprocess
 from pathlib import Path
 
+# Get project root from environment or derive from script location
+PROJECT_ROOT = Path(os.getenv('PROJECT_ROOT', Path(__file__).parent.parent.parent))
+
 def use_project_venv_if_available():
     """Re-execute using project venv python if available."""
-    # Find project root (script is at .claude/hooks/enforce-workflow.py)
-    script_dir = Path(__file__).parent.parent.parent
-    venv_python = script_dir / "venv" / "bin" / "python3"
+    # Find project root (from env or derived from script location)
+    project_root = Path(os.getenv('PROJECT_ROOT', Path(__file__).parent.parent.parent))
+    venv_python = project_root / "venv" / "bin" / "python3"
 
     # Only proceed if venv exists and we're not already using it
     if not venv_python.exists():
@@ -56,7 +59,7 @@ def get_current_branch():
         result = subprocess.run(
             ['git', 'rev-parse', '--abbrev-ref', 'HEAD'],
             capture_output=True, text=True, check=True,
-            cwd=str(Path(__file__).parent.parent.parent)
+            cwd=str(PROJECT_ROOT)
         )
         return result.stdout.strip()
     except Exception:
@@ -64,7 +67,7 @@ def get_current_branch():
 
 def get_next_task_id():
     """Find next available NNNN task ID by scanning tasks/ directory."""
-    tasks_dir = Path(__file__).parent.parent.parent / 'tasks'
+    tasks_dir = PROJECT_ROOT / 'tasks'
     ids = []
     if tasks_dir.exists():
         for f in tasks_dir.glob('[0-9][0-9][0-9][0-9]-*.md'):
@@ -151,7 +154,7 @@ def main():
 
         worktree_note = ""
         if on_feature:
-            proj = Path(__file__).parent.parent.parent.name
+            proj = PROJECT_ROOT.name
             worktree_note = (
                 f"\n[On feature branch '{current_branch}' — use a worktree + sub-agent:]\n"
                 f"  git worktree add ../{proj}-req requirement/{branch_prefix}-<next-id>-<slug>\n"

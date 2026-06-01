@@ -12,10 +12,13 @@ Usage:
 
 import sys
 import json
+import os
 from pathlib import Path
 from datetime import datetime
 
-VERSION_FILE = Path("VERSION")
+# Get project root from environment or use current directory
+PROJECT_ROOT = Path(os.getenv('PROJECT_ROOT', os.getcwd()))
+VERSION_FILE = PROJECT_ROOT / "VERSION"
 
 def read_version():
     """Read version from VERSION file."""

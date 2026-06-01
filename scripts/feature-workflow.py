@@ -52,8 +52,10 @@ class WorkflowManager:
     """Manage feature branch workflow."""
 
     def __init__(self):
+        # Get project root from environment or use current directory
+        self.project_root = Path(os.getenv('PROJECT_ROOT', os.getcwd()))
         self.main_branch = "main"
-        self.version_file = Path("VERSION")
+        self.version_file = self.project_root / "VERSION"
 
     def log(self, message, color=NC):
         """Print colored message."""
@@ -141,7 +143,7 @@ class WorkflowManager:
         print()
 
         # Check test file exists
-        if not Path("tests/panchanga-calculator.test.js").exists():
+        if not (self.project_root / "tests/panchanga-calculator.test.js").exists():
             self.log(
                 "Error: Test file not found: tests/panchanga-calculator.test.js",
                 RED
@@ -383,7 +385,7 @@ class WorkflowManager:
         task_id = f'{int(task_id):04d}' if task_id.isdigit() else task_id
 
         # Find the task file
-        tasks_dir = Path('tasks')
+        tasks_dir = self.project_root / 'tasks'
         task_file = None
         for f in tasks_dir.glob(f'{task_id}-*.md'):
             task_file = f
@@ -457,7 +459,7 @@ class WorkflowManager:
 
     def _get_next_task_id(self):
         """Find next available task ID by scanning tasks/ directory."""
-        tasks_dir = Path('tasks')
+        tasks_dir = self.project_root / 'tasks'
         ids = []
         if tasks_dir.exists():
             for f in tasks_dir.glob('[0-9][0-9][0-9][0-9]-*.md'):
@@ -468,7 +470,7 @@ class WorkflowManager:
 
     def _create_bdd_task_file(self, task_id, req_name, sub_of=None, depends_on=None, blocks=None):
         """Create a starter task file with BDD acceptance criteria template."""
-        tasks_dir = Path('tasks')
+        tasks_dir = self.project_root / 'tasks'
         tasks_dir.mkdir(exist_ok=True)
 
         task_file = tasks_dir / f'{task_id}-{req_name}.md'
@@ -646,7 +648,7 @@ TBD
         )
 
         # Read task files to build dependency map
-        tasks_dir = Path('tasks')
+        tasks_dir = self.project_root / 'tasks'
         task_data = {}  # task_id -> {title, status, parent, blocked_by}
 
         if tasks_dir.exists():
@@ -719,7 +721,7 @@ TBD
 
     def setup_hooks(self):
         """Setup git hooks."""
-        setup_script = Path("scripts/setup-hooks.py")
+        setup_script = self.project_root / "scripts/setup-hooks.py"
         if setup_script.exists():
             try:
                 self.run_command(f"python3 {setup_script}", check=False)
