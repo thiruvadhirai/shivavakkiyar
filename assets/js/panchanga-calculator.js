@@ -20,6 +20,22 @@ class PanchangaCalculator {
 
     this.initialized = false;
     this.astronomy = null;
+
+    // Initialize NOAACalculator for refraction-corrected sunrise/sunset
+    this.noaaCalculator = null;
+  }
+
+  /**
+   * Initialize NOAA Calculator for refraction-corrected calculations
+   * Must be called after Astronomy Engine is available
+   */
+  initializeNOAACalculator() {
+    if (typeof NOAACalculator !== 'undefined') {
+      this.noaaCalculator = new NOAACalculator(this.astronomy);
+      this.log('NOAACalculator initialized for refraction-corrected times');
+    } else {
+      this.logError('NOAACalculator class not available');
+    }
   }
 
   log(...args) {
@@ -346,38 +362,25 @@ class PanchangaCalculator {
   async getSunrise(date, latitude, longitude) {
     this.log('getSunrise called with lat:', latitude, 'lon:', longitude);
 
-    // Use Astronomy Engine for accurate sunrise calculation
-    if (!this.astronomy || !this.astronomy.SearchRiseSet) {
-      throw new Error('Astronomy Engine not available for sunrise calculation');
-    }
-
     try {
-      const observer = new this.astronomy.Observer(latitude, longitude, 0);
-      this.log('Observer created:', observer);
-
-      // Convert local date to UTC for search
-      const tzOffset = this.getTimezoneOffsetFromLongitude(longitude, date);
-      const utcDate = this.localToUTC(date, tzOffset);
-      this.log('Timezone conversion:', { timezone_offset_hours: tzOffset, local_date: date, utc_date: utcDate });
-
-      const time = this.astronomy.MakeTime(utcDate);
-      this.log('Time object created for UTC:', time);
-
-      // Search for sunrise: direction 1 = Rise
-      this.log('Calling SearchRiseSet with:', { body: this.ASTRONOMY_SUN, direction: this.DIRECTION_RISE });
-      const riseEvent = this.astronomy.SearchRiseSet(this.ASTRONOMY_SUN, observer, this.DIRECTION_RISE, time, 1);
-
-      if (!riseEvent) {
-        throw new Error('Could not calculate sunrise - check latitude/longitude and date');
+      // Use NOAACalculator for refraction-corrected sunrise
+      if (!this.noaaCalculator) {
+        this.initializeNOAACalculator();
       }
 
-      this.log('Sunrise from Astronomy Engine:', {
-        riseEvent: riseEvent,
-        has_date: riseEvent && !!riseEvent.date,
-        date_iso: riseEvent?.date?.toISOString?.()
+      if (!this.noaaCalculator) {
+        throw new Error('NOAACalculator not available - cannot calculate refraction-corrected sunrise');
+      }
+
+      const result = await this.noaaCalculator.getSunriseWithRefraction(date, latitude, longitude);
+
+      this.log('Sunrise from NOAACalculator (refraction-corrected):', {
+        date: result.date.toISOString(),
+        correctionMinutes: result.correctionMinutes,
+        refractionDegrees: result.refractionDegrees
       });
 
-      const sunriseDate = new Date(riseEvent.date.toISOString());
+      const sunriseDate = result.date;
       const istTime = this.convertToIST(sunriseDate, longitude);
 
       return {
@@ -402,38 +405,25 @@ class PanchangaCalculator {
   async getSunset(date, latitude, longitude) {
     this.log('getSunset called with lat:', latitude, 'lon:', longitude);
 
-    // Use Astronomy Engine for accurate sunset calculation
-    if (!this.astronomy || !this.astronomy.SearchRiseSet) {
-      throw new Error('Astronomy Engine not available for sunset calculation');
-    }
-
     try {
-      const observer = new this.astronomy.Observer(latitude, longitude, 0);
-      this.log('Observer created:', observer);
-
-      // Convert local date to UTC for search
-      const tzOffset = this.getTimezoneOffsetFromLongitude(longitude, date);
-      const utcDate = this.localToUTC(date, tzOffset);
-      this.log('Timezone conversion:', { timezone_offset_hours: tzOffset, local_date: date, utc_date: utcDate });
-
-      const time = this.astronomy.MakeTime(utcDate);
-      this.log('Time object created for UTC:', time);
-
-      // Search for sunset: direction -1 = Set
-      this.log('Calling SearchRiseSet with:', { body: this.ASTRONOMY_SUN, direction: this.DIRECTION_SET });
-      const setEvent = this.astronomy.SearchRiseSet(this.ASTRONOMY_SUN, observer, this.DIRECTION_SET, time, 1);
-
-      if (!setEvent) {
-        throw new Error('Could not calculate sunset - check latitude/longitude and date');
+      // Use NOAACalculator for refraction-corrected sunset
+      if (!this.noaaCalculator) {
+        this.initializeNOAACalculator();
       }
 
-      this.log('Sunset from Astronomy Engine:', {
-        setEvent: setEvent,
-        has_date: setEvent && !!setEvent.date,
-        date_iso: setEvent?.date?.toISOString?.()
+      if (!this.noaaCalculator) {
+        throw new Error('NOAACalculator not available - cannot calculate refraction-corrected sunset');
+      }
+
+      const result = await this.noaaCalculator.getSunsetWithRefraction(date, latitude, longitude);
+
+      this.log('Sunset from NOAACalculator (refraction-corrected):', {
+        date: result.date.toISOString(),
+        correctionMinutes: result.correctionMinutes,
+        refractionDegrees: result.refractionDegrees
       });
 
-      const sunsetDate = new Date(setEvent.date.toISOString());
+      const sunsetDate = result.date;
       const istTime = this.convertToIST(sunsetDate, longitude);
 
       return {
