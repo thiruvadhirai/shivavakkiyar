@@ -1,0 +1,121 @@
+{
+  "test_cases": [
+    {
+      "id": "olympia-usa-may31-2026",
+      "location": {
+        "name": "Olympia, United States",
+        "latitude": 47.0379,
+        "longitude": -122.9007,
+        "timezone": "America/Los_Angeles"
+      },
+      "date": "2026-05-31",
+      "expected": {
+        "sunrise": "05:21",
+        "sunset": "20:58",
+        "moonrise": "23:05",
+        "moonset": "05:37",
+        "tithi": {
+          "name": "Pratipada",
+          "end_time": "04:07",
+          "end_date": "2026-06-01"
+        },
+        "nakshatra": {
+          "name": "Jyeshtha",
+          "end_time": "full_night"
+        },
+        "yoga": {
+          "name": "Siddha",
+          "end_time": "17:49"
+        },
+        "karana": [
+          {
+            "name": "Balava",
+            "end_time": "14:55"
+          },
+          {
+            "name": "Kaulava",
+            "end_time": "04:07",
+            "end_date": "2026-06-01"
+          }
+        ],
+        "paksha": "Krishna Paksha",
+        "weekday": "Raviwara (Sunday)",
+        "month_amanta": "Jyeshtha (Adhik)",
+        "month_purnimanta": "Jyeshtha (Adhik)",
+        "moonsign": "Vrishchika",
+        "sunsign": "Vrishabha",
+        "shaka_samvat": "1948 Parabhava",
+        "rahu_kalam": {
+          "start": "09:15",
+          "end": "11:12"
+        },
+        "gulika_kalam": {
+          "start": "05:21",
+          "end": "07:18"
+        },
+        "yamaganda": {
+          "start": "15:06",
+          "end": "17:03"
+        },
+        "abhijit": {
+          "start": "12:38",
+          "end": "13:41"
+        }
+      }
+    },
+    {
+      "id": "tamil-location-may31-2026",
+      "location": {
+        "name": "Tamil Nadu, India",
+        "latitude": 11.1271,
+        "longitude": 79.2921,
+        "timezone": "Asia/Kolkata"
+      },
+      "date": "2026-05-31",
+      "expected": {
+        "sunrise": "05:20",
+        "sunset": "18:59",
+        "moonrise": "21:13",
+        "moonset": "04:52",
+        "tithi": {
+          "name": "Pournami",
+          "end_time": "01:44"
+        },
+        "nakshatra": {
+          "name": "Anusha (Anusham)",
+          "end_time": "03:42"
+        },
+        "yoga": {
+          "name": "Shiva",
+          "end_time": "16:55"
+        },
+        "karana": [
+          {
+            "name": "Vishti",
+            "end_time": "12:35"
+          },
+          {
+            "name": "Bava",
+            "end_time": "01:44",
+            "end_date": "2026-06-01"
+          }
+        ],
+        "paksha": "Shukla Paksha",
+        "weekday": "Cani (Friday)",
+        "month_amanta": "Jyeshtha (Adhik)",
+        "month_purnimanta": "Jyeshtha (Adhik)",
+        "moonsign": "Vrishchika",
+        "sunsign": "Vrishabha",
+        "shaka_samvat": "1948 Parabhava",
+        "rahu_kalam": {
+          "start": "09:15",
+          "end": "11:12"
+        },
+        "gulika_kalam": {
+          "start": "05:21",
+          "end": "07:18"
+        }
+      }
+    }
+  ]
+}

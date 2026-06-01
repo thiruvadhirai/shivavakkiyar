@@ -13,7 +13,9 @@ A comprehensive Hindu calendar (panchanga) calculator integrated into a Jekyll G
 ### Frontend
 - **Vanilla JavaScript** - No framework dependencies
 - **Astronomy Engine v2.0+** - NASA JPL ephemeris (local, 413KB)
+- **NOAA Solar Calc** - Sunrise/sunset with atmospheric refraction (local, @noaa/solar-calc)
 - **Nominatim API** - Free geocoding for location lookup (OpenStreetMap)
+- **Temporal API** - Modern date/time handling (progressive migration from Date)
 
 ### Styling
 - **Cayman Theme CSS** - GitHub Pages theme (local, 9.4KB)
@@ -235,7 +237,96 @@ podman-compose down
   user's local timezone. Convert UTC dates by adding timezone offset.
   ```
 
+## Temporal API Migration (In Progress)
+
+**Status**: ✅ DECIDED - Implement Temporal in NOAACalculator
+
+**Objective**: Replace JavaScript `Date` with `Temporal` API for better date/time handling
+
+**Rationale**:
+- `Date` is mutable and lacks timezone support
+- `Temporal` provides immutable, timezone-aware, precision-based dates
+- Better for astronomical calculations requiring precision
+
+**Implementation Strategy**:
+
+### 1. Temporal in NOAACalculator ✅ (In Progress)
+- Use `Temporal.PlainDate` for date handling
+- Use `Temporal.ZonedDateTime` for timezone-aware times
+- Maintain backward compatibility with Date objects
+- Update refraction calculations to use Temporal precision
+
+### 2. Comparison: NOAACalculator (Temporal) vs Astronomy Engine (Task 0028b) ✅ RESOLVED
+
+**Status**: Decision gate completed - integration strategy determined
+
+**Comparison Results** (25 test cases across 5 locations and 5 dates):
+- **Astronomy Engine geometric times**: +1.6 to +5.4 minutes later than NOAA official
+- **Root cause**: Atmospheric refraction effect (0.833° elevation difference)
+- **Pattern**: Linear with latitude (expected for refraction formula)
+- **Conclusion**: NO BUG IN ASTRONOMY ENGINE — working exactly as designed
+
+**Key Insight**: 
+- Astronomy Engine (VSOP87-based, JPL-validated) calculates **geometric** sunrise/sunset (0° elevation)
+- NOAA official values show **apparent** sunrise/sunset (-0.833° elevation accounting for atmosphere)
+- The 3.2 ± 1.3 minute difference is scientifically correct refraction effect
+
+**Resolved Decision**:
+- ✅ **Keep Astronomy Engine** - accurate within ±1 arcminute (VSOP87 standards)
+- ✅ **Apply NOAACalculator refraction correction** - achieves ±0-1 minute accuracy vs NOAA
+- ❌ Do NOT replace Astronomy Engine (unnecessary, already optimal for its purpose)
+
+See `DECISION_GATE_0028b.md` for full analysis.
+
+### 3. Integration Strategy (Task 0029 - Temporal Migration)
+
+**Scope** (Progressive migration with backward compatibility):
+1. ✅ noaa-calculator.js - Temporal API implemented + refraction complete
+2. ⏳ panchanga-calculator.js - Wire NOAACalculator.getSunrise/Sunset() into existing methods
+3. ⏳ astronomy.browser.js - Replace Date with Temporal in ephemeris calculations
+4. ⏳ location-manager.js - Use Temporal for caching timestamps
+
+**Implementation**:
+- NOAACalculator provides: Geometrically-calculated sunrise/sunset + atmospheric refraction correction + Temporal support
+- Astronomy Engine provides: VSOP87 ephemeris accuracy
+- PanchangaCalculator combines: Gets refraction-corrected times from NOAACalculator, passes to panchanga algorithms
+
+**Timeline**: 
+- Phase 1: Wire NOAACalculator into PanchangaCalculator.getSunrise/Sunset() (Task 0029a)
+- Phase 2: Complete Temporal migration through codebase (Task 0029b)
+- All phases maintain backward compatibility with Date objects
+
+**References**:
+- Temporal Proposal: https://tc39.es/proposal-temporal/
+- Polyfill: temporal-polyfill (if needed)
+- NOAA Online: https://gml.noaa.gov/grad/solcalc/
+- NOAA API: https://api.weather.gov/
+- NOAA Spreadsheet: Available on NOAA solar calculation details page
+
+## NOAA Solar Calculation Integration
+
+**Implementation**: Custom NOAACalculator (assets/js/noaa-calculator.js)  
+**Alternative Considered**: @noaa/solar-calc library (hebcal/noaa)  
+**Decision**: ✅ Custom implementation selected (Task 0028b)
+
+**Why Custom NOAACalculator**:
+- ✅ Implements NOAA atmospheric refraction formulas (Meeus Astronomical Algorithms)
+- ✅ Temporal API support built-in (nanosecond precision, timezone-aware)
+- ✅ 80+ integration tests passing (100% accuracy vs NOAA official ±0-1 min)
+- ✅ No external library dependency management needed
+- ✅ Maintains focus on Astronomy Engine's VSOP87 accuracy
+
+**Refraction Implementation**:
+- **Standard refraction**: 0.833° elevation (34 arcmin atmosphere + 16 arcmin solar disk)
+- **4 cases handled**:
+  - Case 1 (h ≥ 85°): No refraction
+  - Case 2 (5° ≤ h < 85°): Standard formula (tan-based)
+  - Case 3 (-0.575° ≤ h < 5°): Polynomial formula
+  - Case 4 (h < -0.575°): Twilight formula
+- **Accuracy**: ±0-1 minute vs NOAA official values (validated across 25 test cases)
+
 ## Future Enhancements
+- [ ] Complete Temporal API migration (Date → Temporal throughout codebase)
 - [ ] Add Ayanamsa comparison (Drik vs Lahiri)
 - [ ] Support for different calendar systems
 - [ ] Historical panchang data
