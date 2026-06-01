@@ -1,0 +1,34 @@
+{
+  "location": {
+    "name": "Karur, Tamil Nadu",
+    "latitude": 11.1408,
+    "longitude": 78.1309,
+    "timezone": "Asia/Kolkata",
+    "utc_offset": 5.5
+  },
+  "method": "NOAA-compatible simplified astronomical formulas",
+  "refraction_applied": "-0.833° (atmospheric refraction)",
+  "calculated_timestamp": "2026-06-01T21:34:47.430Z",
+  "results": {
+    "karur-winter": {
+      "sunrise": "01:26",
+      "sunset": "12:39"
+    },
+    "karur-spring": {
+      "sunrise": "01:17",
+      "sunset": "13:09"
+    },
+    "karur-summer": {
+      "sunrise": "00:50",
+      "sunset": "13:21"
+    },
+    "karur-fall": {
+      "sunrise": "01:00",
+      "sunset": "12:55"
+    },
+    "karur-random": {
+      "sunrise": "00:47",
+      "sunset": "13:16"
+    }
+  }
+}

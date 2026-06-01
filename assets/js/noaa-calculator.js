@@ -3,11 +3,14 @@
  *
  * Implements the NOAA standard for sunrise/sunset calculations with
  * atmospheric refraction correction based on Astronomical Algorithms
- * by Jean Meeus.
+ * by Jean Meeus. Uses Temporal API for precise date/time handling.
  *
  * Reference: https://gml.noaa.gov/grad/solcalc/calcdetails.html
  *
  * Accuracy: ±1 minute for ±72° latitude, ±10 minutes outside
+ *
+ * Note: Uses Temporal API (immutable, nanosecond precision, timezone-aware)
+ * Maintains backward compatibility with Date objects via conversion methods
  */
 class NOAACalculator {
   constructor(astronomy = null) {
@@ -23,6 +26,58 @@ class NOAACalculator {
     this.SUN = 'Sun';
     this.DIRECTION_RISE = 1;
     this.DIRECTION_SET = -1;
+
+    // Temporal API availability
+    this.hasTemporalAPI = typeof globalThis.Temporal !== 'undefined';
+  }
+
+  /**
+   * Convert Date to Temporal.Instant for calculations
+   * Handles both Date objects and Temporal types gracefully
+   * @param {Date|Temporal.Instant|Temporal.ZonedDateTime} dateInput - Date to convert
+   * @returns {Temporal.Instant} Temporal instant in UTC
+   */
+  toTemporalInstant(dateInput) {
+    if (!this.hasTemporalAPI) {
+      throw new Error('Temporal API not available. Use temporal-polyfill or Node.js 18+');
+    }
+
+    if (dateInput instanceof Date) {
+      // Convert Date to ISO string then to Temporal.Instant
+      return Temporal.Instant.from(dateInput.toISOString());
+    }
+
+    if (dateInput instanceof Temporal.Instant) {
+      return dateInput;
+    }
+
+    if (dateInput instanceof Temporal.ZonedDateTime) {
+      return dateInput.toInstant();
+    }
+
+    // Try parsing as string
+    return Temporal.Instant.from(dateInput);
+  }
+
+  /**
+   * Convert Temporal.Instant back to Date for backward compatibility
+   * @param {Temporal.Instant} instant - Temporal instant to convert
+   * @returns {Date} JavaScript Date object
+   */
+  toDate(instant) {
+    return new Date(instant.toJSON());
+  }
+
+  /**
+   * Get current time as Temporal.Instant with timezone awareness
+   * @param {string} timeZone - IANA timezone name (e.g., 'America/Los_Angeles')
+   * @returns {Temporal.ZonedDateTime} Current time in specified timezone
+   */
+  getNowInTimezone(timeZone = 'UTC') {
+    if (!this.hasTemporalAPI) {
+      throw new Error('Temporal API not available');
+    }
+    return Temporal.Now.zonedDateTimeISO(timeZone);
   }
 
   /**
@@ -127,18 +182,27 @@ class NOAACalculator {
    * atmospheric refraction. The key insight: apparent sunrise/sunset occurs
    * when the sun is at -0.833° elevation (geometric -0° with +0.833° refraction)
    *
-   * @param {Date} date - Date for calculation (any timezone acceptable)
+   * Supports both Date and Temporal inputs. Temporal provides:
+   * - Immutability (prevents accidental modification)
+   * - Nanosecond precision (beyond current millisecond needs)
+   * - Explicit timezone handling
+   *
+   * @param {Date|Temporal.Instant|Temporal.ZonedDateTime} dateInput - Date for calculation
    * @param {number} latitude - Geographic latitude in degrees (N positive)
    * @param {number} longitude - Geographic longitude in degrees (E positive)
    * @param {boolean} isRise - true for sunrise, false for sunset
-   * @returns {Promise<Object>} {date: Date (UTC), correction: minutes, elevation: degrees}
+   * @returns {Promise<Object>} {date: Date, temporal: Instant, correction: minutes, elevation: degrees}
    */
-  async calculateSunriseSetWithRefraction(date, latitude, longitude, isRise) {
+  async calculateSunriseSetWithRefraction(dateInput, latitude, longitude, isRise) {
     if (!this.astronomy || !this.astronomy.SearchRiseSet) {
       throw new Error('Astronomy Engine not available - required for NOAA calculations');
     }
 
     try {
+      // Convert input to both Date (for Astronomy Engine) and Temporal (for results)
+      const date = dateInput instanceof Date ? dateInput : this.toDate(this.toTemporalInstant(dateInput));
+      const temporalInstant = this.toTemporalInstant(dateInput);
+
       const observer = new this.astronomy.Observer(latitude, longitude, 0);
 
       // Calculate geometric sunrise/sunset (0° elevation)
@@ -152,6 +216,7 @@ class NOAACalculator {
 
       // Get geometric time
       const geometricDate = new Date(event.date);
+      const geometricTemporal = this.toTemporalInstant(geometricDate);
 
       // Calculate solar elevation at this time for refraction lookup
       // For sunrise/sunset calculations, we use the standard NOAA refraction
@@ -164,11 +229,26 @@ class NOAACalculator {
       const correctionMinutes = isRise ? -timeShiftMinutes : timeShiftMinutes;
 
       // Apply correction to get apparent time
+      // Using Temporal for precise duration handling
+      const correctionDuration = this.hasTemporalAPI
+        ? Temporal.Duration.from({ minutes: correctionMinutes })
+        : null;
+
       const apparentDate = new Date(geometricDate.getTime() + correctionMinutes * 60 * 1000);
+      const apparentTemporal = this.hasTemporalAPI
+        ? geometricTemporal.add(correctionDuration)
+        : this.toTemporalInstant(apparentDate);
 
       return {
+        // Backward compatible: Date objects
         date: apparentDate,
         geometricDate: geometricDate,
+
+        // Temporal: immutable, precise, timezone-aware
+        temporal: apparentTemporal,
+        temporalGeometric: geometricTemporal,
+
+        // Metadata
         correctionMinutes: correctionMinutes,
         refractionDegrees: refraction,
         refractionArcmin: refraction * 60,
@@ -186,25 +266,29 @@ class NOAACalculator {
   /**
    * Calculate sunrise with NOAA refraction correction
    *
-   * @param {Date} date - Date for calculation
+   * Accepts Date or Temporal input. Returns both Date and Temporal results.
+   *
+   * @param {Date|Temporal.Instant|Temporal.ZonedDateTime} dateInput - Date for calculation
    * @param {number} latitude - Geographic latitude in degrees
    * @param {number} longitude - Geographic longitude in degrees
    * @returns {Promise<Object>} Sunrise data with refraction correction
    */
-  async getSunriseWithRefraction(date, latitude, longitude) {
-    return this.calculateSunriseSetWithRefraction(date, latitude, longitude, true);
+  async getSunriseWithRefraction(dateInput, latitude, longitude) {
+    return this.calculateSunriseSetWithRefraction(dateInput, latitude, longitude, true);
   }
 
   /**
    * Calculate sunset with NOAA refraction correction
    *
-   * @param {Date} date - Date for calculation
+   * Accepts Date or Temporal input. Returns both Date and Temporal results.
+   *
+   * @param {Date|Temporal.Instant|Temporal.ZonedDateTime} dateInput - Date for calculation
    * @param {number} latitude - Geographic latitude in degrees
    * @param {number} longitude - Geographic longitude in degrees
    * @returns {Promise<Object>} Sunset data with refraction correction
    */
-  async getSunsetWithRefraction(date, latitude, longitude) {
-    return this.calculateSunriseSetWithRefraction(date, latitude, longitude, false);
+  async getSunsetWithRefraction(dateInput, latitude, longitude) {
+    return this.calculateSunriseSetWithRefraction(dateInput, latitude, longitude, false);
   }
 
   /**
