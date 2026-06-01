@@ -1,7 +1,7 @@
 ---
 id: 0023
 title: Add environment variable support to all scripts (no hardcoded paths)
-status: open
+status: done
 impact: Infrastructure
 priority: 020
 complexity: "20-30 minutes"
