@@ -79,4 +79,7 @@ playwright-report/
 # Claude worktrees (local development, not shared)
 .claude/worktrees/
 
+# Claude Code memory and project state (local, not shared)
+.claude/projects/
+
 _site/
