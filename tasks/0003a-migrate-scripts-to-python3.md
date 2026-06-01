@@ -1,7 +1,7 @@
 ---
 id: 0003a
 title: Migrate Workflow Scripts to Python3 with venv Isolation
-status: open
+status: done
 impact: Medium
 priority: 030
 complexity: "2-3 hours"

@@ -1,7 +1,7 @@
 ---
 id: 0022
 title: Convert shell scripts to Python and enforce Python-only rule
-status: open
+status: done
 impact: Infrastructure
 priority: 025
 complexity: "30-45 minutes"

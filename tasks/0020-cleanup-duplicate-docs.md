@@ -1,7 +1,7 @@
 ---
 id: 0020
 title: Clean up duplicate documentation in .claude/ and root
-status: open
+status: done
 impact: Maintenance
 priority: 020
 complexity: "30-45 minutes"

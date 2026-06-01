@@ -1,7 +1,7 @@
 ---
 id: 0026
 title: Clean up old workflow artifacts (consolidate to task-based system)
-status: open
+status: done
 impact: Cleanup
 priority: 040
 complexity: "10 minutes"

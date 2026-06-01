@@ -1,7 +1,7 @@
 ---
 id: 0003
 title: Persist Git Hooks + Enforce Task Workflow Across All Branches
-status: open
+status: done
 impact: High
 priority: 010
 complexity: "2-3 hours"

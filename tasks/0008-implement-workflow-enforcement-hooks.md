@@ -1,7 +1,7 @@
 ---
 id: 0008
 title: Implement Workflow Enforcement Hooks (UserPromptSubmit + Git)
-status: open
+status: done
 impact: Critical
 priority: P1
 complexity: "2-3 hours"

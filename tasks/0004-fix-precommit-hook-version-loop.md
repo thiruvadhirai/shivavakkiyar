@@ -1,7 +1,7 @@
 ---
 id: 0004
 title: Fix Pre-Commit Hook Version Loop Bug
-status: open
+status: done
 impact: Low
 priority: P5
 complexity: "1-2 hours"

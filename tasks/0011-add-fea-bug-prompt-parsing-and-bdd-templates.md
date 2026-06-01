@@ -1,7 +1,7 @@
 ---
 id: 0011
 title: Add FEA:/BUG: Prompt Parsing and BDD Task Templates
-status: open
+status: done
 impact: High
 priority: 020
 complexity: "3-4 hours"

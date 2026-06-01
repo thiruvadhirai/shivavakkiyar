@@ -1,7 +1,7 @@
 ---
 id: 0009
 title: Enforce Tests Before Merge & Add Requirement Branch Pattern
-status: open
+status: done
 impact: Critical
 priority: P1
 complexity: "3-4 hours"
