@@ -10,13 +10,13 @@
 const testData = require('./integration-test-data.json');
 
 /**
- * Compare time values with tolerance
+ * Compare time values with tolerance (NOAA standard)
  * @param {string} actual - Actual time in HH:MM format
  * @param {string} expected - Expected time in HH:MM format
- * @param {number} toleranceMinutes - Allowed difference in minutes (default: 2)
+ * @param {number} toleranceMinutes - Allowed difference in minutes (default: 1 per NOAA)
  * @returns {boolean}
  */
-function timeMatch(actual, expected, toleranceMinutes = 2) {
+function timeMatch(actual, expected, toleranceMinutes = 1) {
   if (!actual || !expected) return false;
 
   const [aH, aM] = actual.split(':').map(Number);
@@ -88,8 +88,8 @@ describe('Sunrise/Sunset Calculations', () => {
         sunset: expected.sunset
       };
 
-      expect(timeMatch(actual.sunrise, expected.sunrise, 2)).toBe(true);
-      expect(timeMatch(actual.sunset, expected.sunset, 2)).toBe(true);
+      expect(timeMatch(actual.sunrise, expected.sunrise, 1)).toBe(true);
+      expect(timeMatch(actual.sunset, expected.sunset, 1)).toBe(true);
     });
   });
 });
