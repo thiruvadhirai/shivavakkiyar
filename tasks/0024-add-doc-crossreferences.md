@@ -1,7 +1,7 @@
 ---
 id: 0024
 title: Add cross-references between DEVELOPMENT.md and architecture.md
-status: open
+status: done
 impact: Documentation
 priority: 030
 complexity: "15-20 minutes"
