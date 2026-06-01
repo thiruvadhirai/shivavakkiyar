@@ -76,4 +76,7 @@ playwright-report/
 .claude/session.json
 .claude/session-data.json
 
+# Claude worktrees (local development, not shared)
+.claude/worktrees/
+
 _site/
