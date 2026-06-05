@@ -1,7 +1,7 @@
 ---
 id: 0028c
 title: "RESEARCH: 365-day Kundali comparison — Astronomy Engine vs Drik Panchang"
-status: pending
+status: done
 impact: High
 priority: 026
 complexity: "3-4 hours"
