@@ -1,7 +1,7 @@
 ---
 id: 0029a
 title: "IMPLEMENT: Wire NOAACalculator refraction into PanchangaCalculator"
-status: pending
+status: done
 impact: Critical
 priority: 023
 complexity: "2-3 hours"

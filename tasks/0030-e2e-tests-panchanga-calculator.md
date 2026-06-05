@@ -1,7 +1,7 @@
 ---
 id: 0030
 title: "E2E TESTS: Panchanga Calculator validation against Drik Panchang"
-status: in_progress
+status: done
 impact: High
 priority: 030
 complexity: "2-3 hours"

@@ -1,7 +1,7 @@
 ---
 id: 0027a
 title: "FEA: Implement NOAA-standard sunrise/sunset calculations with atmospheric refraction"
-status: in_progress
+status: done
 impact: High
 priority: 015
 complexity: "3-4 hours"
