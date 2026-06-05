@@ -48,8 +48,9 @@ fi
 # Update VERSION file
 echo "$new_version" > "$VERSION_FILE"
 
-# Stage the updated VERSION file (adds it to current commit)
-git add "$VERSION_FILE" 2>/dev/null || true
+# NOTE: Do NOT stage VERSION with git add here - it causes recursive hook invocation
+# Git automatically includes tracked files in commits, so VERSION will be staged
+# See: Task 0032 (VERSION auto-increment loop bug)
 
 # ============================================================
 # PART 2: Task ID Validation
