@@ -1,7 +1,7 @@
 ---
 id: 0028
 title: "FEA: Integrate @noaa/solar-calc library for official NOAA sunrise/sunset"
-status: open
+status: cancelled
 impact: High
 priority: 020
 complexity: "2-3 hours"

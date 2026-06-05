@@ -1,7 +1,7 @@
 ---
 id: 0028a
 title: "TEST: Validate NOAACalculator accuracy against NOAA official sources"
-status: open
+status: done
 impact: Critical
 priority: 021
 complexity: "2-3 hours"
