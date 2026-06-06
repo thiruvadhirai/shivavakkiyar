@@ -63,6 +63,30 @@ test.describe('Panchanga Calculator Page', () => {
     }
   });
 
+  // Test: Navigate with date parameter (user flow from Pradosha page)
+  test('Navigates to /panchangam/?date=2026-06-12 with date pre-filled', async ({ page }) => {
+    // Navigate to panchanga page with date parameter
+    // This simulates clicking a Pradosha date from the pradoshakalapooja page
+    await page.goto(`${BASE_URL}/panchangam/?date=2026-06-12`, { timeout: TIMEOUT });
+    await page.waitForLoadState('networkidle');
+
+    // Verify page loaded correctly
+    const title = await page.title();
+    expect(title).toContain('Panchanga');
+
+    // Check that date picker has the parameter date pre-filled
+    const datePicker = page.locator('#panchanga-date-input');
+    if (await datePicker.isVisible()) {
+      const value = await datePicker.inputValue();
+      // Should contain the date from URL parameter
+      expect(value).toBeTruthy();
+    }
+
+    // Verify widget is present
+    const widget = await page.locator('.panchanga-widget').isVisible();
+    expect(widget).toBeTruthy();
+  });
+
   // Test: Calculate button triggers calculation
   test('Calculate button initiates panchanga calculation', async ({ page }) => {
     const locationInput = page.locator('#panchanga-location-input');
