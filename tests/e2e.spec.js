@@ -39,6 +39,13 @@ test.describe('Panchanga Calculator Page', () => {
 
   // Test: Location input works
   test('Location input accepts text input', async ({ page }) => {
+    // Click expand button to show location input section
+    const expandBtn = page.locator('#panchanga-expand-details-btn');
+    await expandBtn.click();
+
+    // Wait for input section to be visible
+    await page.locator('#panchanga-input-section').waitFor({ state: 'visible' });
+
     const locationInput = page.locator('#panchanga-location-input');
 
     // Type location
@@ -89,6 +96,13 @@ test.describe('Panchanga Calculator Page', () => {
 
   // Test: Calculate button triggers calculation
   test('Calculate button initiates panchanga calculation', async ({ page }) => {
+    // Click expand button to show location input section
+    const expandBtn = page.locator('#panchanga-expand-details-btn');
+    await expandBtn.click();
+
+    // Wait for input section to be visible
+    await page.locator('#panchanga-input-section').waitFor({ state: 'visible' });
+
     const locationInput = page.locator('#panchanga-location-input');
     const calcBtn = page.locator('button:has-text("Calculate")');
 
@@ -118,6 +132,13 @@ test.describe('Panchanga Calculator Page', () => {
 
   // Test: Panchanga results display when calculation succeeds
   test('Panchanga results display with all components', async ({ page }) => {
+    // Click expand button to show location input section
+    const expandBtn = page.locator('#panchanga-expand-details-btn');
+    await expandBtn.click();
+
+    // Wait for input section to be visible
+    await page.locator('#panchanga-input-section').waitFor({ state: 'visible' });
+
     const locationInput = page.locator('#panchanga-location-input');
     const calcBtn = page.locator('button:has-text("Calculate")');
 
@@ -151,6 +172,13 @@ test.describe('Panchanga Calculator Page', () => {
 
   // Test: Error handling when location not found
   test('Shows error message when location cannot be geocoded', async ({ page }) => {
+    // Click expand button to show location input section
+    const expandBtn = page.locator('#panchanga-expand-details-btn');
+    await expandBtn.click();
+
+    // Wait for input section to be visible
+    await page.locator('#panchanga-input-section').waitFor({ state: 'visible' });
+
     const locationInput = page.locator('#panchanga-location-input');
     const calcBtn = page.locator('button:has-text("Calculate")');
 
@@ -439,6 +467,13 @@ test.describe('Accessibility', () => {
 
     await page.goto(`${BASE_URL}/panchangam/`, { timeout: TIMEOUT });
     await page.waitForLoadState('networkidle');
+
+    // Click expand button to show location input section
+    const expandBtn = page.locator('#panchanga-expand-details-btn');
+    await expandBtn.click();
+
+    // Wait for input section to be visible
+    await page.locator('#panchanga-input-section').waitFor({ state: 'visible' });
 
     // Fill in the known problematic case
     const locationInput = page.locator('#panchanga-location-input');
