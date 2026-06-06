@@ -1,7 +1,7 @@
 ---
 id: 0012
 title: Add Critical LSP Support (Python, JavaScript, TypeScript, Ruby)
-status: open
+status: done
 impact: High
 priority: 030
 complexity: "2-3 hours"

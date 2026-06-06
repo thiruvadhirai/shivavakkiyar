@@ -1,7 +1,7 @@
 ---
 id: 0013
 title: Add Optional LSP Support (Rust, C/C++, Zig, Go)
-status: open
+status: done
 impact: Low
 priority: 090
 complexity: "1-2 hours per language"
