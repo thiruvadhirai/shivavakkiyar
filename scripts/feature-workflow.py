@@ -138,15 +138,15 @@ class WorkflowManager:
         print("  5. Run: ./scripts/feature-workflow.py finish")
 
     def cmd_test(self):
-        """Run all tests (unit + integration + E2E) in container."""
+        """Run all tests (unit + integration + E2E) using proper test container scripts."""
         self.log("Running all tests in saivamcloud-test container...", BLUE)
-        self.log("(This includes unit, integration, and E2E tests)", YELLOW)
+        self.log("(This includes unit, integration, and E2E browser tests)", YELLOW)
         print()
 
-        # Check test file exists
-        if not (self.project_root / "tests/panchanga-calculator.test.js").exists():
+        # Check test script exists
+        if not (self.project_root / "tests/run-all.sh").exists():
             self.log(
-                "Error: Test file not found: tests/panchanga-calculator.test.js",
+                "Error: Test script not found: tests/run-all.sh",
                 RED
             )
             sys.exit(1)
@@ -167,12 +167,9 @@ class WorkflowManager:
                 self.log("Starting test container...", YELLOW)
                 self.run_command("podman-compose --profile test up -d saivamcloud-test")
 
-            # Run full test suite (unit + integration + E2E)
-            self.log("Running unit and integration tests...", BLUE)
-            self.run_command("podman exec saivamcloud-test npm test")
-            print()
-            self.log("Running E2E tests...", BLUE)
-            self.run_command("podman exec saivamcloud-test npm run test:e2e")
+            # Run full test suite using proper shell script
+            self.log("Running full test suite: ./tests/run-all.sh", BLUE)
+            self.run_command("podman exec saivamcloud-test /app/tests/run-all.sh")
             print()
             self.log("✅ All tests passed! (unit + integration + E2E)", GREEN)
 
@@ -223,23 +220,12 @@ class WorkflowManager:
     def run_tests_silent(self):
         """Run all tests silently (unit + integration + E2E), return True if pass, False if fail."""
         try:
-            # Run unit and integration tests
+            # Run full test suite using proper shell script
             result = subprocess.run(
-                "podman exec saivamcloud-test npm test",
+                "podman exec saivamcloud-test /app/tests/run-all.sh",
                 shell=True,
                 capture_output=True,
-                timeout=300,
-                text=True
-            )
-            if result.returncode != 0:
-                return False
-
-            # Run E2E tests
-            result = subprocess.run(
-                "podman exec saivamcloud-test npm run test:e2e",
-                shell=True,
-                capture_output=True,
-                timeout=300,
+                timeout=600,
                 text=True
             )
             return result.returncode == 0
