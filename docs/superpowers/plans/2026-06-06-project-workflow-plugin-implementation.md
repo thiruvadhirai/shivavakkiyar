@@ -2,11 +2,58 @@
 
 > **For agentic workers:** Use superpowers:subagent-driven-development to execute this plan task-by-task. Each task has fresh subagent + two-stage review (spec compliance, then code quality).
 
-**Goal:** Convert scattered workflow rules/hooks/scripts into unified enforcement-driven plugin with CLI shortcuts, permission gates, and planning workflow.
+**Goal:** Build a marketplace-publishable, reusable development workflow plugin that can be installed in any project. Provides CLI shortcuts (pw/pwX), permission gates, enforcement hooks, and planning capabilities.
 
-**Architecture:** Five-phase rollout with each phase self-testing. Phase 1 establishes plugin foundation, Phases 2-5 add features incrementally.
+**Architecture:** Separate, independent repository (`project-workflow-plugin`) designed for distribution via marketplace or git submodule. Five-phase implementation with self-testing. Reference implementation in `shivavakkiyar` repo (this project).
 
-**Tech Stack:** Python 3.7+, Podman/podman-compose, Bash, JSON/YAML, pytest (100% coverage in containers)
+**Deployment Model:**
+- **Primary Repo**: `anthropics/project-workflow-plugin` (NEW - standalone, marketplace-ready)
+- **Reference Impl**: `shivavakkiyar` (THIS REPO - installs via git submodule or marketplace)
+- **Distribution**: PyPI, GitHub releases, Claude Code marketplace
+
+**Tech Stack:** 
+- Python 3.7+ (core, portable)
+- Podman/podman-compose (project-agnostic, configurable)
+- Bash (CLI shortcuts)
+- JSON/YAML (configuration, marketplace metadata)
+- pytest (100% coverage)
+
+**Portability Requirements:**
+- Project-agnostic (works with any repo structure via config)
+- `PROJECT_ROOT` environment variable support
+- Configurable container names, test directories, branch patterns
+- Installation docs for other projects
+- No hard-coded paths to shivavakkiyar project
+
+---
+
+## Marketplace & Distribution
+
+### Publishing Requirements (Phase 5+)
+- [ ] PyPI package metadata (setup.py / pyproject.toml)
+- [ ] GitHub releases with version tags
+- [ ] Claude Code marketplace listing (README.md, marketplace metadata)
+- [ ] Installation instructions (pip, git clone, marketplace)
+- [ ] Usage documentation for any project type
+- [ ] License (choose: MIT, Apache 2.0, etc.)
+- [ ] CONTRIBUTING.md for other developers
+- [ ] Automated tests run on every commit (GitHub Actions)
+- [ ] Release automation (auto-publish to PyPI/marketplace on tag)
+
+### Installation Methods (for other projects)
+```bash
+# Method 1: PyPI (when published)
+pip install project-workflow-plugin
+
+# Method 2: Git clone (standalone)
+git clone https://github.com/anthropics/project-workflow-plugin.git ~/.claude/plugins/
+
+# Method 3: Git submodule (in consuming project)
+git submodule add https://github.com/anthropics/project-workflow-plugin.git .claude/plugins/project-workflow-plugin
+
+# Method 4: Claude Code marketplace (when approved)
+# User installs directly from marketplace UI
+```
 
 ---
 
