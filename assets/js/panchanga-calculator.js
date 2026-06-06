@@ -539,8 +539,6 @@ class PanchangaCalculator {
    * @returns {Object} {planet: string, number: 1-24}
    */
   calculateHora(dateTime, sunrise) {
-    const planets = ['Sun', 'Venus', 'Mercury', 'Moon', 'Saturn', 'Jupiter', 'Mars'];
-
     // Calculate hours since sunrise
     // Use sunrise time as the base (start of day) if dateTime is midnight
     // Otherwise calculate from dateTime to determine current hora
@@ -558,8 +556,12 @@ class PanchangaCalculator {
     const horaNumber = Math.floor(hoursSinceSunrise % 24) + 1;
     const planetIndex = (horaNumber - 1) % 7;
 
+    // Use PanchangaLanguages for correct planet names and Tamil translations
+    const horaData = PanchangaLanguages.HORA[planetIndex] || { name: `Planet ${planetIndex}`, tamil: '' };
+
     return {
-      planet: planets[planetIndex],
+      planet: horaData.name,
+      tamil: horaData.tamil,
       number: horaNumber
     };
   }
