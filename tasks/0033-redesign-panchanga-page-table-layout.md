@@ -1,7 +1,7 @@
 ---
 id: 0033
 title: "FEA: Redesign Panchanga page with table layout instead of large boxes"
-status: open
+status: done
 impact: High
 priority: 010
 complexity: "3-4 hours"
