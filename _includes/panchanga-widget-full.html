@@ -20,9 +20,57 @@
     </div>
 
     <!-- Expand Button -->
-    <button class="panchanga-btn" id="panchanga-expand-details-btn" style="width: 100%; margin-top: 15px;">
-      📍 Change Location or Show Full Details
+    <button class="panchanga-btn" id="panchanga-expand-details-btn" data-testid="panchanga-change-location-btn" style="width: 100%; margin-top: 15px;">
+      🔄 Change Location/Date
     </button>
+  </div>
+
+  <!-- Modal Overlay -->
+  <div id="panchanga-modal-overlay" data-testid="panchanga-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); z-index: 1000; justify-content: center; align-items: center;">
+    <div class="panchanga-modal-content">
+      <div class="panchanga-modal-header">
+        <h3>📍 Change Location / Date</h3>
+        <button id="panchanga-modal-close-btn" data-testid="panchanga-modal-close-btn" class="panchanga-modal-close-btn" type="button" style="background: none; border: none; font-size: 20px; cursor: pointer; color: #666;">&times;</button>
+      </div>
+
+      <div class="panchanga-modal-body">
+        <div class="panchanga-location-group">
+          <label class="panchanga-location-label">📍 Location</label>
+          <div class="panchanga-location-input-wrapper" style="position: relative;">
+            <input
+              type="text"
+              id="panchanga-modal-location-input"
+              data-testid="panchanga-modal-location-input"
+              class="panchanga-location-input"
+              placeholder="Enter city, state, country, or ZIP code"
+              style="flex: 1;"
+            >
+            <button class="panchanga-btn" id="panchanga-modal-auto-detect-btn">Auto-Detect</button>
+            <div id="panchanga-modal-location-suggestions" class="panchanga-location-suggestions"></div>
+          </div>
+          <div class="panchanga-modal-location-display" id="panchanga-modal-location-display" style="font-size: 12px; color: #666; margin-top: 8px;"></div>
+        </div>
+
+        <div class="panchanga-date-group">
+          <label class="panchanga-date-label">📅 Date</label>
+          <input
+            type="date"
+            id="panchanga-modal-date-input"
+            data-testid="panchanga-modal-date-input"
+            class="panchanga-date-input"
+          >
+        </div>
+      </div>
+
+      <div class="panchanga-modal-footer">
+        <button id="panchanga-modal-calculate-btn" data-testid="panchanga-modal-calculate-btn" class="panchanga-btn" style="width: 100%; margin-bottom: 10px;">
+          Calculate Panchanga
+        </button>
+        <button id="panchanga-modal-close-bottom-btn" class="panchanga-btn" style="width: 100%; background-color: #6f42c1;">
+          Close
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- Expandable Input Section -->
@@ -275,6 +323,33 @@
       document.getElementById('panchanga-current-location').textContent = `📍 ${savedLocation.name} (${savedLocation.latitude.toFixed(4)}, ${savedLocation.longitude.toFixed(4)})`;
     }
 
+    // Modal elements
+    const modalOverlay = document.getElementById('panchanga-modal-overlay');
+    const modalCloseBtn = document.getElementById('panchanga-modal-close-btn');
+    const modalCloseBottomBtn = document.getElementById('panchanga-modal-close-bottom-btn');
+
+    // Modal open/close handlers
+    const openModal = () => {
+      modalOverlay.classList.add('active');
+      document.body.style.overflow = 'hidden'; // Prevent scrolling
+    };
+
+    const closeModal = () => {
+      modalOverlay.classList.remove('active');
+      document.body.style.overflow = 'auto'; // Re-enable scrolling
+    };
+
+    // Close modal when clicking outside the content area
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) {
+        closeModal();
+      }
+    });
+
+    // Close modal buttons
+    modalCloseBtn.onclick = closeModal;
+    modalCloseBottomBtn.onclick = closeModal;
+
     // Collapsed/Expanded view toggle
     const collapsedView = document.getElementById('panchanga-collapsed-view');
     const inputSection = document.getElementById('panchanga-input-section');
@@ -282,9 +357,7 @@
     const collapseBtn = document.getElementById('panchanga-collapse-details-btn');
 
     expandBtn.onclick = () => {
-      collapsedView.style.display = 'none';
-      inputSection.style.display = 'block';
-      locationInput.focus();
+      openModal();
     };
 
     collapseBtn.onclick = () => {
