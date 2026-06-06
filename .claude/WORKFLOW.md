@@ -10,7 +10,49 @@
 
 ## 🚀 Quick Start
 
-### Every Development Session Must Follow This Pattern:
+### The Complete Development Cycle (3 Phases)
+
+**Phase 1: Requirements (Design + Planning)**
+```bash
+# Create requirement branch
+FEA: Your feature description
+
+# This blocks and suggests:
+#   ./scripts/feature-workflow.py requirement fea-NNNN-description
+
+# In the requirement branch, use unified workflow:
+/requirement-workflow
+
+# This guides: brainstorming → design doc → implementation plan → merge to main
+```
+
+**Phase 2: Feature Implementation**
+```bash
+# Create feature branch
+./scripts/feature-workflow.sh start NNNN-short-title
+
+# Make changes, test, commit
+./scripts/feature-workflow.sh commit "Fix: description
+
+- detail
+- detail
+
+Fixes #NNNN"
+
+# Finish feature
+./scripts/feature-workflow.sh finish
+```
+
+**Phase 3: Push to GitHub**
+```bash
+./scripts/push-to-github.sh
+```
+
+---
+
+## Detailed Phase 2: Feature-Workflow Commands
+
+Once requirements are merged to main, use feature-workflow for implementation:
 
 ```bash
 # 1. START a feature branch
@@ -97,6 +139,54 @@ git commit -m "message"
 ./scripts/feature-workflow.sh test
 ./scripts/feature-workflow.sh commit "specific change 2"
 ```
+
+---
+
+## 🎯 The Three-Phase Workflow
+
+This project uses a **unified requirement + feature workflow** that integrates project conventions with superpowers plugin capabilities:
+
+### Phase 1: Requirements (Design + Planning in requirement/* branch)
+
+**When**: You have a new feature or significant change to plan
+
+**How**:
+1. Type a FEA:/BUG: prompt to create a requirement branch
+2. Enforcement hook blocks and suggests: `./scripts/feature-workflow.py requirement fea-NNNN-*`
+3. Run the suggested command to create requirement branch + task file
+4. **In the requirement branch, use the unified workflow skill**:
+   ```bash
+   /requirement-workflow
+   ```
+5. This skill guides you through:
+   - **Brainstorming**: Explore design options (superpowers:brainstorming)
+   - **Design Doc**: Create formal specification in `docs/superpowers/specs/`
+   - **Implementation Plan**: Break down into tasks (superpowers:writing-plans)
+   - **Merge to Main**: Requirement branch merges to main with design + plan
+
+**Output**: Task file + design spec + implementation plan in main branch
+
+### Phase 2: Feature Implementation (feature/* branch)
+
+**When**: Requirement is merged to main
+
+**How**: Use feature-workflow as described below (see Detailed Steps)
+
+**Input**: Design spec and implementation plan from Phase 1
+
+**Output**: Working feature, all tests passing, merged to main
+
+### Phase 3: GitHub Push
+
+**When**: Feature merged to main
+
+**How**: `./scripts/push-to-github.sh`
+
+**Key Insight**: By separating **requirements (design+plan)** from **features (implementation)**, you can:
+- Review design separately from code review
+- Reference design + plan during implementation
+- Maintain clear history in git
+- Collaborate efficiently (design review → code review → merge)
 
 ---
 

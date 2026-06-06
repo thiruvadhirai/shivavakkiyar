@@ -126,6 +126,35 @@ def main():
         # Questions don't require task context
         return 0
 
+    # --- REQUIREMENT BRANCH: Suggest using /requirement-workflow skill ---
+    current_branch = get_current_branch()
+    on_requirement = current_branch.startswith('requirement/')
+
+    if on_requirement:
+        # Check if they're asking about brainstorming or planning
+        if any(kw in prompt.lower() for kw in ['design', 'plan', 'approach', 'strategy', 'how should', 'what', 'brainstorm']):
+            # They're doing requirement work - suggest the unified skill
+            context = (
+                f"You're on requirement branch '{current_branch}'.\n\n"
+                f"Use the unified requirement-workflow skill:\n"
+                f"  /requirement-workflow\n\n"
+                f"This will guide you through:\n"
+                f"  1. Brainstorming (design exploration)\n"
+                f"  2. Design documentation\n"
+                f"  3. Implementation planning\n"
+                f"  4. Merging to main\n\n"
+                f"Then use feature-workflow for implementation."
+            )
+            error_response = {
+                "hookSpecificOutput": {
+                    "permissionDecision": "deny",
+                    "permissionDecisionReason": "On requirement branch - use /requirement-workflow skill",
+                    "permissionDecisionContext": context
+                }
+            }
+            print(json.dumps(error_response))
+            return 1
+
     # --- FEA:/BUG: structured entry point ---
     prompt_type, parent_id, items = parse_fea_bug_prompt(prompt)
     if prompt_type and items:
@@ -172,6 +201,9 @@ def main():
             f"  --depends-on <task-id>   this task is blocked by another\n"
             f"  --blocks <task-id>       this task unblocks another\n\n"
             f"Commands to run:\n" + "\n".join(commands) +
+            f"\n\n📋 After creating the requirement branch, use the unified workflow:\n"
+            f"  /requirement-workflow\n"
+            f"\n  This guides you through design, planning, and merge to main." +
             worktree_note
         )
 
