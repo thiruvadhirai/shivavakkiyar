@@ -1,7 +1,7 @@
 ---
 id: 0031
 title: "Fix task files to match reality — consolidate completed work"
-status: open
+status: done
 impact: High
 priority: 031
 complexity: "1-2 hours"
