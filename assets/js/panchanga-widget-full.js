@@ -84,6 +84,7 @@ class PanchangaWidgetFull {
     const modalDateInput = document.getElementById('panchanga-modal-date-input');
     const modalAutoDetectBtn = document.getElementById('panchanga-modal-auto-detect-btn');
     const modalCalculateBtn = document.getElementById('panchanga-modal-calculate-btn');
+    const modalCloseBtn = document.getElementById('panchanga-modal-close-btn');
     const modalCloseBottomBtn = document.getElementById('panchanga-modal-close-bottom-btn');
 
     expandBtn.onclick = () => {
@@ -137,8 +138,17 @@ class PanchangaWidgetFull {
       await this.handleModalCalculate(modalLocationInput, modalDateInput);
     };
 
-    // Modal close button
+    // Modal close buttons (X and Close button)
+    modalCloseBtn.onclick = () => this.closeModal();
     modalCloseBottomBtn.onclick = () => this.closeModal();
+
+    // Close modal when clicking outside (on overlay)
+    const modalOverlay = document.getElementById('panchanga-modal-overlay');
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) {
+        this.closeModal();
+      }
+    });
   }
 
   async handleModalCalculate(locationInput, dateInput) {
