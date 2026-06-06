@@ -151,8 +151,9 @@ class WorkflowManager:
             )
             sys.exit(1)
 
-        # Start containers if needed
+        # Run tests using podman-compose run (proper container lifecycle)
         try:
+            # Ensure dev container is running (test container depends on it)
             dev_running = "saivamcloud-dev" in self.run_command(
                 "podman ps --format '{{.Names}}'", capture=True
             )
@@ -160,16 +161,9 @@ class WorkflowManager:
                 self.log("Starting dev container...", YELLOW)
                 self.run_command("podman-compose up -d saivamcloud-dev")
 
-            test_running = "saivamcloud-test" in self.run_command(
-                "podman ps --format '{{.Names}}'", capture=True
-            )
-            if not test_running:
-                self.log("Starting test container...", YELLOW)
-                self.run_command("podman-compose --profile test up -d saivamcloud-test")
-
-            # Run full test suite using proper shell script
+            # Run full test suite using podman-compose run (not up -d + exec)
             self.log("Running full test suite: ./tests/run-all.sh", BLUE)
-            self.run_command("podman exec saivamcloud-test /app/tests/run-all.sh")
+            self.run_command("podman-compose --profile test run --rm saivamcloud-test /app/tests/run-all.sh")
             print()
             self.log("✅ All tests passed! (unit + integration + E2E)", GREEN)
 
@@ -220,9 +214,18 @@ class WorkflowManager:
     def run_tests_silent(self):
         """Run all tests silently (unit + integration + E2E), return True if pass, False if fail."""
         try:
-            # Run full test suite using proper shell script
+            # Ensure dev container is running (test container depends on it)
+            dev_check = subprocess.run(
+                "podman ps --format '{{.Names}}' | grep -q saivamcloud-dev",
+                shell=True,
+                capture_output=True
+            )
+            if dev_check.returncode != 0:
+                subprocess.run("podman-compose up -d saivamcloud-dev", shell=True, capture_output=True)
+
+            # Run full test suite using podman-compose run (proper container lifecycle)
             result = subprocess.run(
-                "podman exec saivamcloud-test /app/tests/run-all.sh",
+                "podman-compose --profile test run --rm saivamcloud-test /app/tests/run-all.sh",
                 shell=True,
                 capture_output=True,
                 timeout=600,
@@ -275,7 +278,7 @@ class WorkflowManager:
                 print(f"  {line}")
 
         print()
-        response = input("Continue? (y/n) ").strip().lower()
+        response = input(f"{YELLOW}Continue? (y/n) {NC}").strip().lower()
         if response != 'y':
             print("Aborted.")
             return
@@ -605,7 +608,7 @@ TBD
                 print(f"  {line}")
 
         print()
-        response = input("Continue? (y/n) ").strip().lower()
+        response = input(f"{YELLOW}Continue? (y/n) {NC}").strip().lower()
         if response != 'y':
             print("Aborted.")
             return

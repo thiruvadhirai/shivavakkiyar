@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Run all test suites (unit, integration, E2E)
 
 set -e
