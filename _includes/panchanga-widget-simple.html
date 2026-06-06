@@ -201,16 +201,19 @@
       const expandBtn = document.getElementById('panchanga-expand-location-btn');
       const collapseBtn = document.getElementById('panchanga-collapse-location-btn');
 
-      expandBtn.onclick = () => {
-        collapsedView.style.display = 'none';
-        locationInputState.style.display = 'block';
-        locationInput.focus();
-      };
+      if (expandBtn) {
+        expandBtn.onclick = () => {
+          collapsedView.style.display = 'none';
+          locationInputState.style.display = 'block';
+          locationInput.focus();
+        };
+      }
 
-      collapseBtn.onclick = () => {
-        collapsedView.style.display = 'block';
-        locationInputState.style.display = 'none';
-        // Keep results visible (which includes location display with Change link)
+      if (collapseBtn) {
+        collapseBtn.onclick = () => {
+          collapsedView.style.display = 'block';
+          locationInputState.style.display = 'none';
+          // Keep results visible (which includes location display with Change link)
         resultsEl.style.display = 'block';
       };
 
@@ -457,7 +460,9 @@
           loadingEl.style.display = 'none';
           resultsEl.style.display = 'block';
           collapsedView.style.display = 'block';
-          expandBtn.style.display = 'none';  // Hide the location picker button when showing results
+          if (expandBtn) {
+            expandBtn.style.display = 'none';  // Hide the location picker button when showing results
+          }
 
           // Reload cached locations
           loadCachedLocations();
@@ -488,7 +493,9 @@
 
       // If no cached location, show the "Select Location" button
       if (!selectedLocation) {
-        expandBtn.style.display = 'block';
+        if (expandBtn) {
+          expandBtn.style.display = 'block';
+        }
         locationInputState.style.display = 'none';
         collapsedView.style.display = 'block';
       }
