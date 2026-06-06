@@ -1,4 +1,4 @@
-# Panchanga Calculator - Testing Guide
+# Panchangam Calculator - Testing Guide
 
 ## Overview
 
@@ -243,7 +243,7 @@ Located in: `tests/test-results/`
 
 ### "Astronomy Engine not loaded" (E2E)
 - Verify Jekyll server running: `podman-compose ps`
-- Check browser can access: `curl http://localhost:5080/panchanga/`
+- Check browser can access: `curl http://localhost:5080/panchangam/`
 - Clear browser cache: Test runs with fresh profiles
 
 ### Integration tests failing

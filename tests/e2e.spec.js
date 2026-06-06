@@ -17,7 +17,7 @@ const TIMEOUT = 10000;
 test.describe('Panchanga Calculator Page', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to panchanga page
-    await page.goto(`${BASE_URL}/panchanga/`, { timeout: TIMEOUT });
+    await page.goto(`${BASE_URL}/panchangam/`, { timeout: TIMEOUT });
 
     // Wait for page to load
     await page.waitForLoadState('networkidle');
@@ -236,7 +236,7 @@ test.describe('Responsive Design', () => {
     // Set mobile viewport
     await page.setViewportSize({ width: 375, height: 667 });
 
-    await page.goto(`${BASE_URL}/panchanga/`, { timeout: TIMEOUT });
+    await page.goto(`${BASE_URL}/panchangam/`, { timeout: TIMEOUT });
     await page.waitForLoadState('networkidle');
 
     // Check that main elements are visible
@@ -253,7 +253,7 @@ test.describe('Responsive Design', () => {
     // Set tablet viewport
     await page.setViewportSize({ width: 768, height: 1024 });
 
-    await page.goto(`${BASE_URL}/panchanga/`, { timeout: TIMEOUT });
+    await page.goto(`${BASE_URL}/panchangam/`, { timeout: TIMEOUT });
     await page.waitForLoadState('networkidle');
 
     const widget = await page.locator('.panchanga-widget').isVisible().catch(() => false);
@@ -264,7 +264,7 @@ test.describe('Responsive Design', () => {
     // Set desktop viewport
     await page.setViewportSize({ width: 1920, height: 1080 });
 
-    await page.goto(`${BASE_URL}/panchanga/`, { timeout: TIMEOUT });
+    await page.goto(`${BASE_URL}/panchangam/`, { timeout: TIMEOUT });
     await page.waitForLoadState('networkidle');
 
     const widget = await page.locator('.panchanga-widget').isVisible().catch(() => false);
@@ -278,7 +278,7 @@ test.describe('Responsive Design', () => {
 
 test.describe('Astronomy Engine & Calculations', () => {
   test('Astronomy Engine loads in browser', async ({ page }) => {
-    await page.goto(`${BASE_URL}/panchanga/`, { timeout: TIMEOUT });
+    await page.goto(`${BASE_URL}/panchangam/`, { timeout: TIMEOUT });
     await page.waitForLoadState('networkidle');
 
     // Check if Astronomy Engine is available in browser context
@@ -290,7 +290,7 @@ test.describe('Astronomy Engine & Calculations', () => {
   });
 
   test('PanchangaCalculator class initializes correctly', async ({ page }) => {
-    await page.goto(`${BASE_URL}/panchanga/`, { timeout: TIMEOUT });
+    await page.goto(`${BASE_URL}/panchangam/`, { timeout: TIMEOUT });
     await page.waitForLoadState('networkidle');
 
     // Check if calculator class is available
@@ -302,7 +302,7 @@ test.describe('Astronomy Engine & Calculations', () => {
   });
 
   test('LocationManager class initializes correctly', async ({ page }) => {
-    await page.goto(`${BASE_URL}/panchanga/`, { timeout: TIMEOUT });
+    await page.goto(`${BASE_URL}/panchangam/`, { timeout: TIMEOUT });
     await page.waitForLoadState('networkidle');
 
     // Check if location manager is available
@@ -314,7 +314,7 @@ test.describe('Astronomy Engine & Calculations', () => {
   });
 
   test('Calculations produce valid results with Astronomy Engine', async ({ page }) => {
-    await page.goto(`${BASE_URL}/panchanga/`, { timeout: TIMEOUT });
+    await page.goto(`${BASE_URL}/panchangam/`, { timeout: TIMEOUT });
     await page.waitForLoadState('networkidle');
 
     // Run a calculation in the browser
@@ -380,7 +380,7 @@ test.describe('Astronomy Engine & Calculations', () => {
 
 test.describe('Accessibility', () => {
   test('Form inputs are keyboard accessible', async ({ page }) => {
-    await page.goto(`${BASE_URL}/panchanga/`, { timeout: TIMEOUT });
+    await page.goto(`${BASE_URL}/panchangam/`, { timeout: TIMEOUT });
     await page.waitForLoadState('networkidle');
 
     const locationInput = page.locator('#panchanga-location-input');
@@ -394,7 +394,7 @@ test.describe('Accessibility', () => {
   });
 
   test('Buttons have accessible labels', async ({ page }) => {
-    await page.goto(`${BASE_URL}/panchanga/`, { timeout: TIMEOUT });
+    await page.goto(`${BASE_URL}/panchangam/`, { timeout: TIMEOUT });
     await page.waitForLoadState('networkidle');
 
     const calcBtn = page.locator('button:has-text("Calculate")').first();
@@ -413,7 +413,7 @@ test.describe('Accessibility', () => {
       console.log(`[Browser Console] ${msg.text()}`);
     });
 
-    await page.goto(`${BASE_URL}/panchanga/`, { timeout: TIMEOUT });
+    await page.goto(`${BASE_URL}/panchangam/`, { timeout: TIMEOUT });
     await page.waitForLoadState('networkidle');
 
     // Fill in the known problematic case

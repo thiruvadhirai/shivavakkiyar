@@ -101,11 +101,11 @@ podman-compose up -d saivamcloud-dev
 Check it's running:
 ```bash
 podman-compose ps
-curl http://localhost:5080/panchanga/
+curl http://localhost:5080/panchangam/
 ```
 
 Access locally:
-- **Panchanga Calculator**: http://localhost:5080/panchanga/
+- **Panchanga Calculator**: http://localhost:5080/panchangam/
 - **Pradosha Page**: http://localhost:5080/pradoshakalapooja/
 
 ### 4. Run Tests

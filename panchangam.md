@@ -1,20 +1,20 @@
 ---
 layout: default
-title: Panchanga Calculator - Hindu Calendar
-permalink: /panchanga/
+title: Panchangam Calculator - Hindu Calendar
+permalink: /panchangam/
 ---
 
-# Panchanga Calculator
+# Panchangam Calculator
 
-Calculate the Hindu calendar (panchanga) for any date and location using the Drik Ayanamsa system.
+Calculate the Hindu calendar (panchangam) for any date and location using the Drik Ayanamsa system.
 
 {% include panchanga-widget-full.html %}
 
 ---
 
-## About Panchanga
+## About Panchangam
 
-**Panchanga** (पञ्चाङ्ग) literally means "five limbs" in Sanskrit. The **Panchanga** is the Hindu calendar system that divides each day into five main components:
+**Panchangam** (पञ्चाङ्ग) literally means "five limbs" in Sanskrit. The **Panchangam** is the Hindu calendar system that divides each day into five main components:
 
 ### **Tithi** (Lunar Day)
 - 30 tithis per lunar month
@@ -80,4 +80,4 @@ The calculator uses the **Drik Ayanamsa**, the most accurate modern system for H
 
 ---
 
-*Last Updated: May 28, 2026*
+*Last Updated: June 5, 2026*

@@ -95,7 +95,7 @@ podman-compose up
 
 # Access locally
 http://localhost:5080/pradoshakalapooja/
-http://localhost:5080/panchanga/
+http://localhost:5080/panchangam/
 
 # Test from Windows
 http://<ubuntu-ip>:5080/pradoshakalapooja/
