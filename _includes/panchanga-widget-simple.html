@@ -348,60 +348,112 @@
 
           // Update date display
           const dateStr = calculator.formatDate(today);
-          document.getElementById('panchanga-date-display').textContent = dateStr;
+          const dateDisplayEl = document.getElementById('panchanga-date-display');
+          if (dateDisplayEl) dateDisplayEl.textContent = dateStr;
 
           // Update location display
-          document.getElementById('panchanga-location-display').textContent = selectedLocation.name;
+          const locationDisplayEl = document.getElementById('panchanga-location-display');
+          if (locationDisplayEl) locationDisplayEl.textContent = selectedLocation.name;
 
           // Update Pradosha info
-          document.getElementById('pradosha-sunset').textContent = panchanga.times.sunset.timeIST;
+          const pradoshaSunsetEl = document.getElementById('pradosha-sunset');
+          if (pradoshaSunsetEl) pradoshaSunsetEl.textContent = panchanga.times.sunset.timeIST;
+
           const pradoshaStart = new Date(panchanga.times.sunset.date.getTime() - 90 * 60 * 1000);
           const pradoshaEnd = new Date(panchanga.times.sunset.date.getTime() + 90 * 60 * 1000);
-          document.getElementById('pradosha-window').textContent =
-            `${calculator.formatTime(pradoshaStart.getHours(), pradoshaStart.getMinutes())} to ${calculator.formatTime(pradoshaEnd.getHours(), pradoshaEnd.getMinutes())}`;
+          const pradoshaWindowEl = document.getElementById('pradosha-window');
+          if (pradoshaWindowEl) {
+            pradoshaWindowEl.textContent =
+              `${calculator.formatTime(pradoshaStart.getHours(), pradoshaStart.getMinutes())} to ${calculator.formatTime(pradoshaEnd.getHours(), pradoshaEnd.getMinutes())}`;
+          }
 
           // Update full panchanga details
           const p = panchanga.panchanga;
 
           // Tithi
-          document.getElementById('tithi-name').textContent = p.tithi.name;
-          document.getElementById('tithi-phase').textContent = p.tithi.phase?.toUpperCase?.() || '';
-          document.getElementById('tithi-endtime').textContent = p.tithi.endTime || '--:--';
-          document.getElementById('tithi-next').textContent = p.tithi.nextTithi || '--';
-          document.getElementById('tithi-next-tamil').textContent = p.tithi.nextTithiTamil || '--';
+          const tithiNameEl = document.getElementById('tithi-name');
+          if (tithiNameEl) tithiNameEl.textContent = p.tithi.name;
+
+          const tithiPhaseEl = document.getElementById('tithi-phase');
+          if (tithiPhaseEl) tithiPhaseEl.textContent = p.tithi.phase?.toUpperCase?.() || '';
+
+          const tithiEndtimeEl = document.getElementById('tithi-endtime');
+          if (tithiEndtimeEl) tithiEndtimeEl.textContent = p.tithi.endTime || '--:--';
+
+          const tithiNextEl = document.getElementById('tithi-next');
+          if (tithiNextEl) tithiNextEl.textContent = p.tithi.nextTithi || '--';
+
+          const tithiNextTamilEl = document.getElementById('tithi-next-tamil');
+          if (tithiNextTamilEl) tithiNextTamilEl.textContent = p.tithi.nextTithiTamil || '--';
 
           // Nakshatra
-          document.getElementById('nakshatra-name').textContent = p.nakshatra.name;
-          document.getElementById('nakshatra-tamil').textContent = p.nakshatra.tamil;
-          document.getElementById('nakshatra-endtime').textContent = p.nakshatra.endTime || '--:--';
-          document.getElementById('nakshatra-next').textContent = p.nakshatra.nextNakshatra || '--';
-          document.getElementById('nakshatra-next-tamil').textContent = p.nakshatra.nextNakshatraTamil || '--';
+          const nakshatraNameEl = document.getElementById('nakshatra-name');
+          if (nakshatraNameEl) nakshatraNameEl.textContent = p.nakshatra.name;
+
+          const nakshatraTamilEl = document.getElementById('nakshatra-tamil');
+          if (nakshatraTamilEl) nakshatraTamilEl.textContent = p.nakshatra.tamil;
+
+          const nakshatraEndtimeEl = document.getElementById('nakshatra-endtime');
+          if (nakshatraEndtimeEl) nakshatraEndtimeEl.textContent = p.nakshatra.endTime || '--:--';
+
+          const nakshatraNextEl = document.getElementById('nakshatra-next');
+          if (nakshatraNextEl) nakshatraNextEl.textContent = p.nakshatra.nextNakshatra || '--';
+
+          const nakshatraNextTamilEl = document.getElementById('nakshatra-next-tamil');
+          if (nakshatraNextTamilEl) nakshatraNextTamilEl.textContent = p.nakshatra.nextNakshatraTamil || '--';
 
           // Yoga
-          document.getElementById('yoga-name').textContent = p.yoga.name;
-          document.getElementById('yoga-tamil').textContent = p.yoga.tamil;
-          document.getElementById('yoga-endtime').textContent = p.yoga.endTime || '--:--';
-          document.getElementById('yoga-next').textContent = p.yoga.nextYoga || '--';
-          document.getElementById('yoga-next-tamil').textContent = p.yoga.nextYogaTamil || '--';
+          const yogaNameEl = document.getElementById('yoga-name');
+          if (yogaNameEl) yogaNameEl.textContent = p.yoga.name;
+
+          const yogaTamilEl = document.getElementById('yoga-tamil');
+          if (yogaTamilEl) yogaTamilEl.textContent = p.yoga.tamil;
+
+          const yogaEndtimeEl = document.getElementById('yoga-endtime');
+          if (yogaEndtimeEl) yogaEndtimeEl.textContent = p.yoga.endTime || '--:--';
+
+          const yogaNextEl = document.getElementById('yoga-next');
+          if (yogaNextEl) yogaNextEl.textContent = p.yoga.nextYoga || '--';
+
+          const yogaNextTamilEl = document.getElementById('yoga-next-tamil');
+          if (yogaNextTamilEl) yogaNextTamilEl.textContent = p.yoga.nextYogaTamil || '--';
 
           // Karana
-          document.getElementById('karana-name').textContent = p.karana.name;
-          document.getElementById('karana-tamil').textContent = p.karana.tamil;
-          document.getElementById('karana-endtime').textContent = p.karana.endTime || '--:--';
-          document.getElementById('karana-next').textContent = p.karana.nextKarana || '--';
-          document.getElementById('karana-next-tamil').textContent = p.karana.nextKaranaTamil || '--';
+          const karanaNameEl = document.getElementById('karana-name');
+          if (karanaNameEl) karanaNameEl.textContent = p.karana.name;
+
+          const karanaTamilEl = document.getElementById('karana-tamil');
+          if (karanaTamilEl) karanaTamilEl.textContent = p.karana.tamil;
+
+          const karanaEndtimeEl = document.getElementById('karana-endtime');
+          if (karanaEndtimeEl) karanaEndtimeEl.textContent = p.karana.endTime || '--:--';
+
+          const karanaNextEl = document.getElementById('karana-next');
+          if (karanaNextEl) karanaNextEl.textContent = p.karana.nextKarana || '--';
+
+          const karanaNextTamilEl = document.getElementById('karana-next-tamil');
+          if (karanaNextTamilEl) karanaNextTamilEl.textContent = p.karana.nextKaranaTamil || '--';
 
           // Hora
-          document.getElementById('hora-planet').textContent = p.hora.planet;
-          document.getElementById('hora-number').textContent = `${p.hora.tamil ? p.hora.tamil + ' - ' : ''}Hour #${p.hora.number}`;
+          const horaPlanetEl = document.getElementById('hora-planet');
+          if (horaPlanetEl) horaPlanetEl.textContent = p.hora.planet;
+
+          const horaNumberEl = document.getElementById('hora-number');
+          if (horaNumberEl) horaNumberEl.textContent = `${p.hora.tamil ? p.hora.tamil + ' - ' : ''}Hour #${p.hora.number}`;
 
           // Rahu Kalam
-          document.getElementById('rahu-time').textContent = `${panchanga.times.rahuKalam.startTime} to ${panchanga.times.rahuKalam.endTime}`;
+          const rahuTimeEl = document.getElementById('rahu-time');
+          if (rahuTimeEl) rahuTimeEl.textContent = `${panchanga.times.rahuKalam.startTime} to ${panchanga.times.rahuKalam.endTime}`;
 
           // Times
-          document.getElementById('times-sunrise').textContent = panchanga.times.sunrise.timeIST;
-          document.getElementById('times-sunset').textContent = panchanga.times.sunset.timeIST;
-          document.getElementById('times-abhijit').textContent = `${panchanga.times.abhijitMuhurta.startTime} to ${panchanga.times.abhijitMuhurta.endTime}`;
+          const timesSunriseEl = document.getElementById('times-sunrise');
+          if (timesSunriseEl) timesSunriseEl.textContent = panchanga.times.sunrise.timeIST;
+
+          const timesSunsetEl = document.getElementById('times-sunset');
+          if (timesSunsetEl) timesSunsetEl.textContent = panchanga.times.sunset.timeIST;
+
+          const timesAbhijitEl = document.getElementById('times-abhijit');
+          if (timesAbhijitEl) timesAbhijitEl.textContent = `${panchanga.times.abhijitMuhurta.startTime} to ${panchanga.times.abhijitMuhurta.endTime}`;
 
           // Next 3 Pradosha dates
           const nextPradosha = await calculator.findNextPradosha(today, selectedLocation.latitude, selectedLocation.longitude);
