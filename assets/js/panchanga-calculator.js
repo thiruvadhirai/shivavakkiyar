@@ -824,7 +824,7 @@ class PanchangaCalculator {
    * @returns {Object} {name: string, tamil: string}
    */
   getKaranaName(number) {
-    const norm = ((number - 1) % 60) + 1;
+    const norm = ((number - 1) % 11) + 1;
     const langData = PanchangaLanguages.KARANA[norm] || { name: `Karana ${norm}`, tamil: '' };
     return { name: langData.name, tamil: langData.tamil };
   }
