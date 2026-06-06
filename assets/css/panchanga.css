@@ -240,7 +240,75 @@
   margin-bottom: 15px;
 }
 
-/* ==================== RESULT GRID ==================== */
+/* ==================== RESULT TABLE ==================== */
+.panchanga-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.panchanga-table-row {
+  border-bottom: 1px solid #f0f0f0;
+  transition: background-color 0.2s;
+}
+
+.panchanga-table-row:last-child {
+  border-bottom: none;
+}
+
+.panchanga-table-row:hover {
+  background-color: #f9f9f9;
+}
+
+.panchanga-table-row:nth-child(even) {
+  background-color: #fafbfc;
+}
+
+.panchanga-table-row:hover:nth-child(even) {
+  background-color: #f3f4f6;
+}
+
+.panchanga-table-label {
+  padding: 12px 15px;
+  font-weight: 600;
+  color: #666;
+  font-size: 14px;
+  width: 40%;
+  vertical-align: top;
+  text-align: left;
+}
+
+.panchanga-table-value {
+  padding: 12px 15px;
+  color: #24292e;
+  font-size: 14px;
+  vertical-align: top;
+}
+
+/* Row type styling */
+.panchanga-table-warning {
+  background-color: #fff5f5;
+}
+
+.panchanga-table-warning .panchanga-table-label {
+  color: #d73a49;
+  font-weight: 700;
+}
+
+.panchanga-table-auspicious {
+  background-color: #f0fdf4;
+}
+
+.panchanga-table-auspicious .panchanga-table-label {
+  color: #28a745;
+  font-weight: 700;
+}
+
+/* Old Grid Styles (kept for reference, can remove if not needed) */
 .panchanga-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -466,6 +534,55 @@
 
   .panchanga-date-input {
     max-width: 100%;
+  }
+
+  /* Table responsive - stack on small screens */
+  .panchanga-table {
+    font-size: 13px;
+  }
+
+  .panchanga-table-label {
+    padding: 10px 12px;
+    font-size: 13px;
+    width: 35%;
+  }
+
+  .panchanga-table-value {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .panchanga-table {
+    display: block;
+    border: none;
+  }
+
+  .panchanga-table-row {
+    display: block;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+
+  .panchanga-table-row:last-child {
+    margin-bottom: 0;
+  }
+
+  .panchanga-table-label,
+  .panchanga-table-value {
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+    border: none;
+  }
+
+  .panchanga-table-label {
+    background-color: #f6f8fa;
+    font-weight: 700;
+    border-bottom: 1px solid #e1e4e8;
   }
 }
 

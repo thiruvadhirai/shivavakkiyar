@@ -82,85 +82,97 @@
       <div style="font-size: 11px; color: #999; margin-top: 5px;">Ayanamsa: <span id="panchanga-result-ayanamsa">--</span>°</div>
     </div>
 
-    <!-- Main Panchanga Grid -->
-    <div class="panchanga-grid">
-      <!-- Tithi -->
-      <div class="panchanga-card panchanga-tithi">
-        <div class="panchanga-card-title">तिथि - Tithi (Lunar Day)</div>
-        <div class="panchanga-card-value" id="result-tithi-name">--</div>
-        <div class="panchanga-card-subtitle" id="result-tithi-phase">--</div>
-        <div class="panchanga-progress">
-          <div class="panchanga-progress-bar" id="result-tithi-progress" style="width: 0%"></div>
-        </div>
-        <div class="panchanga-progress-label" id="result-tithi-percent">0% complete</div>
-      </div>
+    <!-- Main Panchanga Table -->
+    <table class="panchanga-table">
+      <tbody>
+        <!-- Tithi -->
+        <tr class="panchanga-table-row">
+          <td class="panchanga-table-label">Tithi (Lunar Day)</td>
+          <td class="panchanga-table-value">
+            <strong id="result-tithi-name">--</strong>
+            <span id="result-tithi-phase" style="color: #666; margin-left: 8px;">--</span>
+            <div class="panchanga-progress" style="margin-top: 6px;">
+              <div class="panchanga-progress-bar" id="result-tithi-progress" style="width: 0%;"></div>
+            </div>
+            <div class="panchanga-progress-label" id="result-tithi-percent" style="font-size: 11px; color: #999; margin-top: 3px;">0% complete</div>
+          </td>
+        </tr>
 
-      <!-- Nakshatra -->
-      <div class="panchanga-card panchanga-nakshatra">
-        <div class="panchanga-card-title">नक्षत्र - Nakshatra (Star)</div>
-        <div class="panchanga-card-value" id="result-nakshatra-name">--</div>
-        <div class="panchanga-card-subtitle" id="result-nakshatra-tamil">--</div>
-        <div style="font-size: 12px; color: #999; margin-top: 8px;">
-          <strong>Zodiac:</strong> <span id="result-nakshatra-degree">--</span>
-        </div>
-        <div class="panchanga-progress">
-          <div class="panchanga-progress-bar" id="result-nakshatra-progress" style="width: 0%; background-color: #6f42c1;"></div>
-        </div>
-        <div class="panchanga-progress-label" id="result-nakshatra-percent">0% complete</div>
-      </div>
+        <!-- Nakshatra -->
+        <tr class="panchanga-table-row">
+          <td class="panchanga-table-label">Nakshatra (Star)</td>
+          <td class="panchanga-table-value">
+            <strong id="result-nakshatra-name">--</strong>
+            <span id="result-nakshatra-tamil" style="color: #666; margin-left: 8px;">--</span>
+            <div style="font-size: 12px; color: #999; margin-top: 6px;">Zodiac: <span id="result-nakshatra-degree">--</span></div>
+            <div class="panchanga-progress" style="margin-top: 6px;">
+              <div class="panchanga-progress-bar" id="result-nakshatra-progress" style="width: 0%; background-color: #6f42c1;"></div>
+            </div>
+            <div class="panchanga-progress-label" id="result-nakshatra-percent" style="font-size: 11px; color: #999; margin-top: 3px;">0% complete</div>
+          </td>
+        </tr>
 
-      <!-- Yoga -->
-      <div class="panchanga-card panchanga-yoga">
-        <div class="panchanga-card-title">योग - Yoga</div>
-        <div class="panchanga-card-value" id="result-yoga-name">--</div>
-        <div class="panchanga-card-subtitle" id="result-yoga-tamil">--</div>
-        <div style="font-size: 11px; color: #999; margin-top: 8px;">Auspiciousness combination</div>
-      </div>
+        <!-- Yoga -->
+        <tr class="panchanga-table-row">
+          <td class="panchanga-table-label">Yoga (Auspicious Combination)</td>
+          <td class="panchanga-table-value">
+            <strong id="result-yoga-name">--</strong>
+            <span id="result-yoga-tamil" style="color: #666; margin-left: 8px;">--</span>
+          </td>
+        </tr>
 
-      <!-- Karana -->
-      <div class="panchanga-card panchanga-karana">
-        <div class="panchanga-card-title">करण - Karana</div>
-        <div class="panchanga-card-value" id="result-karana-name">--</div>
-        <div class="panchanga-card-subtitle" id="result-karana-tamil">--</div>
-        <div style="font-size: 11px; color: #999; margin-top: 8px;">Half-tithi period</div>
-      </div>
+        <!-- Karana -->
+        <tr class="panchanga-table-row">
+          <td class="panchanga-table-label">Karana (Half-Tithi)</td>
+          <td class="panchanga-table-value">
+            <strong id="result-karana-name">--</strong>
+            <span id="result-karana-tamil" style="color: #666; margin-left: 8px;">--</span>
+          </td>
+        </tr>
 
-      <!-- Hora -->
-      <div class="panchanga-card panchanga-hora">
-        <div class="panchanga-card-title">होरा - Hora (Planetary Hour)</div>
-        <div class="panchanga-card-value" id="result-hora-planet">--</div>
-        <div class="panchanga-card-subtitle" id="result-hora-number">Hour #--</div>
-        <div style="font-size: 11px; color: #999; margin-top: 8px;">Current ruling planet</div>
-      </div>
+        <!-- Hora -->
+        <tr class="panchanga-table-row">
+          <td class="panchanga-table-label">Hora (Planetary Hour)</td>
+          <td class="panchanga-table-value">
+            <strong id="result-hora-planet">--</strong>
+            <span id="result-hora-number" style="color: #666; margin-left: 8px;">Hour #--</span>
+          </td>
+        </tr>
 
-      <!-- Rahu Kalam -->
-      <div class="panchanga-card panchanga-rahukkalam">
-        <div class="panchanga-card-title">⚠️ राहु काल - Rahu Kalam</div>
-        <div class="panchanga-card-subtitle">Inauspicious Time</div>
-        <div style="font-weight: 600; margin-top: 8px; color: #d73a49;" id="result-rahu-time">--:-- to --:--</div>
-        <div style="font-size: 11px; color: #999; margin-top: 5px;">Avoid starting new ventures</div>
-      </div>
-    </div>
+        <!-- Sunrise -->
+        <tr class="panchanga-table-row">
+          <td class="panchanga-table-label">🌅 Sunrise</td>
+          <td class="panchanga-table-value">
+            <strong id="result-sunrise">--:--</strong>
+          </td>
+        </tr>
 
-    <!-- Times Section -->
-    <div class="panchanga-times">
-      <div class="panchanga-times-label">☀️ Important Times</div>
-      <div class="panchanga-times-grid">
-        <div class="panchanga-time-item">
-          <div class="panchanga-time-label">🌅 Sunrise</div>
-          <div class="panchanga-time-value" id="result-sunrise">--:--</div>
-        </div>
-        <div class="panchanga-time-item">
-          <div class="panchanga-time-label">🌇 Sunset</div>
-          <div class="panchanga-time-value" id="result-sunset">--:--</div>
-        </div>
-        <div class="panchanga-time-item">
-          <div class="panchanga-time-label">✨ Abhijit Muhurta</div>
-          <div class="panchanga-time-value" id="result-abhijit">--:-- to --:--</div>
-          <div style="font-size: 11px; color: #999; margin-top: 3px;">Most auspicious time</div>
-        </div>
-      </div>
-    </div>
+        <!-- Sunset -->
+        <tr class="panchanga-table-row">
+          <td class="panchanga-table-label">🌇 Sunset</td>
+          <td class="panchanga-table-value">
+            <strong id="result-sunset">--:--</strong>
+          </td>
+        </tr>
+
+        <!-- Rahu Kalam -->
+        <tr class="panchanga-table-row panchanga-table-warning">
+          <td class="panchanga-table-label">⚠️ Rahu Kalam (Inauspicious)</td>
+          <td class="panchanga-table-value">
+            <strong style="color: #d73a49;" id="result-rahu-time">--:-- to --:--</strong>
+          </td>
+        </tr>
+
+        <!-- Abhijit Muhurtam -->
+        <tr class="panchanga-table-row panchanga-table-auspicious">
+          <td class="panchanga-table-label">✨ Abhijit Muhurtam [Most Auspicious]</td>
+          <td class="panchanga-table-value">
+            <strong style="color: #28a745;" id="result-abhijit">--:-- to --:--</strong>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
 
     <!-- Pradosha Information -->
     <div class="panchanga-pradosha">
