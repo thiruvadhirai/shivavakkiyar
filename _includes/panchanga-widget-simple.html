@@ -408,7 +408,7 @@
             const localDateAdjusted = new Date(pd.date.getTime() + tzOffset * 60 * 60 * 1000);
             const localDateStr = localDateAdjusted.toISOString().split('T')[0];
             return `
-            <li class="panchanga-pradosha-item" style="cursor: pointer;" onclick="window.location.href = '/panchanga/?date=${localDateStr}'; return false;">
+            <li class="panchanga-pradosha-item" style="cursor: pointer;" onclick="window.location.href = '/panchangam/?date=${localDateStr}'; return false;">
               <div class="panchanga-pradosha-date">${localDateStr}</div>
               <div class="panchanga-pradosha-time">Tithi: ${pd.tithi.name} (${pd.tithi.phase?.toUpperCase?.() || ''})</div>
               <div class="panchanga-pradosha-time" style="margin-top: 3px;">Pradosha: ${calculator.formatTime(pd.pradoshaStart.getHours(), pd.pradoshaStart.getMinutes())} to ${calculator.formatTime(pd.pradoshaEnd.getHours(), pd.pradoshaEnd.getMinutes())}</div>
