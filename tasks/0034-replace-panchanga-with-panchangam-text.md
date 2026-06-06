@@ -1,7 +1,7 @@
 ---
 id: 0034
 title: "FEA: Replace 'Panchanga' with 'Panchangam' and remove Sanskrit text"
-status: open
+status: done
 impact: Medium
 priority: 020
 complexity: "1-2 hours"
