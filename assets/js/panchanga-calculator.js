@@ -782,33 +782,15 @@ class PanchangaCalculator {
    * @returns {Object} {name: string, tamil: string, phase: 'shukla'|'krishna'}
    */
   getTithiName(number) {
-    const norms = Math.abs((number - 1) % 30) + 1;
-
-    const tithis = [
-      { name: 'Pratipad', tamil: 'ப்ரதிபாத்' },
-      { name: 'Dwitiya', tamil: 'த்விதீய' },
-      { name: 'Tritiya', tamil: 'த்ருதீய' },
-      { name: 'Chaturthi', tamil: 'சதுர்த்தி' },
-      { name: 'Panchami', tamil: 'பஞ்சமி' },
-      { name: 'Shashthi', tamil: 'ஷஷ்டி' },
-      { name: 'Saptami', tamil: 'ஸப்தமி' },
-      { name: 'Ashtami', tamil: 'அஷ்டமி' },
-      { name: 'Navami', tamil: 'நவமி' },
-      { name: 'Dasami', tamil: 'த³ஶமி' },
-      { name: 'Ekadashi', tamil: 'ஏகாத³ஶி' },
-      { name: 'Dwadashi', tamil: 'த்வாத³ஶி' },
-      { name: 'Triyodashi', tamil: 'த்ரியோத³ஶி' },
-      { name: 'Chaturdashi', tamil: 'சதுர்த்³த³ஶி' },
-      { name: 'Poornima', tamil: 'பூர்ணிமா' }
-    ];
-
+    const norm = Math.abs((number - 1) % 30) + 1;
     const phase = number <= 15 ? 'shukla' : 'krishna';
-    const index = (norms - 1) % 15;
-    const tithi = tithis[index];
+
+    // Use PanchangaLanguages for correct Tamil unicode
+    const langData = PanchangaLanguages.TITHI[norm] || { name: `Tithi ${norm}`, tamil: '' };
 
     return {
-      name: tithi.name,
-      tamil: tithi.tamil,
+      name: langData.name,
+      tamil: langData.tamil,
       phase: phase,
       number: number
     };
@@ -821,38 +803,8 @@ class PanchangaCalculator {
    */
   getNakshatraName(number) {
     const norm = ((number - 1) % 27) + 1;
-
-    const nakshatras = [
-      { name: 'Ashwini', tamil: 'அஶ்வினி', symbol: '♈', degree: '0-13.33' },
-      { name: 'Bharani', tamil: 'பரணி', symbol: '♈', degree: '13.33-26.67' },
-      { name: 'Kritika', tamil: 'க்ருத்திகா', symbol: '♉', degree: '26.67-40' },
-      { name: 'Rohini', tamil: 'ரோஹிணி', symbol: '♉', degree: '40-53.33' },
-      { name: 'Mrigashira', tamil: 'ம்ருக³ஶிரா', symbol: '♉', degree: '53.33-66.67' },
-      { name: 'Ardra', tamil: 'அர்த்ரா', symbol: '♊', degree: '66.67-80' },
-      { name: 'Punarvasu', tamil: 'புனர்வஸு', symbol: '♊', degree: '80-93.33' },
-      { name: 'Pushya', tamil: 'புஷ்ய', symbol: '♋', degree: '93.33-106.67' },
-      { name: 'Ashlesha', tamil: 'அஶ்லேஷா', symbol: '♋', degree: '106.67-120' },
-      { name: 'Magha', tamil: 'ம³க³ா', symbol: '♌', degree: '120-133.33' },
-      { name: 'Purva Phalguni', tamil: 'பூர்வ ப⁴ல்³குனி', symbol: '♌', degree: '133.33-146.67' },
-      { name: 'Uttara Phalguni', tamil: 'உத्தர ப⁴ல्३குனी', symbol: '♌', degree: '146.67-160' },
-      { name: 'Hasta', tamil: 'ஹஸ்த', symbol: '♍', degree: '160-173.33' },
-      { name: 'Chitra', tamil: 'சித்ரா', symbol: '♍', degree: '173.33-186.67' },
-      { name: 'Swati', tamil: 'ஸ்வாதி', symbol: '♎', degree: '186.67-200' },
-      { name: 'Visakha', tamil: 'விஶாக', symbol: '♎', degree: '200-213.33' },
-      { name: 'Anuradha', tamil: 'அனுரா³த', symbol: '♏', degree: '213.33-226.67' },
-      { name: 'Jyeshtha', tamil: 'ஜ்யேஷ்ட', symbol: '♏', degree: '226.67-240' },
-      { name: 'Mool', tamil: 'மூல', symbol: '♏', degree: '240-253.33' },
-      { name: 'Purva Ashadha', tamil: 'பூர்வ அஷ³த', symbol: '♐', degree: '253.33-266.67' },
-      { name: 'Uttara Ashadha', tamil: 'உத्तர अषढा', symbol: '♐', degree: '266.67-280' },
-      { name: 'Sravana', tamil: 'ஶ்ரவணம்', symbol: '♑', degree: '280-293.33' },
-      { name: 'Dhanishtha', tamil: 'த³னிष्ठ', symbol: '♑', degree: '293.33-306.67' },
-      { name: 'Shatabhisha', tamil: 'ஶத⁴பி', symbol: '♒', degree: '306.67-320' },
-      { name: 'Purva Bhadrapada', tamil: 'பூர்வ ப⁴த்³ரபாத', symbol: '♒', degree: '320-333.33' },
-      { name: 'Uttara Bhadrapada', tamil: 'உத्तर ப⁴த्रपाद', symbol: '♓', degree: '333.33-346.67' },
-      { name: 'Revati', tamil: 'ரேவதி', symbol: '♓', degree: '346.67-360' }
-    ];
-
-    return nakshatras[norm - 1];
+    const langData = PanchangaLanguages.NAKSHATRA[norm] || { name: `Nakshatra ${norm}`, tamil: '' };
+    return { name: langData.name, tamil: langData.tamil };
   }
 
   /**
@@ -862,38 +814,8 @@ class PanchangaCalculator {
    */
   getYogaName(number) {
     const norm = ((number - 1) % 27) + 1;
-
-    const yogas = [
-      { name: 'Vaidhriti', tamil: 'வைத்ரிதி' },
-      { name: 'Vaidhriti', tamil: 'வைத்ரிதி' },
-      { name: 'Vaidhriti', tamil: 'வைத்ரிதி' },
-      { name: 'Vishkambha', tamil: 'விஷ்கம்ப' },
-      { name: 'Priti', tamil: 'ப்ரீதி' },
-      { name: 'Ayushman', tamil: 'ஆயுஷ்மான்' },
-      { name: 'Saubhagya', tamil: 'ஸௌப⁴க்ய' },
-      { name: 'Shobhana', tamil: 'ஶோப⁴ன' },
-      { name: 'Atiganda', tamil: 'அதிக³ண்ட' },
-      { name: 'Sukarma', tamil: 'ஸுக³ர්ம' },
-      { name: 'Dhriti', tamil: 'த्ಥವ್ರೃತಿ' },
-      { name: 'Shula', tamil: 'ஶூல' },
-      { name: 'Ganda', tamil: 'கண்ட' },
-      { name: 'Vriddhi', tamil: 'வ்ரூத்³தி' },
-      { name: 'Dhruva', tamil: 'த्ಥರುವ' },
-      { name: 'Vyagata', tamil: 'வ్్ర' },
-      { name: 'Harshana', tamil: 'ஹர್ஷண' },
-      { name: 'Vajra', tamil: 'வஜ்ஜ' },
-      { name: 'Siddhi', tamil: 'ஸிദ్్ಧಿ' },
-      { name: 'Vyatipata', tamil: 'வ್ར్్ತ்' },
-      { name: 'Variyan', tamil: 'வरिया' },
-      { name: 'Parigha', tamil: 'பरिघ' },
-      { name: 'Shiva', tamil: 'ஶிவ' },
-      { name: 'Siddha', tamil: 'ஸిद్థ' },
-      { name: 'Sadhya', tamil: 'ஸा್ಧ್್ಯ' },
-      { name: 'Shubha', tamil: 'ಶುಭ' },
-      { name: 'Shukla', tamil: 'ಶುಕ್ಲ' }
-    ];
-
-    return yogas[norm - 1] || { name: 'Unknown', tamil: 'அஜ்ஞात' };
+    const langData = PanchangaLanguages.YOGA[norm] || { name: `Yoga ${norm}`, tamil: '' };
+    return { name: langData.name, tamil: langData.tamil };
   }
 
   /**
@@ -903,24 +825,8 @@ class PanchangaCalculator {
    */
   getKaranaName(number) {
     const norm = ((number - 1) % 60) + 1;
-
-    const karanas = [
-      { name: 'Bava', tamil: 'பவ' },
-      { name: 'Balava', tamil: 'బલవ' },
-      { name: 'Kaulava', tamil: 'కౌలవ' },
-      { name: 'Taitila', tamil: 'తైతిల' },
-      { name: 'Gara', tamil: 'గర' },
-      { name: 'Vanija', tamil: 'వనిజ' },
-      { name: 'Vishti', tamil: 'విష్టి' },
-      { name: 'Shakuni', tamil: 'శకుని' },
-      { name: 'Chatushpada', tamil: 'చతుష్పద' },
-      { name: 'Naga', tamil: 'నాగ' },
-      { name: 'Kintamani', tamil: 'కింతమణి' },
-      { name: 'Bava', tamil: 'బవ' } // Repeats
-    ];
-
-    const idx = ((norm - 1) % 12);
-    return karanas[idx];
+    const langData = PanchangaLanguages.KARANA[norm] || { name: `Karana ${norm}`, tamil: '' };
+    return { name: langData.name, tamil: langData.tamil };
   }
 
   // ==================== UTILITY FUNCTIONS ====================
