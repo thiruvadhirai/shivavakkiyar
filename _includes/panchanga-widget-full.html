@@ -305,6 +305,7 @@
     // Check URL for date parameter (e.g., ?date=2026-06-12)
     const urlParams = new URLSearchParams(window.location.search);
     const urlDate = urlParams.get('date');
+    const urlLocationId = urlParams.get('locationid');
     let today = new Date();
 
     if (urlDate) {
@@ -316,11 +317,26 @@
 
     document.getElementById('panchanga-date-input').valueAsDate = today;
 
-    // Restore saved location
+    // Parse locationid from URL (format: lat,lon)
+    let urlLocation = null;
+    if (urlLocationId) {
+      const [lat, lon] = urlLocationId.split(',').map(parseFloat);
+      if (!isNaN(lat) && !isNaN(lon)) {
+        urlLocation = {
+          name: `${lat.toFixed(4)}, ${lon.toFixed(4)}`,
+          latitude: lat,
+          longitude: lon
+        };
+        console.log('[Panchanga] Loading location from URL parameter:', urlLocationId);
+      }
+    }
+
+    // Restore saved location (URL location takes priority)
     const savedLocation = locationManager.getStoredLocation();
-    if (savedLocation) {
-      document.getElementById('panchanga-location-input').value = savedLocation.name;
-      document.getElementById('panchanga-current-location').textContent = `📍 ${savedLocation.name} (${savedLocation.latitude.toFixed(4)}, ${savedLocation.longitude.toFixed(4)})`;
+    const effectiveLocation = urlLocation || savedLocation;
+    if (effectiveLocation) {
+      document.getElementById('panchanga-location-input').value = effectiveLocation.name;
+      document.getElementById('panchanga-current-location').textContent = `📍 ${effectiveLocation.name} (${effectiveLocation.latitude.toFixed(4)}, ${effectiveLocation.longitude.toFixed(4)})`;
     }
 
     // Modal elements
@@ -367,21 +383,21 @@
 
     // Auto-load cached location and calculate on page load
     const autoLoadAndCalculate = async () => {
-      if (savedLocation) {
+      if (effectiveLocation) {
         // Set location input value
-        locationInput.value = savedLocation.name;
-        selectedLocation = savedLocation;
+        locationInput.value = effectiveLocation.name;
+        selectedLocation = effectiveLocation;
       }
 
-      // Automatically calculate if we have a saved location or URL date parameter
-      if (savedLocation || urlDate) {
+      // Automatically calculate if we have both URL parameters
+      if (urlDate && urlLocationId) {
         const calculateBtn = document.getElementById('panchanga-calculate-btn');
         calculateBtn.click();
       }
     };
 
     // Location input autocomplete
-    let selectedLocation = savedLocation;
+    let selectedLocation = effectiveLocation;
     const locationInput = document.getElementById('panchanga-location-input');
     const suggestionsDiv = document.getElementById('panchanga-location-suggestions');
 

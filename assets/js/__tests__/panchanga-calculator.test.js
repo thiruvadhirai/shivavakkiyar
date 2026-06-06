@@ -219,3 +219,38 @@ describe('Panchanga Calculations - Mathematical Formulas', () => {
     });
   });
 });
+
+// URL Parsing Tests
+describe('URL State Parsing', () => {
+  test('parseUrlParams extracts date and locationid', () => {
+    const url = '/?date=2026-06-06&locationid=13.0827,80.2707';
+    const params = new URLSearchParams(new URL(url, 'http://localhost').search);
+
+    expect(params.get('date')).toBe('2026-06-06');
+    expect(params.get('locationid')).toBe('13.0827,80.2707');
+  });
+
+  test('parseLocationId splits coordinates correctly', () => {
+    const locationId = '13.0827,80.2707';
+    const [lat, lon] = locationId.split(',').map(parseFloat);
+
+    expect(lat).toBeCloseTo(13.0827, 4);
+    expect(lon).toBeCloseTo(80.2707, 4);
+  });
+
+  test('parseUrlParams handles missing parameters', () => {
+    const url = '/?date=2026-06-06';
+    const params = new URLSearchParams(new URL(url, 'http://localhost').search);
+
+    expect(params.get('date')).toBe('2026-06-06');
+    expect(params.get('locationid')).toBeNull();
+  });
+
+  test('parseUrlParams handles empty URL', () => {
+    const url = '/';
+    const params = new URLSearchParams(new URL(url, 'http://localhost').search);
+
+    expect(params.get('date')).toBeNull();
+    expect(params.get('locationid')).toBeNull();
+  });
+});
