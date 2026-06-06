@@ -67,10 +67,16 @@ build/
 *.log
 .git/hooks/post-commit.bak
 
-# Test artifacts
+# Test output (ephemeral - generated every run)
 test-results/
 .playwright/
 playwright-report/
+tests/*-results.json
+tests/*-results.txt
+comparison-results.json
+
+# But track test fixtures/artifacts (reference data from Drik Panchang)
+!tests/artifacts/
 
 # Claude session files (developer-specific, not shared)
 .claude/session.json
