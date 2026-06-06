@@ -102,12 +102,28 @@ http://<ubuntu-ip>:5080/pradoshakalapooja/
 ```
 
 ### Running Tests
+
+**CRITICAL REQUIREMENT**: E2E tests MUST pass before merging to main!
+
 ```bash
-# Run unit tests (JavaScript)
+# Unit tests (local, fast)
 npm test
 # or
 node tests/panchanga-calculator.test.js
+
+# E2E tests (requires container - MANDATORY before merge)
+podman-compose --profile test up saivamcloud-dev
+podman-compose --profile test run --rm saivamcloud-test ./tests/run-e2e.sh
+
+# Full test suite (unit + integration + E2E)
+podman-compose --profile test run --rm saivamcloud-test ./tests/run-all.sh
 ```
+
+**Why E2E tests are mandatory**:
+- Unit tests only verify logic, not UI/browser behavior
+- E2E tests verify actual page loads and calculations work in real browser
+- Past incident: Table layout changes merged without E2E → broke in production
+- Test container is managed via podman-compose --profile test (already configured)
 
 ## Critical Implementation Details
 
