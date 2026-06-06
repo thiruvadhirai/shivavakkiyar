@@ -102,36 +102,28 @@
       <div class="panchanga-card" style="border-left: 4px solid #0366d6;">
         <div class="panchanga-card-title">Tithi (Lunar Day)</div>
         <div class="panchanga-card-subtitle" id="tithi-name">--</div>
-        <div class="panchanga-card-meta" id="tithi-phase">--</div>
-        <div class="panchanga-progress-bar">
-          <div class="panchanga-progress-fill" id="tithi-progress" style="width: 0%"></div>
-        </div>
-        <div class="panchanga-card-subtitle" id="tithi-percent" style="font-size: 12px; margin-top: 5px;">0% complete</div>
+        <div class="panchanga-card-meta" id="tithi-phase">-- <span style="margin-left: 8px; font-size: 12px;">(until <strong id="tithi-endtime">--:--</strong>, Next: <span id="tithi-next">--</span>)</span></div>
       </div>
 
       <!-- Nakshatra -->
       <div class="panchanga-card" style="border-left: 4px solid #6f42c1;">
         <div class="panchanga-card-title">Nakshatra (Constellation)</div>
         <div class="panchanga-card-subtitle" id="nakshatra-name">--</div>
-        <div class="panchanga-card-meta" id="nakshatra-tamil">--</div>
-        <div class="panchanga-progress-bar">
-          <div class="panchanga-progress-fill" id="nakshatra-progress" style="width: 0%"></div>
-        </div>
-        <div class="panchanga-card-subtitle" id="nakshatra-percent" style="font-size: 12px; margin-top: 5px;">0% complete</div>
+        <div class="panchanga-card-meta" id="nakshatra-tamil">-- <span style="margin-left: 8px; font-size: 12px;">(until <strong id="nakshatra-endtime">--:--</strong>, Next: <span id="nakshatra-next">--</span>)</span></div>
       </div>
 
       <!-- Yoga -->
       <div class="panchanga-card" style="border-left: 4px solid #28a745;">
         <div class="panchanga-card-title">Yoga (Auspiciousness)</div>
         <div class="panchanga-card-subtitle" id="yoga-name">--</div>
-        <div class="panchanga-card-meta" id="yoga-tamil">--</div>
+        <div class="panchanga-card-meta" id="yoga-tamil">-- <span style="margin-left: 8px; font-size: 12px;">(until <strong id="yoga-endtime">--:--</strong>, Next: <span id="yoga-next">--</span>)</span></div>
       </div>
 
       <!-- Karana -->
       <div class="panchanga-card" style="border-left: 4px solid #dc3545;">
         <div class="panchanga-card-title">Karana (Half Tithi)</div>
         <div class="panchanga-card-subtitle" id="karana-name">--</div>
-        <div class="panchanga-card-meta" id="karana-tamil">--</div>
+        <div class="panchanga-card-meta" id="karana-tamil">-- <span style="margin-left: 8px; font-size: 12px;">(until <strong id="karana-endtime">--:--</strong>, Next: <span id="karana-next">--</span>)</span></div>
       </div>
 
       <!-- Hora -->
@@ -370,26 +362,30 @@
           // Tithi
           document.getElementById('tithi-name').textContent = p.tithi.name;
           document.getElementById('tithi-phase').textContent = p.tithi.phase?.toUpperCase?.() || '';
-          document.getElementById('tithi-progress').style.width = p.tithi.percent + '%';
-          document.getElementById('tithi-percent').textContent = p.tithi.percent + '% complete';
+          document.getElementById('tithi-endtime').textContent = p.tithi.endTime || '--:--';
+          document.getElementById('tithi-next').textContent = p.tithi.nextTithi || '--';
 
           // Nakshatra
           document.getElementById('nakshatra-name').textContent = p.nakshatra.name;
           document.getElementById('nakshatra-tamil').textContent = p.nakshatra.tamil;
-          document.getElementById('nakshatra-progress').style.width = p.nakshatra.percent + '%';
-          document.getElementById('nakshatra-percent').textContent = p.nakshatra.percent + '% complete';
+          document.getElementById('nakshatra-endtime').textContent = p.nakshatra.endTime || '--:--';
+          document.getElementById('nakshatra-next').textContent = p.nakshatra.nextNakshatra || '--';
 
           // Yoga
           document.getElementById('yoga-name').textContent = p.yoga.name;
           document.getElementById('yoga-tamil').textContent = p.yoga.tamil;
+          document.getElementById('yoga-endtime').textContent = p.yoga.endTime || '--:--';
+          document.getElementById('yoga-next').textContent = p.yoga.nextYoga || '--';
 
           // Karana
           document.getElementById('karana-name').textContent = p.karana.name;
           document.getElementById('karana-tamil').textContent = p.karana.tamil;
+          document.getElementById('karana-endtime').textContent = p.karana.endTime || '--:--';
+          document.getElementById('karana-next').textContent = p.karana.nextKarana || '--';
 
           // Hora
           document.getElementById('hora-planet').textContent = p.hora.planet;
-          document.getElementById('hora-number').textContent = `Hour #${p.hora.number}`;
+          document.getElementById('hora-number').textContent = `${p.hora.tamil ? p.hora.tamil + ' - ' : ''}Hour #${p.hora.number}`;
 
           // Rahu Kalam
           document.getElementById('rahu-time').textContent = `${panchanga.times.rahuKalam.startTime} to ${panchanga.times.rahuKalam.endTime}`;

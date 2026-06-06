@@ -554,7 +554,10 @@ class PanchangaCalculator {
 
     const hoursSinceSunrise = Math.abs((baseTime - sunrise.date) / (1000 * 60 * 60));
     const horaNumber = Math.floor(hoursSinceSunrise % 24) + 1;
-    const planetIndex = (horaNumber - 1) % 7;
+
+    // Day of week determines starting planet: Sun=0, Mon=1, Tue=2, ... Sat=6
+    const dayOfWeek = sunrise.date.getDay();
+    const planetIndex = (horaNumber - 1 + dayOfWeek) % 7;
 
     // Use PanchangaLanguages for correct planet names and Tamil translations
     const horaData = PanchangaLanguages.HORA[planetIndex] || { name: `Planet ${planetIndex}`, tamil: '' };
@@ -564,6 +567,42 @@ class PanchangaCalculator {
       tamil: horaData.tamil,
       number: horaNumber
     };
+  }
+
+  /**
+   * Calculate all 24 horas for the day (sunrise to sunrise)
+   * @param {Object} sunrise - Sunrise time
+   * @returns {Array} Array of 24 hora objects with planet, name, tamil, start/end times
+   */
+  calculateAllHoras(sunrise) {
+    const horas = [];
+    const horaLength = (24 * 60) / 24; // Minutes per hora (60 minutes)
+
+    // Day of week determines starting planet: Sun=0, Mon=1, Tue=2, ... Sat=6
+    const dayOfWeek = sunrise.date.getDay();
+
+    for (let i = 0; i < 24; i++) {
+      const planetIndex = (i + dayOfWeek) % 7;
+      const horaData = PanchangaLanguages.HORA[planetIndex] || { name: `Planet ${planetIndex}`, tamil: '' };
+
+      const startTime = new Date(sunrise.date);
+      startTime.setMinutes(startTime.getMinutes() + (i * horaLength));
+
+      const endTime = new Date(startTime);
+      endTime.setMinutes(endTime.getMinutes() + horaLength);
+
+      horas.push({
+        number: i + 1,
+        planet: horaData.name,
+        tamil: horaData.tamil,
+        startTime: this.formatTime(startTime.getHours(), startTime.getMinutes()),
+        endTime: this.formatTime(endTime.getHours(), endTime.getMinutes()),
+        startDate: startTime,
+        endDate: endTime
+      });
+    }
+
+    return horas;
   }
 
   /**
@@ -730,10 +769,19 @@ class PanchangaCalculator {
     }
 
     const tithi = this.calculateTithi(sunLon, moonLon);
+    const tithiEndInfo = this.getTithiEndTime(date, sunLon, moonLon, tithi.number);
+
     const nakshatra = this.calculateNakshatra(moonLon);
+    const nakshatraEndInfo = this.getNakshatraEndTime(date, moonLon, nakshatra.number);
+
     const yoga = this.calculateYoga(sunLon, moonLon);
+    const yogaEndInfo = this.getYogaEndTime(date, sunLon, moonLon, yoga.number);
+
     const karana = this.calculateKarana(tithi.number);
+    const karanaEndInfo = this.getKaranaEndTime(date, sunLon, moonLon, karana.number);
+
     const hora = this.calculateHora(date, sunrise);
+    const horas = this.calculateAllHoras(sunrise);
     const rahuKalam = this.calculateRahuKalam(sunrise, sunset, date);
     const abhijitMuhurta = this.calculateAbhijitMuhurta(sunrise, sunset);
 
@@ -749,11 +797,12 @@ class PanchangaCalculator {
         moonLongitude: moonLon
       },
       panchanga: {
-        tithi: tithi,
-        nakshatra: nakshatra,
-        yoga: yoga,
-        karana: karana,
-        hora: hora
+        tithi: { ...tithi, ...tithiEndInfo },
+        nakshatra: { ...nakshatra, ...nakshatraEndInfo },
+        yoga: { ...yoga, ...yogaEndInfo },
+        karana: { ...karana, ...karanaEndInfo },
+        hora: hora,
+        horas: horas
       },
       times: {
         sunrise: sunrise,
@@ -902,6 +951,113 @@ class PanchangaCalculator {
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
+  }
+
+  /**
+   * Calculate when current tithi ends based on sun/moon motion
+   */
+  getTithiEndTime(currentDate, sunLon, moonLon, currentTithiNum) {
+    const tithiSize = 12;
+    const currentAngle = this.normalizeDegrees(moonLon - sunLon);
+    const tithiEndAngle = (currentTithiNum * tithiSize);
+    const degreesUntilEnd = tithiEndAngle - currentAngle;
+
+    const netMotion = 12; // Moon-Sun relative motion ~12°/day
+    const hoursUntilEnd = (degreesUntilEnd / netMotion) * 24;
+
+    const endTime = new Date(currentDate);
+    endTime.setHours(endTime.getHours() + hoursUntilEnd);
+
+    const nextTithiNum = ((currentTithiNum % 30) + 1);
+    const nextTithiData = this.getTithiName(nextTithiNum);
+
+    return {
+      endTime: this.formatTime(endTime.getHours(), endTime.getMinutes()),
+      nextTithi: nextTithiData.name,
+      nextTithiTamil: nextTithiData.tamil
+    };
+  }
+
+  /**
+   * Calculate when current nakshatra ends based on moon motion
+   */
+  getNakshatraEndTime(currentDate, moonLon, currentNakshatraNum) {
+    const nakshatraSize = 360 / 27; // ~13.33°
+    const nakshatraEndAngle = (currentNakshatraNum * nakshatraSize);
+    const degreesUntilEnd = nakshatraEndAngle - moonLon;
+
+    const moonMotion = 13; // Moon moves ~13°/day
+    const hoursUntilEnd = (degreesUntilEnd / moonMotion) * 24;
+
+    const endTime = new Date(currentDate);
+    endTime.setHours(endTime.getHours() + hoursUntilEnd);
+
+    const nextNakshatraNum = ((currentNakshatraNum % 27) + 1);
+    const nextNakshatraData = this.getNakshatraName(nextNakshatraNum);
+
+    return {
+      endTime: this.formatTime(endTime.getHours(), endTime.getMinutes()),
+      nextNakshatra: nextNakshatraData.name,
+      nextNakshatraTamil: nextNakshatraData.tamil
+    };
+  }
+
+  /**
+   * Calculate when current yoga ends based on sun/moon motion
+   */
+  getYogaEndTime(currentDate, sunLon, moonLon, currentYogaNum) {
+    const yogaSize = 360 / 27; // ~13.33°
+    const currentCombined = this.normalizeDegrees(sunLon + moonLon);
+    const yogaEndAngle = (currentYogaNum * yogaSize);
+    const degreesUntilEnd = yogaEndAngle - currentCombined;
+
+    const netMotion = 14; // Sun + Moon combined motion ~14°/day
+    const hoursUntilEnd = (degreesUntilEnd / netMotion) * 24;
+
+    const endTime = new Date(currentDate);
+    endTime.setHours(endTime.getHours() + hoursUntilEnd);
+
+    const nextYogaNum = ((currentYogaNum % 27) + 1);
+    const nextYogaData = this.getYogaName(nextYogaNum);
+
+    return {
+      endTime: this.formatTime(endTime.getHours(), endTime.getMinutes()),
+      nextYoga: nextYogaData.name,
+      nextYogaTamil: nextYogaData.tamil
+    };
+  }
+
+  /**
+   * Calculate when current karana ends based on sun/moon motion
+   */
+  getKaranaEndTime(currentDate, sunLon, moonLon, currentKaranaNum) {
+    const currentAngle = this.normalizeDegrees(moonLon - sunLon);
+    const currentTithi = this.calculateTithi(sunLon, moonLon);
+
+    // Find which position (1 or 2) this karana is in its tithi
+    const karanaPosition = currentKaranaNum % 2 === 0 ? 2 : 1;
+
+    // Calculate boundary for this karana (6° or 12° within tithi)
+    const karanaBoundaryInTithi = karanaPosition * 6;
+    const tithiStartAngle = (currentTithi.number - 1) * 12;
+    const karanaEndAngle = tithiStartAngle + karanaBoundaryInTithi;
+    const degreesUntilEnd = karanaEndAngle - currentAngle;
+
+    const netMotion = 12; // Moon-Sun relative motion ~12°/day
+    const hoursUntilEnd = (degreesUntilEnd / netMotion) * 24;
+
+    const endTime = new Date(currentDate);
+    endTime.setHours(endTime.getHours() + hoursUntilEnd);
+
+    // Next karana
+    const nextKaranaNum = (currentKaranaNum % 60) + 1;
+    const nextKaranaData = this.getKaranaName(nextKaranaNum);
+
+    return {
+      endTime: this.formatTime(endTime.getHours(), endTime.getMinutes()),
+      nextKarana: nextKaranaData.name,
+      nextKaranaTamil: nextKaranaData.tamil
+    };
   }
 }
 

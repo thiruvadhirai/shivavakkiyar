@@ -8,10 +8,13 @@
 
   <!-- Collapsed View - Shows Pradosha Dates (Default) -->
   <div id="panchanga-collapsed-view" style="padding: 20px;">
-    <!-- Next 3 Pradosha Dates (Collapsed View) -->
+    <!-- Next 3 Pradosha Dates (Collapsible) -->
     <div class="panchanga-pradosha">
-      <div class="panchanga-pradosha-title">📅 Next Pradosha Dates</div>
-      <ul class="panchanga-pradosha-list" id="panchanga-pradosha-list-collapsed">
+      <div class="panchanga-pradosha-title" style="cursor: pointer; display: flex; justify-content: space-between; align-items: center;" onclick="const list = document.getElementById('panchanga-pradosha-list-collapsed'); const toggle = document.getElementById('panchanga-pradosha-toggle'); if(list.style.display === 'none') { list.style.display = 'block'; toggle.textContent = '▼'; } else { list.style.display = 'none'; toggle.textContent = '▶'; }">
+        <span>📅 Next Pradosha Dates</span>
+        <span id="panchanga-pradosha-toggle" style="font-size: 14px;">▶</span>
+      </div>
+      <ul class="panchanga-pradosha-list" id="panchanga-pradosha-list-collapsed" style="display: none;">
         <li style="text-align: center; color: #999;">Loading dates...</li>
       </ul>
     </div>
@@ -85,61 +88,7 @@
     <!-- Main Panchanga Table -->
     <table class="panchanga-table">
       <tbody>
-        <!-- Tithi -->
-        <tr class="panchanga-table-row">
-          <td class="panchanga-table-label">Tithi (Lunar Day)</td>
-          <td class="panchanga-table-value">
-            <strong id="result-tithi-name">--</strong>
-            <span id="result-tithi-phase" style="color: #666; margin-left: 8px;">--</span>
-            <div class="panchanga-progress" style="margin-top: 6px;">
-              <div class="panchanga-progress-bar" id="result-tithi-progress" style="width: 0%;"></div>
-            </div>
-            <div class="panchanga-progress-label" id="result-tithi-percent" style="font-size: 11px; color: #999; margin-top: 3px;">0% complete</div>
-          </td>
-        </tr>
-
-        <!-- Nakshatra -->
-        <tr class="panchanga-table-row">
-          <td class="panchanga-table-label">Nakshatra (Star)</td>
-          <td class="panchanga-table-value">
-            <strong id="result-nakshatra-name">--</strong>
-            <span id="result-nakshatra-tamil" style="color: #666; margin-left: 8px;">--</span>
-            <div style="font-size: 12px; color: #999; margin-top: 6px;">Zodiac: <span id="result-nakshatra-degree">--</span></div>
-            <div class="panchanga-progress" style="margin-top: 6px;">
-              <div class="panchanga-progress-bar" id="result-nakshatra-progress" style="width: 0%; background-color: #6f42c1;"></div>
-            </div>
-            <div class="panchanga-progress-label" id="result-nakshatra-percent" style="font-size: 11px; color: #999; margin-top: 3px;">0% complete</div>
-          </td>
-        </tr>
-
-        <!-- Yoga -->
-        <tr class="panchanga-table-row">
-          <td class="panchanga-table-label">Yoga (Auspicious Combination)</td>
-          <td class="panchanga-table-value">
-            <strong id="result-yoga-name">--</strong>
-            <span id="result-yoga-tamil" style="color: #666; margin-left: 8px;">--</span>
-          </td>
-        </tr>
-
-        <!-- Karana -->
-        <tr class="panchanga-table-row">
-          <td class="panchanga-table-label">Karana (Half-Tithi)</td>
-          <td class="panchanga-table-value">
-            <strong id="result-karana-name">--</strong>
-            <span id="result-karana-tamil" style="color: #666; margin-left: 8px;">--</span>
-          </td>
-        </tr>
-
-        <!-- Hora -->
-        <tr class="panchanga-table-row">
-          <td class="panchanga-table-label">Hora (Planetary Hour)</td>
-          <td class="panchanga-table-value">
-            <strong id="result-hora-planet">--</strong>
-            <span id="result-hora-number" style="color: #666; margin-left: 8px;">Hour #--</span>
-          </td>
-        </tr>
-
-        <!-- Sunrise -->
+        <!-- 1. Sunrise -->
         <tr class="panchanga-table-row">
           <td class="panchanga-table-label">🌅 Sunrise</td>
           <td class="panchanga-table-value">
@@ -147,7 +96,7 @@
           </td>
         </tr>
 
-        <!-- Sunset -->
+        <!-- 2. Sunset -->
         <tr class="panchanga-table-row">
           <td class="panchanga-table-label">🌇 Sunset</td>
           <td class="panchanga-table-value">
@@ -155,7 +104,45 @@
           </td>
         </tr>
 
-        <!-- Rahu Kalam -->
+        <!-- 3. Paksha (Lunar Phase) -->
+        <tr class="panchanga-table-row">
+          <td class="panchanga-table-label">Paksha (Lunar Phase)</td>
+          <td class="panchanga-table-value">
+            <strong id="result-paksha-name">--</strong>
+            <span id="result-paksha-tamil" style="color: #666; margin-left: 8px;">--</span>
+          </td>
+        </tr>
+
+        <!-- 3.1. Tithi -->
+        <tr class="panchanga-table-row">
+          <td class="panchanga-table-label">Tithi (Lunar Day)</td>
+          <td class="panchanga-table-value">
+            <strong id="result-tithi-name">--</strong>
+            <span id="result-tithi-tamil" style="color: #666; margin-left: 8px;">--</span>
+            <span style="color: #666; margin-left: 8px;">(until <strong id="result-tithi-endtime">--:--</strong>, Next: <span id="result-tithi-next">--</span>)</span>
+          </td>
+        </tr>
+
+        <!-- 4. Nakshatra -->
+        <tr class="panchanga-table-row">
+          <td class="panchanga-table-label">Nakshatra (Star)</td>
+          <td class="panchanga-table-value">
+            <strong id="result-nakshatra-name">--</strong>
+            <span id="result-nakshatra-tamil" style="color: #666; margin-left: 8px;">--</span>
+            <span style="color: #666; margin-left: 8px;">(until <strong id="result-nakshatra-endtime">--:--</strong>, Next: <span id="result-nakshatra-next">--</span>)</span>
+            <div style="font-size: 12px; color: #999; margin-top: 6px;">Zodiac: <span id="result-nakshatra-degree">--</span></div>
+          </td>
+        </tr>
+
+        <!-- 5. Abhijit Muhurtam -->
+        <tr class="panchanga-table-row panchanga-table-auspicious">
+          <td class="panchanga-table-label">✨ Abhijit Muhurtam [Most Auspicious]</td>
+          <td class="panchanga-table-value">
+            <strong style="color: #28a745;" id="result-abhijit">--:-- to --:--</strong>
+          </td>
+        </tr>
+
+        <!-- 6. Rahu Kalam -->
         <tr class="panchanga-table-row panchanga-table-warning">
           <td class="panchanga-table-label">⚠️ Rahu Kalam (Inauspicious)</td>
           <td class="panchanga-table-value">
@@ -163,43 +150,69 @@
           </td>
         </tr>
 
-        <!-- Abhijit Muhurtam -->
-        <tr class="panchanga-table-row panchanga-table-auspicious">
-          <td class="panchanga-table-label">✨ Abhijit Muhurtam [Most Auspicious]</td>
+        <!-- 7. Yoga -->
+        <tr class="panchanga-table-row">
+          <td class="panchanga-table-label">Yoga (Auspicious Combination)</td>
           <td class="panchanga-table-value">
-            <strong style="color: #28a745;" id="result-abhijit">--:-- to --:--</strong>
+            <strong id="result-yoga-name">--</strong>
+            <span id="result-yoga-tamil" style="color: #666; margin-left: 8px;">--</span>
+            <span style="color: #666; margin-left: 8px;">(until <strong id="result-yoga-endtime">--:--</strong>, Next: <span id="result-yoga-next">--</span>)</span>
+          </td>
+        </tr>
+
+        <!-- 8. Karana -->
+        <tr class="panchanga-table-row">
+          <td class="panchanga-table-label">Karana (Half-Tithi)</td>
+          <td class="panchanga-table-value">
+            <strong id="result-karana-name">--</strong>
+            <span id="result-karana-tamil" style="color: #666; margin-left: 8px;">--</span>
+            <span style="color: #666; margin-left: 8px;">(until <strong id="result-karana-endtime">--:--</strong>, Next: <span id="result-karana-next">--</span>)</span>
+          </td>
+        </tr>
+
+        <!-- 9. Hora (Collapsible) -->
+        <tr class="panchanga-table-row">
+          <td class="panchanga-table-label">Hora (Planetary Hours - 24 Hour Cycle)</td>
+          <td class="panchanga-table-value">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-size: 12px; color: #666;">Click to expand/collapse</span>
+              <span id="panchanga-hora-toggle" style="font-size: 14px; cursor: pointer;" onclick="const horaDiv = document.getElementById('result-horas-table'); horaDiv.style.display = horaDiv.style.display === 'none' ? 'block' : 'none'; this.textContent = horaDiv.style.display === 'none' ? '▶' : '▼';">▶</span>
+            </div>
+            <div id="result-horas-table" style="margin-top: 10px; display: none;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+                <thead>
+                  <tr style="border-bottom: 2px solid #ddd;">
+                    <th style="text-align: left; padding: 5px; font-weight: bold;">Hour</th>
+                    <th style="text-align: left; padding: 5px; font-weight: bold;">Planet</th>
+                    <th style="text-align: left; padding: 5px; font-weight: bold;">Time</th>
+                    <th style="text-align: left; padding: 5px; font-weight: bold;">Tamil</th>
+                  </tr>
+                </thead>
+                <tbody id="result-horas-body">
+                  <!-- Filled by JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </td>
+        </tr>
+
+        <!-- 10. Sun Longitude -->
+        <tr class="panchanga-table-row">
+          <td class="panchanga-table-label">☀️ Sun Longitude</td>
+          <td class="panchanga-table-value">
+            <strong id="result-sun-lon">--°</strong>
+          </td>
+        </tr>
+
+        <!-- 11. Moon Longitude -->
+        <tr class="panchanga-table-row">
+          <td class="panchanga-table-label">🌙 Moon Longitude</td>
+          <td class="panchanga-table-value">
+            <strong id="result-moon-lon">--°</strong>
           </td>
         </tr>
       </tbody>
     </table>
-
-
-    <!-- Pradosha Information -->
-    <div class="panchanga-pradosha">
-      <div class="panchanga-pradosha-title">🔯 Next Pradosha Dates</div>
-      <ul class="panchanga-pradosha-list" id="result-pradosha-list">
-        <li style="text-align: center; color: #999;">Loading...</li>
-      </ul>
-    </div>
-
-    <!-- Celestial Data -->
-    <div style="background: #f6f8fa; padding: 15px; border-radius: 4px; margin-top: 20px;">
-      <div style="font-weight: 600; color: #24292e; margin-bottom: 12px; font-size: 13px;">📊 Celestial Data (Sidereal)</div>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-        <div>
-          <div style="color: #666; font-size: 12px;">Sun's Longitude</div>
-          <div style="font-weight: 600; color: #24292e; margin-top: 3px;" id="result-sun-lon">--°</div>
-        </div>
-        <div>
-          <div style="color: #666; font-size: 12px;">Moon's Longitude</div>
-          <div style="font-weight: 600; color: #24292e; margin-top: 3px;" id="result-moon-lon">--°</div>
-        </div>
-        <div>
-          <div style="color: #666; font-size: 12px;">Drik Ayanamsa</div>
-          <div style="font-weight: 600; color: #24292e; margin-top: 3px;" id="result-drik-ayanamsa">--°</div>
-        </div>
-      </div>
-    </div>
 
     <!-- Location & Save Options -->
     <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #e1e4e8; display: flex; gap: 10px; align-items: center;">
@@ -394,29 +407,56 @@
         document.getElementById('panchanga-result-ayanamsa').textContent = panchanga.ayanamsa.toFixed(2);
 
         // Tithi
+        // Paksha
+        const pakshaData = PanchangaLanguages.PAKSHA[p.tithi.phase] || { name: p.tithi.phase, tamil: '' };
+        document.getElementById('result-paksha-name').textContent = pakshaData.name?.toUpperCase?.() || '';
+        document.getElementById('result-paksha-tamil').textContent = pakshaData.tamil || '';
+
+        // Tithi
         document.getElementById('result-tithi-name').textContent = p.tithi.name;
-        document.getElementById('result-tithi-phase').textContent = p.tithi.phase?.toUpperCase?.() || '';
-        document.getElementById('result-tithi-progress').style.width = p.tithi.percent + '%';
-        document.getElementById('result-tithi-percent').textContent = p.tithi.percent + '% complete';
+        document.getElementById('result-tithi-tamil').textContent = p.tithi.tamil || '';
+        document.getElementById('result-tithi-endtime').textContent = p.tithi.endTime || '--:--';
+        document.getElementById('result-tithi-next').textContent = p.tithi.nextTithi || '--';
 
         // Nakshatra
         document.getElementById('result-nakshatra-name').textContent = p.nakshatra.name;
         document.getElementById('result-nakshatra-tamil').textContent = p.nakshatra.tamil;
         document.getElementById('result-nakshatra-degree').textContent = p.nakshatra.degree;
-        document.getElementById('result-nakshatra-progress').style.width = p.nakshatra.percent + '%';
-        document.getElementById('result-nakshatra-percent').textContent = p.nakshatra.percent + '% complete';
+        document.getElementById('result-nakshatra-endtime').textContent = p.nakshatra.endTime || '--:--';
+        document.getElementById('result-nakshatra-next').textContent = p.nakshatra.nextNakshatra || '--';
 
         // Yoga
         document.getElementById('result-yoga-name').textContent = p.yoga.name;
         document.getElementById('result-yoga-tamil').textContent = p.yoga.tamil;
+        document.getElementById('result-yoga-endtime').textContent = p.yoga.endTime || '--:--';
+        document.getElementById('result-yoga-next').textContent = p.yoga.nextYoga || '--';
 
         // Karana
         document.getElementById('result-karana-name').textContent = p.karana.name;
         document.getElementById('result-karana-tamil').textContent = p.karana.tamil;
+        document.getElementById('result-karana-endtime').textContent = p.karana.endTime || '--:--';
+        document.getElementById('result-karana-next').textContent = p.karana.nextKarana || '--';
 
-        // Hora
-        document.getElementById('result-hora-planet').textContent = p.hora.planet;
-        document.getElementById('result-hora-number').textContent = `Hour #${p.hora.number}`;
+        // Horas - Display all 24 horas table
+        const horasBody = document.getElementById('result-horas-body');
+        horasBody.innerHTML = '';
+        if (p.horas && Array.isArray(p.horas)) {
+          p.horas.forEach(hora => {
+            const row = document.createElement('tr');
+            row.style.borderBottom = '1px solid #eee';
+            if (hora.number === p.hora.number) {
+              row.style.backgroundColor = '#fffacd';
+              row.style.fontWeight = 'bold';
+            }
+            row.innerHTML = `
+              <td style="padding: 5px;">#${hora.number}</td>
+              <td style="padding: 5px;"><strong>${hora.planet}</strong></td>
+              <td style="padding: 5px;">${hora.startTime} - ${hora.endTime}</td>
+              <td style="padding: 5px; color: #666;">${hora.tamil}</td>
+            `;
+            horasBody.appendChild(row);
+          });
+        }
 
         // Rahu Kalam
         document.getElementById('result-rahu-time').textContent = `${panchanga.times.rahuKalam.startTime} to ${panchanga.times.rahuKalam.endTime}`;
@@ -429,7 +469,6 @@
         // Celestial Data
         document.getElementById('result-sun-lon').textContent = panchanga.celestial.sunLongitude.toFixed(2) + '°';
         document.getElementById('result-moon-lon').textContent = panchanga.celestial.moonLongitude.toFixed(2) + '°';
-        document.getElementById('result-drik-ayanamsa').textContent = panchanga.ayanamsa.toFixed(2) + '°';
 
         // Pradosha dates
         const nextPradosha = await calculator.findNextPradosha(
@@ -437,7 +476,6 @@
           selectedLocation.latitude,
           selectedLocation.longitude
         );
-        const pradoshaListEl = document.getElementById('result-pradosha-list');
         const pradoshaListCollapsedEl = document.getElementById('panchanga-pradosha-list-collapsed');
 
         const pradoshaHTML = nextPradosha.slice(0, 3).map((pd) => {
@@ -453,8 +491,7 @@
           `;
         }).join('');
 
-        // Update both collapsed and expanded views
-        pradoshaListEl.innerHTML = pradoshaHTML;
+        // Update collapsed view with pradosha dates
         pradoshaListCollapsedEl.innerHTML = pradoshaHTML;
 
         loadingEl.style.display = 'none';

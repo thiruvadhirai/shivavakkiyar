@@ -16,30 +16,29 @@
         "moonset": "05:37",
         "tithi": {
           "name": "Pratipada",
+          "next_tithi": "Dwitiya",
           "end_time": "04:07",
           "end_date": "2026-06-01"
         },
         "nakshatra": {
           "name": "Jyeshtha",
-          "end_time": "full_night"
+          "next_nakshatra": "Mula",
+          "end_time": "23:15"
         },
         "yoga": {
           "name": "Siddha",
+          "next_yoga": "Sadhya",
           "end_time": "17:49"
         },
-        "karana": [
-          {
-            "name": "Balava",
-            "end_time": "14:55"
-          },
-          {
-            "name": "Kaulava",
-            "end_time": "04:07",
-            "end_date": "2026-06-01"
-          }
-        ],
+        "karana": {
+          "name": "Balava",
+          "next_karana": "Kaulava",
+          "end_time": "14:55"
+        },
         "paksha": "Krishna Paksha",
         "weekday": "Raviwara (Sunday)",
+        "day_of_week": 0,
+        "first_hora_planet": "Sun",
         "month_amanta": "Jyeshtha (Adhik)",
         "month_purnimanta": "Jyeshtha (Adhik)",
         "moonsign": "Vrishchika",
@@ -79,29 +78,28 @@
         "moonset": "04:52",
         "tithi": {
           "name": "Pournami",
+          "next_tithi": "Pratipada",
           "end_time": "01:44"
         },
         "nakshatra": {
           "name": "Anusha (Anusham)",
+          "next_nakshatra": "Pushya",
           "end_time": "03:42"
         },
         "yoga": {
           "name": "Shiva",
+          "next_yoga": "Siddha",
           "end_time": "16:55"
         },
-        "karana": [
-          {
-            "name": "Vishti",
-            "end_time": "12:35"
-          },
-          {
-            "name": "Bava",
-            "end_time": "01:44",
-            "end_date": "2026-06-01"
-          }
-        ],
+        "karana": {
+          "name": "Vishti",
+          "next_karana": "Bava",
+          "end_time": "12:35"
+        },
         "paksha": "Shukla Paksha",
         "weekday": "Cani (Friday)",
+        "day_of_week": 5,
+        "first_hora_planet": "Venus",
         "month_amanta": "Jyeshtha (Adhik)",
         "month_purnimanta": "Jyeshtha (Adhik)",
         "moonsign": "Vrishchika",
