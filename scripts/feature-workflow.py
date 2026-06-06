@@ -138,8 +138,9 @@ class WorkflowManager:
         print("  5. Run: ./scripts/feature-workflow.py finish")
 
     def cmd_test(self):
-        """Run tests in container."""
-        self.log("Running tests in saivamcloud-test container...", BLUE)
+        """Run all tests (unit + integration + E2E) in container."""
+        self.log("Running all tests in saivamcloud-test container...", BLUE)
+        self.log("(This includes unit, integration, and E2E tests)", YELLOW)
         print()
 
         # Check test file exists
@@ -166,10 +167,14 @@ class WorkflowManager:
                 self.log("Starting test container...", YELLOW)
                 self.run_command("podman-compose --profile test up -d saivamcloud-test")
 
-            # Run tests
+            # Run full test suite (unit + integration + E2E)
+            self.log("Running unit and integration tests...", BLUE)
             self.run_command("podman exec saivamcloud-test npm test")
             print()
-            self.log("✅ All tests passed!", GREEN)
+            self.log("Running E2E tests...", BLUE)
+            self.run_command("podman exec saivamcloud-test npm run test:e2e")
+            print()
+            self.log("✅ All tests passed! (unit + integration + E2E)", GREEN)
 
         except subprocess.CalledProcessError:
             print()
@@ -216,10 +221,22 @@ class WorkflowManager:
         self.log(f"   New version: {new_version}")
 
     def run_tests_silent(self):
-        """Run tests silently, return True if pass, False if fail."""
+        """Run all tests silently (unit + integration + E2E), return True if pass, False if fail."""
         try:
+            # Run unit and integration tests
             result = subprocess.run(
                 "podman exec saivamcloud-test npm test",
+                shell=True,
+                capture_output=True,
+                timeout=300,
+                text=True
+            )
+            if result.returncode != 0:
+                return False
+
+            # Run E2E tests
+            result = subprocess.run(
+                "podman exec saivamcloud-test npm run test:e2e",
                 shell=True,
                 capture_output=True,
                 timeout=300,
@@ -230,7 +247,7 @@ class WorkflowManager:
             return False
 
     def cmd_finish(self):
-        """Finish feature branch - AUTO-RUN TESTS BEFORE MERGE."""
+        """Finish feature branch - AUTO-RUN ALL TESTS (unit + integration + E2E) BEFORE MERGE."""
         current_branch = self.get_current_branch()
 
         if current_branch == self.main_branch:
@@ -245,8 +262,8 @@ class WorkflowManager:
         self.log(f"Finishing feature branch: {current_branch}", BLUE)
         print()
 
-        # Auto-run tests BEFORE merge
-        self.log("Running tests before merge...", BLUE)
+        # Auto-run all tests (unit + integration + E2E) BEFORE merge
+        self.log("Running ALL tests before merge (unit + integration + E2E)...", BLUE)
         print()
 
         if not self.run_tests_silent():
