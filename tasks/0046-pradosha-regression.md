@@ -1,7 +1,7 @@
 ---
-id: BUG-0001
+id: 0046
 title: Pradosha Regression - Null Reference Error
-status: open
+status: done
 priority: high
 complexity: low
 created: 2026-06-06
