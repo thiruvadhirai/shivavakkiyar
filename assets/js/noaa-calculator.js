@@ -230,8 +230,10 @@ class NOAACalculator {
 
       // Apply correction to get apparent time
       // Using Temporal for precise duration handling
+      // Note: Temporal.Duration requires integer fields, so we convert fractional minutes to seconds
+      const correctionSeconds = Math.round(correctionMinutes * 60);
       const correctionDuration = this.hasTemporalAPI
-        ? Temporal.Duration.from({ minutes: correctionMinutes })
+        ? Temporal.Duration.from({ seconds: correctionSeconds })
         : null;
 
       const apparentDate = new Date(geometricDate.getTime() + correctionMinutes * 60 * 1000);
