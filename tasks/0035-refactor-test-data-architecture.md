@@ -1,7 +1,7 @@
 ---
 id: 0035
 title: "REFACTOR: Test data architecture - move hardcoded data to stored artifacts"
-status: open
+status: done
 impact: Medium
 priority: 030
 complexity: "2-3 hours"
