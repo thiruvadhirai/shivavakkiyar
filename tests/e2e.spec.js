@@ -40,20 +40,21 @@ test.describe('Panchanga Calculator Page', () => {
 
   // Test: Location input works
   test('Location input accepts text input', async ({ page }) => {
-    // Click expand button to show location input section
+    // Click expand button to open modal (replaces old input-section)
     const expandBtn = page.locator('#panchanga-expand-details-btn');
     await expandBtn.click();
 
-    // Wait for input section to be visible
-    await page.locator('#panchanga-input-section').waitFor({ state: 'visible' });
+    // Wait for modal to be visible
+    const modal = page.locator('[data-testid="panchanga-modal"]');
+    await modal.waitFor({ state: 'visible' });
 
-    const locationInput = page.locator('#panchanga-location-input');
+    const modalLocationInput = page.locator('#panchanga-modal-location-input');
 
     // Type location
-    await locationInput.fill('Chennai, India');
+    await modalLocationInput.fill('Chennai, India');
 
     // Verify text was entered
-    const value = await locationInput.inputValue();
+    const value = await modalLocationInput.inputValue();
     expect(value).toBe('Chennai, India');
   });
 
@@ -94,21 +95,24 @@ test.describe('Panchanga Calculator Page', () => {
 
   // Test: Calculate button triggers calculation
   test('Calculate button initiates panchanga calculation', async ({ page }) => {
-    // Click expand button to show location input section
+    // Click expand button to open modal
     const expandBtn = page.locator('#panchanga-expand-details-btn');
     await expandBtn.click();
 
-    // Wait for input section to be visible
-    await page.locator('#panchanga-input-section').waitFor({ state: 'visible' });
+    // Wait for modal to be visible
+    const modal = page.locator('[data-testid="panchanga-modal"]');
+    await modal.waitFor({ state: 'visible' });
 
-    const locationInput = page.locator('#panchanga-location-input');
-    const calcBtn = page.locator('button:has-text("Calculate")');
+    const modalLocationInput = page.locator('#panchanga-modal-location-input');
+    const modalDateInput = page.locator('#panchanga-modal-date-input');
+    const modalCalcBtn = page.locator('[data-testid="panchanga-modal-calculate-btn"]');
 
-    // Fill location
-    await locationInput.fill('New York, USA');
+    // Fill location and date
+    await modalLocationInput.fill('New York, USA');
+    await modalDateInput.fill('2026-06-06');
 
     // Click calculate button
-    await calcBtn.click();
+    await modalCalcBtn.click();
 
     // Wait for calculation (may show loading state or results)
     try {
@@ -130,19 +134,22 @@ test.describe('Panchanga Calculator Page', () => {
 
   // Test: Panchanga results display when calculation succeeds
   test('Panchanga results display with all components', async ({ page }) => {
-    // Click expand button to show location input section
+    // Click expand button to open modal
     const expandBtn = page.locator('#panchanga-expand-details-btn');
     await expandBtn.click();
 
-    // Wait for input section to be visible
-    await page.locator('#panchanga-input-section').waitFor({ state: 'visible' });
+    // Wait for modal to be visible
+    const modal = page.locator('[data-testid="panchanga-modal"]');
+    await modal.waitFor({ state: 'visible' });
 
-    const locationInput = page.locator('#panchanga-location-input');
-    const calcBtn = page.locator('button:has-text("Calculate")');
+    const modalLocationInput = page.locator('#panchanga-modal-location-input');
+    const modalDateInput = page.locator('#panchanga-modal-date-input');
+    const modalCalcBtn = page.locator('[data-testid="panchanga-modal-calculate-btn"]');
 
-    // Fill location and calculate
-    await locationInput.fill('Chennai, India');
-    await calcBtn.click();
+    // Fill location and date, then calculate
+    await modalLocationInput.fill('Chennai, India');
+    await modalDateInput.fill('2026-06-06');
+    await modalCalcBtn.click();
 
     // Wait for results to appear
     try {
@@ -170,30 +177,33 @@ test.describe('Panchanga Calculator Page', () => {
 
   // Test: Error handling when location not found
   test('Shows error message when location cannot be geocoded', async ({ page }) => {
-    // Click expand button to show location input section
+    // Click expand button to open modal
     const expandBtn = page.locator('#panchanga-expand-details-btn');
     await expandBtn.click();
 
-    // Wait for input section to be visible
-    await page.locator('#panchanga-input-section').waitFor({ state: 'visible' });
+    // Wait for modal to be visible
+    const modal = page.locator('[data-testid="panchanga-modal"]');
+    await modal.waitFor({ state: 'visible' });
 
-    const locationInput = page.locator('#panchanga-location-input');
-    const calcBtn = page.locator('button:has-text("Calculate")');
+    const modalLocationInput = page.locator('#panchanga-modal-location-input');
+    const modalDateInput = page.locator('#panchanga-modal-date-input');
+    const modalCalcBtn = page.locator('[data-testid="panchanga-modal-calculate-btn"]');
 
     // Try invalid location
-    await locationInput.fill('XYZABC Nonexistent Place 12345');
-    await calcBtn.click();
+    await modalLocationInput.fill('XYZABC Nonexistent Place 12345');
+    await modalDateInput.fill('2026-06-06');
+    await modalCalcBtn.click();
 
     // Wait for error or timeout
     try {
       await page.waitForTimeout(3000);
 
-      // Check for error message
-      const errorMsg = page.locator('[class*="error"]');
-      const errorVisible = await errorMsg.isVisible().catch(() => false);
+      // Check for error message in modal or main area
+      const errorMsg = page.locator('[class*="error"], [id*="error"]');
+      const errorVisible = await errorMsg.first().isVisible().catch(() => false);
 
       if (errorVisible) {
-        const text = await errorMsg.textContent();
+        const text = await errorMsg.first().textContent();
         expect(text).toBeTruthy();
       }
     } catch (e) {
@@ -433,21 +443,22 @@ test.describe('Accessibility', () => {
     await page.goto(`${BASE_URL}/panchangam/`, { timeout: TIMEOUT });
     await page.waitForLoadState('networkidle');
 
-    // Click expand button to show location input section
+    // Click expand button to open modal
     const expandBtn = page.locator('#panchanga-expand-details-btn');
     await expandBtn.click();
 
-    // Wait for input section to be visible
-    await page.locator('#panchanga-input-section').waitFor({ state: 'visible' });
+    // Wait for modal to be visible
+    const modal = page.locator('[data-testid="panchanga-modal"]');
+    await modal.waitFor({ state: 'visible' });
 
-    const locationInput = page.locator('#panchanga-location-input');
+    const modalLocationInput = page.locator('#panchanga-modal-location-input');
 
     // Tab to input
     await page.keyboard.press('Tab');
 
-    // Check if input is focused
-    const focused = await locationInput.evaluate(el => el === document.activeElement);
-    console.log('Location input focused:', focused);
+    // Check if modal location input is focused
+    const focused = await modalLocationInput.evaluate(el => el === document.activeElement).catch(() => false);
+    console.log('Modal location input focused:', focused);
   });
 
   test('Buttons have accessible labels', async ({ page }) => {
@@ -473,36 +484,37 @@ test.describe('Accessibility', () => {
     await page.goto(`${BASE_URL}/panchangam/`, { timeout: TIMEOUT });
     await page.waitForLoadState('networkidle');
 
-    // Click expand button to show location input section
+    // Click expand button to open modal
     const expandBtn = page.locator('#panchanga-expand-details-btn');
     await expandBtn.click();
 
-    // Wait for input section to be visible
-    await page.locator('#panchanga-input-section').waitFor({ state: 'visible' });
+    // Wait for modal to be visible
+    const modal = page.locator('[data-testid="panchanga-modal"]');
+    await modal.waitFor({ state: 'visible' });
 
     // Fill in the known problematic case
-    const locationInput = page.locator('#panchanga-location-input');
-    const dateInput = page.locator('#panchanga-date-input');
-    const calcBtn = page.locator('button:has-text("Calculate")').first();
+    const modalLocationInput = page.locator('#panchanga-modal-location-input');
+    const modalDateInput = page.locator('#panchanga-modal-date-input');
+    const modalCalcBtn = page.locator('[data-testid="panchanga-modal-calculate-btn"]');
 
-    await locationInput.fill('Olympia, Thurston, Washington');
-    await dateInput.fill('2026-06-12');
+    await modalLocationInput.fill('Olympia, Thurston, Washington');
+    await modalDateInput.fill('2026-06-12');
 
     console.log('TEST: Clicking Calculate button for 06/12/2026 + Olympia, WA');
 
     // Click calculate and wait for results or error
-    await calcBtn.click();
+    await modalCalcBtn.click();
 
     // Wait for either success or error message
     try {
-      await page.waitForSelector('#panchanga-result-date, #panchanga-error, [id*="error"]', { timeout: 5000 });
+      await page.waitForSelector('#panchanga-result-date, #panchanga-full-error, [id*="error"]', { timeout: 5000 });
     } catch (e) {
       console.log('TEST: No result/error element found within 5s');
     }
 
     // Check if calculation succeeded
-    const resultDate = await page.locator('#panchanga-result-date').isVisible();
-    const errorMsg = await page.locator('[id*="error"]').isVisible();
+    const resultDate = await page.locator('#panchanga-result-date').isVisible().catch(() => false);
+    const errorMsg = await page.locator('[id*="error"]').isVisible().catch(() => false);
 
     console.log('TEST SUMMARY:');
     console.log('- Result visible:', resultDate);
