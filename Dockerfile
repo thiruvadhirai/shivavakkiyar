@@ -9,19 +9,13 @@ RUN apk add --no-cache \
 # Set working directory
 WORKDIR /srv/jekyll
 
-# Install bundler
-RUN gem install bundler
+# Install Jekyll and bundler
+RUN gem install jekyll bundler
 
-# Copy Gemfile and Gemfile.lock (if exists)
-COPY Gemfile Gemfile.lock* ./
-
-# Install gems from Gemfile using bundler
-RUN bundle install --deployment --jobs 4 2>&1 | grep -E "(Fetching|Using|Installing|Gem|ERROR)" || true
-
-ENV LISTEN_DIRS=/srv/jekyll/_posts:/srv/jekyll/_includes:/srv/jekyll/assets:/srv/jekyll/panchangam.md
+ENV LISTEN_DIRS=/srv/jekyll/_posts:/srv/jekyll/_includes:/srv/jekyll/assets:/srv/jekyll/panchanga.md
 
 # Expose port
 EXPOSE 4000
 
-# Default command - start jekyll
-CMD ["bundle", "exec", "jekyll", "serve", "--host", "0.0.0.0"]
+# Default command - install webrick and start jekyll
+CMD sh -c "gem install webrick && jekyll serve --host 0.0.0.0"
