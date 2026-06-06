@@ -13,42 +13,11 @@ const fs = require('fs');
 const path = require('path');
 
 // ============================================================
-// REFERENCE DATA (From Drik Panchang official)
+// REFERENCE DATA (From Drik Panchang official - stored as artifact)
 // ============================================================
 
-const REFERENCE_DATA = {
-  'olympia_2026_11_02': {
-    location: 'Olympia, Washington',
-    latitude: 47.0379,
-    longitude: -122.9007,
-    date: '2026-11-02',
-    time: '15:11:24',
-    timezone: 'PST/PDT',
-    references: {
-      sunrise: { value: '05:21', tolerance: 1 }, // minutes
-      sunset: { value: '21:00', tolerance: 1 },
-      tithi: { value: 'Dwitiya (2)', paksha: 'Krishna', tolerance: 1 },
-      nakshatra: { value: 'Jyeshtha (18)', tolerance: 1 },
-      yoga: { value: 'TBD', tolerance: 2 },
-      rahu_kalam: { value: 'TBD', tolerance: 5 },
-      abhijit_muhurta: { value: 'TBD', tolerance: 5 }
-    }
-  },
-  'karur_2026_11_02': {
-    location: 'Karur, Tamil Nadu',
-    latitude: 11.1408,
-    longitude: 78.1309,
-    date: '2026-11-02',
-    time: '15:11:24',
-    timezone: 'IST',
-    references: {
-      sunrise: { value: '05:23', tolerance: 1 },
-      sunset: { value: '19:15', tolerance: 1 },
-      tithi: { value: 'TBD', tolerance: 1 },
-      nakshatra: { value: 'TBD', tolerance: 1 }
-    }
-  }
-};
+// Load reference data from artifact file (using absolute path for reliability)
+const REFERENCE_DATA = require(path.join(__dirname, 'artifacts', 'drik-panchang-2026-comparison.json'));
 
 // ============================================================
 // TEST SUITE
