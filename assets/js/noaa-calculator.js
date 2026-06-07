@@ -29,21 +29,36 @@ class NOAACalculator {
 
     // Temporal API availability
     this.hasTemporalAPI = typeof globalThis.Temporal !== 'undefined';
+
+    // Warn if Temporal API is not available
+    if (!this.hasTemporalAPI) {
+      console.warn('NOAACalculator: Temporal API not available. Calculations may fall back to Date-based methods.');
+    }
   }
 
   /**
    * Convert Date to Temporal.Instant for calculations
    * Handles both Date objects and Temporal types gracefully
+   * Falls back to Date objects if Temporal API is not available
    * @param {Date|Temporal.Instant|Temporal.ZonedDateTime} dateInput - Date to convert
-   * @returns {Temporal.Instant} Temporal instant in UTC
+   * @returns {Temporal.Instant|Date} Temporal instant in UTC, or Date if Temporal unavailable
    */
   toTemporalInstant(dateInput) {
+    // If Temporal API not available, return Date as-is for backward compatibility
     if (!this.hasTemporalAPI) {
-      throw new Error('Temporal API not available. Use temporal-polyfill or Node.js 18+');
+      if (dateInput instanceof Date) {
+        return dateInput;
+      }
+      // Try to parse as Date string
+      const parsed = new Date(String(dateInput));
+      if (isNaN(parsed.getTime())) {
+        throw new Error('Cannot parse date and Temporal API not available');
+      }
+      return parsed;
     }
 
+    // Temporal API available - use it for better precision
     if (dateInput instanceof Date) {
-      // Convert Date to ISO string then to Temporal.Instant
       return Temporal.Instant.from(dateInput.toISOString());
     }
 
@@ -61,11 +76,18 @@ class NOAACalculator {
 
   /**
    * Convert Temporal.Instant back to Date for backward compatibility
-   * @param {Temporal.Instant} instant - Temporal instant to convert
+   * Handles both Temporal.Instant and Date objects
+   * @param {Temporal.Instant|Date} instant - Temporal instant or Date to convert
    * @returns {Date} JavaScript Date object
    */
   toDate(instant) {
-    return new Date(instant.toJSON());
+    if (instant instanceof Date) {
+      return instant;
+    }
+    if (instant && typeof instant.toJSON === 'function') {
+      return new Date(instant.toJSON());
+    }
+    return new Date(instant);
   }
 
   /**
