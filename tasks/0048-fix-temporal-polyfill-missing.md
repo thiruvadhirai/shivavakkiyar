@@ -25,23 +25,25 @@ This happens because the NOAACalculator requires the Temporal API, but the brows
 
 ## Solution
 
-1. Add temporal-polyfill CDN to `_layouts/default.html`
-2. Load synchronously (no defer) to ensure it's available before other scripts
-3. Add graceful fallback in NOAACalculator if Temporal is still unavailable
+1. Remove temporal-polyfill CDN dependency (iOS Safari doesn't load it reliably)
+2. Leverage existing Date-based fallback logic in NOAACalculator
+3. NOAACalculator automatically uses Date objects when Temporal API unavailable
 
 ## Acceptance Criteria
 
-- ✅ Temporal-polyfill CDN link added to layout
-- ✅ Polyfill loads before NOAACalculator and Astronomy Engine
-- ✅ URL `https://saivam.cloud/panchangam/?date=2026-06-06&locationid=47.0451,-122.8950` works without errors
-- ✅ Sunrise/sunset calculations show correct refraction-corrected values
-- ✅ NOAACalculator provides fallback warning if Temporal unavailable
+- ✅ Remove temporal-polyfill CDN dependency
+- ✅ NOAACalculator uses Date-based fallback calculations
+- ✅ URL `https://saivam.cloud/panchangam/?date=2026-06-06&locationid=47.0451,-122.8950` works on iOS Safari without errors
+- ✅ Sunrise/sunset calculations show correct refraction-corrected values with Date objects
+- ✅ All browsers (Chrome, Firefox, Safari, iOS Safari) work correctly
 
 ## Implementation Notes
 
-- Temporal polyfill version: 0.2.5 from cdn.jsdelivr.net
-- Load order: Temporal polyfill → Astronomy Engine → NOAA Calculator
-- Backward compatibility: NOAACalculator can fall back to Date objects if needed
+- NOAACalculator checks `this.hasTemporalAPI` before using Temporal
+- Date-based calculations are fully functional and accurate enough
+- Refraction correction works with Date arithmetic (milliseconds)
+- iOS Safari compatibility: No CDN dependencies needed
+- Fallback behavior: toTemporalInstant() returns Date objects when Temporal unavailable
 
 ## Testing
 
