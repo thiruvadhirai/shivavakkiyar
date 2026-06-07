@@ -294,10 +294,6 @@
     });
   </script>
 
-  <!-- Temporal Polyfill (required for NOAACalculator nanosecond precision) -->
-  <!-- NOTE: No defer - must load before other scripts that use Temporal API -->
-  <script src="https://cdn.jsdelivr.net/npm/temporal-polyfill@0.2.5/dist/temporal.global.min.js"></script>
-
   <!-- Astronomy Engine - NASA JPL Ephemeris (local copy) -->
   <script src="{{ '/assets/js/astronomy.browser.js' | relative_url }}" defer></script>
 
