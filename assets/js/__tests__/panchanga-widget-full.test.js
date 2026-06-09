@@ -68,6 +68,25 @@ describe('PanchangaWidgetFull', () => {
       expect(widget.today.getMonth()).toBe(5); // 0-indexed
       expect(widget.today.getDate()).toBe(6);
     });
+
+    test('Dubai timezone: parseUrlParams maintains correct date (2026-06-06, not 2026-06-05)', () => {
+      // Bug reproduction: When browser is in different timezone than Dubai (UTC+4),
+      // the date should still be 2026-06-06, not shifted to 2026-06-05
+      Object.defineProperty(window, 'location', {
+        value: {
+          search: '?date=2026-06-06&locationid=25.0791,55.4797'
+        },
+        writable: true
+      });
+
+      widget.parseUrlParams();
+
+      // The date from URL should be treated as UTC or location-agnostic
+      // regardless of browser's local timezone
+      expect(widget.today.getUTCFullYear()).toBe(2026);
+      expect(widget.today.getUTCMonth()).toBe(5); // 0-indexed, June = 5
+      expect(widget.today.getUTCDate()).toBe(6);
+    });
   });
 
   describe('Modal Error Handling', () => {

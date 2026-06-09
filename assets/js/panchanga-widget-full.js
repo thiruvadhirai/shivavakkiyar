@@ -50,7 +50,8 @@ class PanchangaWidgetFull {
 
     if (this.urlDate) {
       const [year, month, day] = this.urlDate.split('-').map(Number);
-      this.today = new Date(year, month - 1, day);
+      // Parse as UTC to avoid timezone shift issues with location-specific timezones
+      this.today = new Date(Date.UTC(year, month - 1, day));
       document.getElementById('panchanga-date-input').valueAsDate = this.today;
     }
 
