@@ -428,7 +428,12 @@ class PanchangaWidgetFull {
 
   async calculate(dateValue, location) {
     if (!location) {
-      console.error('Calculate called without location');
+      console.error('Calculate called without location:', { dateValue, location, selectedLocation: this.selectedLocation, effectiveLocation: this.effectiveLocation });
+      const errorEl = document.getElementById('panchanga-full-error');
+      if (errorEl) {
+        errorEl.style.display = 'block';
+        errorEl.textContent = '❌ Error: Location not found. Please select a location.';
+      }
       return;
     }
 
@@ -598,6 +603,13 @@ class PanchangaWidgetFull {
   }
 
   async autoLoadAndCalculate() {
+    console.log('[Widget] autoLoadAndCalculate check:', {
+      urlDate: this.urlDate,
+      selectedLocation: this.selectedLocation?.name || 'null',
+      today: this.today,
+      effectiveLocation: this.effectiveLocation?.name || 'null'
+    });
+
     if (this.urlDate && this.selectedLocation) {
       // URL has both date and location - auto-calculate
       console.log('[Widget] Auto-calculating from URL params');
