@@ -7,15 +7,11 @@
   window.initialLocation = null;
   window.initialDate = null;
 
-  // Support both ?location=Name and ?locationid=lat,lon formats
-  if (urlParams.has('locationid') && urlParams.has('location')) {
+  // Support ?locationid=lat,lon format (simplified, no location name in URL)
+  if (urlParams.has('locationid')) {
     const [lat, lon] = urlParams.get('locationid').split(',').map(Number);
-    const name = decodeURIComponent(urlParams.get('location'));
-    window.initialLocation = { latitude: lat, longitude: lon, name: name };
-    console.log('[Widget Init] Loaded from URL:', window.initialLocation);
-  } else if (urlParams.has('location')) {
-    window.initialLocationName = decodeURIComponent(urlParams.get('location'));
-    console.log('[Widget Init] Location name from URL:', window.initialLocationName);
+    window.initialLocation = { latitude: lat, longitude: lon };
+    console.log('[Widget Init] Loaded location from URL:', window.initialLocation);
   }
 
   if (urlParams.has('date')) {

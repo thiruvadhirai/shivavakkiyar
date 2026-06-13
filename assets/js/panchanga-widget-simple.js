@@ -329,12 +329,12 @@ async function initSimplePanchangaWidget() {
       suggestionsDiv.style.display = 'none';
       calculateBtn.focus();
 
-      // Update URL with selected location
+      // Update URL with just coordinates (locationid only)
       const url = new URL(window.location);
-      url.searchParams.set('location', name);
+      url.searchParams.delete('location');
       url.searchParams.set('locationid', `${lat.toFixed(4)},${lon.toFixed(4)}`);
       window.history.pushState({ location: selectedLocation }, '', url);
-      console.log('[Widget] Updated URL with location:', name);
+      console.log('[Widget] Updated URL with locationid:', selectedLocation);
     };
 
     // Calculate button
@@ -363,12 +363,12 @@ async function initSimplePanchangaWidget() {
         loadingEl.style.display = 'block';
         resultsEl.style.display = 'none';
 
-        // Update URL with selected location
+        // Update URL with just coordinates (locationid only)
         const url = new URL(window.location);
-        url.searchParams.set('location', selectedLocation.name);
+        url.searchParams.delete('location');
         url.searchParams.set('locationid', `${selectedLocation.latitude.toFixed(4)},${selectedLocation.longitude.toFixed(4)}`);
         window.history.pushState({ location: selectedLocation }, '', url);
-        console.log('[Widget] Updated URL with location:', selectedLocation.name);
+        console.log('[Widget] Updated URL with locationid:', selectedLocation.name);
 
         // Save location to cache
         locationManager.saveLocationToStorage(selectedLocation);
