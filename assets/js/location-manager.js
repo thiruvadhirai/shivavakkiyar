@@ -120,6 +120,7 @@ class LocationManager {
 
   /**
    * Geocode location from query (city, state, country, or ZIP code)
+   * Uses local database first, then Nominatim API, with rate-limit handling
    * @param {string} query - Location query (e.g., "Chennai", "New Delhi, India", "10001")
    * @returns {Promise<Array>} Array of matching locations with coordinates
    */
@@ -134,6 +135,17 @@ class LocationManager {
       return cached;
     }
 
+    // Try local database first (instant, no rate limits)
+    if (typeof searchLocalCitiesDatabase === 'function') {
+      const localResults = searchLocalCitiesDatabase(query);
+      if (localResults.length > 0) {
+        console.log('[LocationManager] Found', localResults.length, 'cities in local database');
+        this.cacheGeocodingResult(query, localResults);
+        return localResults;
+      }
+    }
+
+    // Fall back to Nominatim API
     try {
       const params = new URLSearchParams({
         q: query.trim(),
@@ -148,6 +160,13 @@ class LocationManager {
           'User-Agent': 'PanchangaCalculator/1.0' // Required by Nominatim ToS
         }
       });
+
+      // Handle rate limiting (429 Too Many Requests)
+      if (response.status === 429) {
+        console.warn('[LocationManager] Rate limited by Nominatim API (429). Using local database only.');
+        // Don't throw - just return empty to let user try local search or manual entry
+        return [];
+      }
 
       if (!response.ok) {
         throw new Error(`Geocoding failed: ${response.statusText}`);
