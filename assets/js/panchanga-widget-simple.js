@@ -373,10 +373,23 @@ async function initSimplePanchangaWidget() {
         // Save location to cache
         locationManager.saveLocationToStorage(selectedLocation);
 
-        // Calculate for today (today's date in the USER's browser timezone)
-        // The panchanga calculation will handle timezone offset internally for the location
+        // Get IANA timezone first, then calculate today in LOCATION's timezone
         const now = new Date();
-        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+        const ianaTimezone = getIANATimezone(selectedLocation);
+
+        // Calculate today's date in the LOCATION's timezone (not browser's)
+        const dateFormatter = new Intl.DateTimeFormat('en-CA', {
+          timeZone: ianaTimezone,
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit'
+        });
+
+        const localDateStr = dateFormatter.format(now);
+        const [year, month, day] = localDateStr.split('-').map(Number);
+        const today = new Date(year, month - 1, day, 0, 0, 0);
+
+        console.log('[Widget] Browser now:', now.toISOString(), 'Location timezone:', ianaTimezone, 'Local date:', localDateStr);
 
         const panchanga = await calculator.calculateFullPanchanga(
           today,
@@ -384,8 +397,7 @@ async function initSimplePanchangaWidget() {
           selectedLocation.longitude
         );
 
-        // Update date display with timezone using Intl API
-        const ianaTimezone = getIANATimezone(selectedLocation);
+        // Get timezone offset and abbreviation
         const tzOffset = getTimezoneOffsetFromIntl(ianaTimezone, now);
         const tzAbbr = getTimezoneAbbr(selectedLocation, now);
 
