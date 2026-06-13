@@ -427,14 +427,19 @@ class PanchangaWidgetFull {
   }
 
   async calculate(dateValue, location) {
+    if (!location) {
+      console.error('Calculate called without location');
+      return;
+    }
+
     const loadingEl = document.getElementById('panchanga-full-loading');
     const resultsEl = document.getElementById('panchanga-full-results');
     const errorEl = document.getElementById('panchanga-full-error');
 
     try {
-      loadingEl.style.display = 'block';
-      resultsEl.style.display = 'none';
-      errorEl.style.display = 'none';
+      if (loadingEl) loadingEl.style.display = 'block';
+      if (resultsEl) resultsEl.style.display = 'none';
+      if (errorEl) errorEl.style.display = 'none';
 
       const ianaTimezone = this.getIANATimezone(location);
       const tzOffset = this.getTimezoneOffsetFromIntl(ianaTimezone, dateValue);
@@ -448,22 +453,26 @@ class PanchangaWidgetFull {
 
       this.displayResults(panchanga, dateValue, location, tzOffset, adjustedDate);
 
-      loadingEl.style.display = 'none';
-      resultsEl.style.display = 'block';
-      document.getElementById('panchanga-collapsed-view').style.display = 'block';
+      if (loadingEl) loadingEl.style.display = 'none';
+      if (resultsEl) resultsEl.style.display = 'block';
+      const collapsedView = document.getElementById('panchanga-collapsed-view');
+      if (collapsedView) collapsedView.style.display = 'block';
 
       // Update subtitle with timezone and selected date
       this.updateSubtitleWithTimezone(location, dateValue);
 
       // Save location
-      if (document.getElementById('panchanga-save-location-checkbox').checked) {
+      const saveCheckbox = document.getElementById('panchanga-save-location-checkbox');
+      if (saveCheckbox && saveCheckbox.checked) {
         this.locationManager.saveLocationToStorage(location);
       }
     } catch (error) {
       console.error('Calculation error:', error);
-      loadingEl.style.display = 'none';
-      errorEl.style.display = 'block';
-      errorEl.textContent = '❌ Error: ' + error.message;
+      if (loadingEl) loadingEl.style.display = 'none';
+      if (errorEl) {
+        errorEl.style.display = 'block';
+        errorEl.textContent = '❌ Error: ' + error.message;
+      }
     }
   }
 
