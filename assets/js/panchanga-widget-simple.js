@@ -233,6 +233,23 @@ async function initSimplePanchangaWidget() {
     // Auto-load location from URL params or cache
     const autoLoadLocation = () => {
       // 1. Check URL parameters first (highest priority)
+      const urlParams = new URLSearchParams(window.location.search);
+      const locationidParam = urlParams.get('locationid');
+
+      if (locationidParam) {
+        // Parse locationid format: "lat,lon"
+        const [lat, lon] = locationidParam.split(',').map(parseFloat);
+        if (!isNaN(lat) && !isNaN(lon)) {
+          selectedLocation = {
+            name: `${lat.toFixed(4)}, ${lon.toFixed(4)}`,
+            latitude: lat,
+            longitude: lon
+          };
+          console.log('[Widget] Loaded location from URL locationid:', selectedLocation);
+          return true;
+        }
+      }
+
       if (window.initialLocation) {
         selectedLocation = window.initialLocation;
         console.log('[Widget] Loaded location from URL params:', selectedLocation);
