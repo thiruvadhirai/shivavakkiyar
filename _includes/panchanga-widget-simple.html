@@ -1,3 +1,8 @@
+<!-- Load timezone data from geo-tz (via Jekyll _data) -->
+<script>
+  window.timezoneTestCases = {% if site.data.timezones.testCases %}{{ site.data.timezones.testCases | jsonify }}{% else %}null{% endif %};
+</script>
+
 <!-- Panchanga Widget - Simple Version for Pradosha Page -->
 <div class="panchanga-container" id="panchanga-simple-widget">
   <div class="panchanga-header">
@@ -173,6 +178,188 @@
     }
   }
 
+  // Get IANA timezone name using nearest-neighbor lookup from geo-tz data
+  // Falls back to geographic ranges if timezone data not loaded
+  function getIANATimezone(location) {
+    const lat = location.latitude;
+    const lon = location.longitude;
+
+    // Use geo-tz reference data if available
+    if (window.timezoneTestCases && Array.isArray(window.timezoneTestCases)) {
+      let nearest = null;
+      let minDistance = Infinity;
+
+      window.timezoneTestCases.forEach(point => {
+        const dLat = point.lat - lat;
+        const dLon = point.lon - lon;
+        const distance = Math.sqrt(dLat * dLat + dLon * dLon);
+
+        if (distance < minDistance) {
+          minDistance = distance;
+          nearest = point;
+        }
+      });
+
+      console.log('[TZ] Nearest:', nearest?.name || 'Unknown', 'Distance:', minDistance.toFixed(2)+'°', 'TZ:', nearest?.tz || 'UTC');
+      return nearest?.tz || 'UTC';
+    }
+
+    // Fallback to geographic ranges
+    return getIANATimezoneFallback(lat, lon);
+  }
+
+  function getIANATimezoneFallback(lat, lon) {
+
+    // Pacific & Hawaii
+    if (lon >= -180 && lon < -165) return 'Pacific/Honolulu';
+    if (lon >= -165 && lon < -155) return 'Pacific/Samoa';
+    if (lon >= -155 && lon < -145) return 'America/Anchorage';
+    if (lon >= -145 && lon < -130) return 'America/Nome';
+
+    // North America - West
+    if (lon >= -130 && lon < -120) return 'America/Los_Angeles';
+    if (lon >= -120 && lon < -110) return 'America/Denver';
+    if (lon >= -110 && lon < -100) return 'America/Phoenix';
+    if (lon >= -100 && lon < -90) return 'America/Chicago';
+    if (lon >= -90 && lon < -80) return 'America/New_York';
+    if (lon >= -80 && lon < -70) return 'America/Halifax';
+
+    // North America - Central & South
+    if (lon >= -100 && lon < -80 && lat < 20) return 'America/Mexico_City';
+    if (lon >= -85 && lon < -75 && lat < 15) return 'America/Panama';
+    if (lon >= -85 && lon < -60 && lat < 10) return 'America/Cayenne';
+
+    // South America
+    if (lon >= -75 && lon < -50 && lat > 0 && lat < 15) return 'America/Bogota';
+    if (lon >= -75 && lon < -50 && lat <= 0 && lat > -20) return 'America/Sao_Paulo';
+    if (lon >= -75 && lon < -60 && lat <= -20) return 'America/Argentina/Buenos_Aires';
+    if (lon >= -75 && lon < -65 && lat > -50 && lat < -20) return 'America/Santiago';
+
+    // Atlantic
+    if (lon >= -50 && lon < -30) return 'Atlantic/South_Georgia';
+    if (lon >= -30 && lon < -25) return 'Atlantic/Azores';
+    if (lon >= -25 && lon < -15) return 'Atlantic/Cape_Verde';
+
+    // Europe & Africa - West
+    if (lon >= -15 && lon < 0) return 'Europe/Lisbon';
+    if (lon >= 0 && lon < 5) return 'Europe/London';
+    if (lon >= 5 && lon < 15) return 'Europe/Paris';
+    if (lon >= 15 && lon < 25) return 'Europe/Berlin';
+    if (lon >= 25 && lon < 35) return 'Europe/Athens';
+    if (lon >= 35 && lon < 50) return 'Europe/Moscow';
+
+    // Africa
+    if (lon >= -15 && lon < 25 && lat < 10 && lat > -25) return 'Africa/Lagos';
+    if (lon >= 10 && lon < 40 && lat < 35 && lat > 20) return 'Africa/Cairo';
+    if (lon >= 25 && lon < 40 && lat < 0 && lat > -30) return 'Africa/Johannesburg';
+    if (lon >= 30 && lon < 45 && lat > 0 && lat < 20) return 'Africa/Nairobi';
+    if (lon >= 45 && lon < 60 && lat > 0 && lat < 25) return 'Africa/Addis_Ababa';
+
+    // Middle East & Central Asia
+    if (lon >= 35 && lon < 50 && lat > 30 && lat < 45) return 'Asia/Tehran';
+    if (lon >= 50 && lon < 65 && lat > 25 && lat < 45) return 'Asia/Tehran';
+    if (lon >= 40 && lon <= 60 && lat > 15 && lat < 35) return 'Asia/Dubai';
+    if (lon >= 50 && lon < 75 && lat > 30 && lat < 45) return 'Asia/Tashkent';
+    if (lon >= 60 && lon < 80 && lat > 15 && lat < 40) return 'Asia/Karachi';
+
+    // South Asia
+    if (lon >= 70 && lon < 90 && lat > 5 && lat < 35) return 'Asia/Kolkata';
+    if (lon >= 85 && lon < 100 && lat > 20 && lat < 35) return 'Asia/Kathmandu';
+
+    // Southeast Asia
+    if (lon >= 95 && lon < 110 && lat > 5 && lat < 30) return 'Asia/Bangkok';
+    if (lon >= 95 && lon < 110 && lat < 5 && lat > -10) return 'Asia/Jakarta';
+    if (lon >= 110 && lon < 125 && lat > 0 && lat < 20) return 'Asia/Manila';
+
+    // East Asia
+    if (lon >= 105 && lon < 125 && lat > 20 && lat < 40) return 'Asia/Shanghai';
+    if (lon >= 120 && lon < 135 && lat > 30 && lat < 50) return 'Asia/Tokyo';
+    if (lon >= 125 && lon < 135 && lat > 30 && lat < 45) return 'Asia/Seoul';
+    if (lon >= 110 && lon < 125 && lat > -30 && lat < 0) return 'Asia/Manila';
+
+    // Southeast Asia & Pacific
+    if (lon >= 125 && lon < 145 && lat > -15 && lat < 5) return 'Australia/Darwin';
+    if (lon >= 145 && lon < 160 && lat > -30 && lat < -10) return 'Australia/Sydney';
+    if (lon >= 130 && lon < 145 && lat > -40 && lat < -20) return 'Australia/Melbourne';
+    if (lon >= 115 && lon < 135 && lat > -40 && lat < -20) return 'Australia/Perth';
+
+    // Pacific Islands
+    if (lon >= 160 && lon < 180) return 'Pacific/Auckland';
+    if (lon >= 175 && lon < 180) return 'Pacific/Tongatapu';
+    if (lon >= 170 && lon < 180 && lat < -30 && lat > -50) return 'Pacific/Auckland';
+
+    return 'UTC';
+  }
+
+  // Get actual UTC offset from Intl API
+  function getTimezoneOffsetFromIntl(ianaTimezone, date) {
+    const utcFormatter = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'UTC',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    });
+
+    const localFormatter = new Intl.DateTimeFormat('en-US', {
+      timeZone: ianaTimezone,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    });
+
+    const utcParts = utcFormatter.formatToParts(date);
+    const localParts = localFormatter.formatToParts(date);
+
+    // Extract components
+    const utcHour = parseInt(utcParts.find(p => p.type === 'hour').value);
+    const utcMinute = parseInt(utcParts.find(p => p.type === 'minute').value);
+    const localHour = parseInt(localParts.find(p => p.type === 'hour').value);
+    const localMinute = parseInt(localParts.find(p => p.type === 'minute').value);
+
+    console.log('[TZ Debug] UTC:', utcHour + ':' + String(utcMinute).padStart(2,'0'), 'Local:', localHour + ':' + String(localMinute).padStart(2,'0'));
+
+    // Calculate offset in hours and minutes
+    let offsetMinutes = (localHour * 60 + localMinute) - (utcHour * 60 + utcMinute);
+
+    // Handle day boundaries
+    if (offsetMinutes > 12 * 60) offsetMinutes -= 24 * 60;
+    if (offsetMinutes < -12 * 60) offsetMinutes += 24 * 60;
+
+    const offsetHours = offsetMinutes / 60;
+    console.log('[TZ Debug] Offset:', offsetMinutes, 'min =', offsetHours, 'hrs');
+    return Math.round(offsetHours * 100) / 100;
+  }
+
+  // Get timezone abbreviation using Intl API - Works for all IANA timezones
+  function getTimezoneAbbr(location, date) {
+    const ianaTimezone = getIANATimezone(location);
+
+    try {
+      // Use Intl.DateTimeFormat to get timezone abbreviation for ANY IANA timezone
+      const formatter = new Intl.DateTimeFormat('en-US', {
+        timeZone: ianaTimezone,
+        timeZoneName: 'short'
+      });
+
+      const parts = formatter.formatToParts(date);
+      const tzPart = parts.find(part => part.type === 'timeZoneName');
+      const abbr = tzPart ? tzPart.value : 'UTC';
+
+      console.log('[Timezone] Location:', location.name, '| IANA:', ianaTimezone, '| Abbreviation:', abbr);
+
+      return abbr;
+    } catch (error) {
+      console.warn('[Timezone Error] Could not get abbreviation for', ianaTimezone, ':', error);
+      return 'UTC';
+    }
+  }
+
   // Initialize and run simple panchanga widget
   async function initSimplePanchangaWidget() {
     const widget = document.getElementById('panchanga-simple-widget');
@@ -319,26 +506,10 @@
           // Save location to cache
           locationManager.saveLocationToStorage(selectedLocation);
 
-          // Calculate for today (current date in selected location's timezone)
+          // Calculate for today (today's date in the USER's browser timezone)
+          // The panchanga calculation will handle timezone offset internally for the location
           const now = new Date();
-
-          // Figure out what date it is in the selected location
-          // Get timezone offset for the selected location
-          const tzOffset = calculator.getTimezoneOffsetFromLongitude(selectedLocation.longitude, now);
-
-          // Adjust current UTC time to local time in selected location
-          const localTime = new Date(now.getTime() + tzOffset * 60 * 60 * 1000);
-
-          // Get the date in the selected location's timezone
-          const year = localTime.getUTCFullYear();
-          const month = localTime.getUTCMonth();
-          const day = localTime.getUTCDate();
-
-          // Create midnight of that date in the LOCAL timezone
-          // (expressed as UTC milliseconds for use with Date objects)
-          // Midnight local = Midnight UTC - timezone offset
-          const todayMidnightUTC = new Date(Date.UTC(year, month, day, 0, 0, 0));
-          const today = new Date(todayMidnightUTC.getTime() - tzOffset * 60 * 60 * 1000);
+          const today = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
 
           const panchanga = await calculator.calculateFullPanchanga(
             today,
@@ -346,10 +517,24 @@
             selectedLocation.longitude
           );
 
-          // Update date display
-          const dateStr = calculator.formatDate(today);
+          // Update date display with timezone using Intl API
+          const ianaTimezone = getIANATimezone(selectedLocation);
+          const tzOffset = getTimezoneOffsetFromIntl(ianaTimezone, now);
+          const tzAbbr = getTimezoneAbbr(selectedLocation, now);
+
+          // Get local date in location's timezone using Intl API
+          const dateFormatter = new Intl.DateTimeFormat('en-CA', {
+            timeZone: ianaTimezone,
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+          });
+
+          const localDate = dateFormatter.format(now);
+          const tzOffset_str = tzOffset >= 0 ? `UTC+${tzOffset}` : `UTC${tzOffset}`;
+
           const dateDisplayEl = document.getElementById('panchanga-date-display');
-          if (dateDisplayEl) dateDisplayEl.textContent = dateStr;
+          if (dateDisplayEl) dateDisplayEl.textContent = `${localDate} (${tzAbbr}, ${tzOffset_str})`;
 
           // Update location display
           const locationDisplayEl = document.getElementById('panchanga-location-display');

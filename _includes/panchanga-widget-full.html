@@ -1,8 +1,13 @@
+<!-- Load timezone data from geo-tz (via Jekyll _data) -->
+<script>
+  window.timezoneTestCases = {% if site.data.timezones.testCases %}{{ site.data.timezones.testCases | jsonify }}{% else %}null{% endif %};
+</script>
+
 <!-- Panchanga Calculator Widget - Full Version -->
 <div class="panchanga-container" id="panchanga-full-widget">
   <div class="panchanga-header">
     <h2 class="panchanga-title">🔮 Panchanga Calculator</h2>
-    <p class="panchanga-subtitle">Hindu Calendar - Daily Astronomical Calculations</p>
+    <p class="panchanga-subtitle" id="panchanga-subtitle">Hindu Calendar - Daily Astronomical Calculations</p>
     <p class="panchanga-note">Based on Drik Panchang (modern astronomical system with accurate precession)</p>
   </div>
 

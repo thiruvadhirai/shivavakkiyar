@@ -22,7 +22,7 @@ class PanchangaWidgetFull {
       this.locationManager = new LocationManager();
       await this.calculator.init();
 
-      this.parseUrlParams();
+      await this.parseUrlParams();
       this.restoreLocation();
       this.setupModalHandlers();
       this.setupHistoryHandlers();
@@ -43,7 +43,7 @@ class PanchangaWidgetFull {
     }
   }
 
-  parseUrlParams() {
+  async parseUrlParams() {
     const urlParams = new URLSearchParams(window.location.search);
     this.urlDate = urlParams.get('date');
     this.urlLocationId = urlParams.get('locationid');
@@ -58,8 +58,10 @@ class PanchangaWidgetFull {
     if (this.urlLocationId) {
       const [lat, lon] = this.urlLocationId.split(',').map(parseFloat);
       if (!isNaN(lat) && !isNaN(lon)) {
+        // Reverse-geocode to get location name instead of coordinates
+        const locationName = await this.locationManager.reverseGeocode(lat, lon);
         this.selectedLocation = {
-          name: `${lat.toFixed(4)}, ${lon.toFixed(4)}`,
+          name: locationName || `${lat.toFixed(4)}, ${lon.toFixed(4)}`,
           latitude: lat,
           longitude: lon
         };
@@ -74,8 +76,222 @@ class PanchangaWidgetFull {
       document.getElementById('panchanga-location-input').value = this.effectiveLocation.name;
       document.getElementById('panchanga-current-location').textContent =
         `📍 ${this.effectiveLocation.name} (${this.effectiveLocation.latitude.toFixed(4)}, ${this.effectiveLocation.longitude.toFixed(4)})`;
+      // Update subtitle with local date and timezone (use today's date initially)
+      this.updateSubtitleWithTimezone(this.effectiveLocation, this.today);
     }
     this.selectedLocation = this.effectiveLocation;
+  }
+
+  updateSubtitleWithTimezone(location, dateValue = null) {
+    const displayDate = dateValue || new Date();
+    const ianaTimezone = this.getIANATimezone(location);
+
+    // Get timezone abbreviation and offset using Intl API
+    const tzAbbr = this.getTimezoneAbbr(location, displayDate);
+    const tzOffset = this.getTimezoneOffsetFromIntl(ianaTimezone, displayDate);
+
+    // Get local date in location's timezone using Intl API
+    const formatter = new Intl.DateTimeFormat('en-CA', {
+      timeZone: ianaTimezone,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    });
+
+    const localDateStr = formatter.format(displayDate);
+    const tzOffset_str = tzOffset >= 0 ? `UTC+${tzOffset}` : `UTC${tzOffset}`;
+
+    const subtitle = `${localDateStr} (${tzAbbr}, ${tzOffset_str})`;
+    document.getElementById('panchanga-subtitle').textContent = subtitle;
+  }
+
+  getTimezoneOffsetFromIntl(ianaTimezone, date) {
+    // Get actual UTC offset from Intl API by comparing UTC time with local time
+    const utcFormatter = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'UTC',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    });
+
+    const localFormatter = new Intl.DateTimeFormat('en-US', {
+      timeZone: ianaTimezone,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    });
+
+    const utcParts = utcFormatter.formatToParts(date);
+    const localParts = localFormatter.formatToParts(date);
+
+    // Extract components
+    const utcHour = parseInt(utcParts.find(p => p.type === 'hour').value);
+    const utcMinute = parseInt(utcParts.find(p => p.type === 'minute').value);
+    const localHour = parseInt(localParts.find(p => p.type === 'hour').value);
+    const localMinute = parseInt(localParts.find(p => p.type === 'minute').value);
+
+    console.log('[Timezone Debug] UTC time:', `${utcHour}:${String(utcMinute).padStart(2,'0')}`, 'Local time:', `${localHour}:${String(localMinute).padStart(2,'0')}`);
+
+    // Calculate offset in hours and minutes
+    let offsetMinutes = (localHour * 60 + localMinute) - (utcHour * 60 + utcMinute);
+
+    // Handle day boundaries (e.g., UTC 23:00 -> local 03:00 next day = +4 hours)
+    if (offsetMinutes > 12 * 60) offsetMinutes -= 24 * 60; // Past noon diff = went to prev day
+    if (offsetMinutes < -12 * 60) offsetMinutes += 24 * 60; // Before neg noon = went to next day
+
+    const offsetHours = offsetMinutes / 60;
+    console.log('[Timezone Debug] Offset calculation:', offsetMinutes, 'minutes =', offsetHours, 'hours');
+
+    return Math.round(offsetHours * 100) / 100; // Round to 2 decimal places
+  }
+
+  getTimezoneAbbr(location, date) {
+    // Get IANA timezone for the location
+    const ianaTimezone = this.getIANATimezone(location);
+
+    try {
+      // Use Intl API to get timezone abbreviation for any IANA timezone
+      const formatter = new Intl.DateTimeFormat('en-US', {
+        timeZone: ianaTimezone,
+        timeZoneName: 'short'
+      });
+
+      const parts = formatter.formatToParts(date);
+      const tzPart = parts.find(part => part.type === 'timeZoneName');
+      const abbr = tzPart ? tzPart.value : 'UTC';
+
+      console.log('[Timezone] Location:', location.name, '| IANA:', ianaTimezone, '| Abbreviation:', abbr);
+
+      return abbr;
+    } catch (error) {
+      console.warn(`[Timezone Error] Could not get abbreviation for ${ianaTimezone}:`, error);
+      return 'UTC';
+    }
+  }
+
+  getIANATimezone(location) {
+    // Find timezone using nearest-neighbor lookup from geo-tz reference data
+    // Intl API is then used to get abbreviation and verify offset
+    const lat = location.latitude;
+    const lon = location.longitude;
+
+    // If timezone data is available (Jekyll _data/timezones.json), use it
+    if (window.timezoneTestCases && Array.isArray(window.timezoneTestCases)) {
+      return this.findNearestTimezone(lat, lon, window.timezoneTestCases);
+    }
+
+    // Fallback to geographic ranges if data not loaded
+    return this.getIANATimezoneFallback(lat, lon);
+  }
+
+  findNearestTimezone(lat, lon, testCases) {
+    // Calculate distance to each test point and find nearest
+    let nearest = null;
+    let minDistance = Infinity;
+
+    testCases.forEach(point => {
+      // Simple Euclidean distance (good enough for timezone lookup)
+      const dLat = point.lat - lat;
+      const dLon = point.lon - lon;
+      const distance = Math.sqrt(dLat * dLat + dLon * dLon);
+
+      if (distance < minDistance) {
+        minDistance = distance;
+        nearest = point;
+      }
+    });
+
+    console.log('[Timezone] Nearest test point:', nearest?.name || 'Unknown', 'Distance:', minDistance.toFixed(2),'°', 'Timezone:', nearest?.tz || 'UTC');
+    return nearest?.tz || 'UTC';
+  }
+
+  getIANATimezoneFallback(lat, lon) {
+    // Fallback geographic range mapping (for when JSON data not loaded)
+    // Pacific & Hawaii
+    if (lon >= -180 && lon < -165) return 'Pacific/Honolulu';
+    if (lon >= -165 && lon < -155) return 'Pacific/Samoa';
+    if (lon >= -155 && lon < -145) return 'America/Anchorage';
+    if (lon >= -145 && lon < -130) return 'America/Nome';
+
+    // North America - West
+    if (lon >= -130 && lon < -120) return 'America/Los_Angeles';
+    if (lon >= -120 && lon < -110) return 'America/Denver';
+    if (lon >= -110 && lon < -100) return 'America/Phoenix';
+    if (lon >= -100 && lon < -90) return 'America/Chicago';
+    if (lon >= -90 && lon < -80) return 'America/New_York';
+    if (lon >= -80 && lon < -70) return 'America/Halifax';
+
+    // North America - Central & South
+    if (lon >= -100 && lon < -80 && lat < 20) return 'America/Mexico_City';
+    if (lon >= -85 && lon < -75 && lat < 15) return 'America/Panama';
+    if (lon >= -85 && lon < -60 && lat < 10) return 'America/Cayenne';
+
+    // South America
+    if (lon >= -75 && lon < -50 && lat > 0 && lat < 15) return 'America/Bogota';
+    if (lon >= -75 && lon < -50 && lat <= 0 && lat > -20) return 'America/Sao_Paulo';
+    if (lon >= -75 && lon < -60 && lat <= -20) return 'America/Argentina/Buenos_Aires';
+    if (lon >= -75 && lon < -65 && lat > -50 && lat < -20) return 'America/Santiago';
+
+    // Atlantic
+    if (lon >= -50 && lon < -30) return 'Atlantic/South_Georgia';
+    if (lon >= -30 && lon < -25) return 'Atlantic/Azores';
+    if (lon >= -25 && lon < -15) return 'Atlantic/Cape_Verde';
+
+    // Europe & Africa - West
+    if (lon >= -15 && lon < 0) return 'Europe/Lisbon';
+    if (lon >= 0 && lon < 5) return 'Europe/London';
+    if (lon >= 5 && lon < 15) return 'Europe/Paris';
+    if (lon >= 15 && lon < 25) return 'Europe/Berlin';
+    if (lon >= 25 && lon < 35) return 'Europe/Athens';
+    if (lon >= 35 && lon < 50) return 'Europe/Moscow';
+
+    // Africa
+    if (lon >= -15 && lon < 25 && lat < 10 && lat > -25) return 'Africa/Lagos';
+    if (lon >= 10 && lon < 40 && lat < 35 && lat > 20) return 'Africa/Cairo';
+    if (lon >= 25 && lon < 40 && lat < 0 && lat > -30) return 'Africa/Johannesburg';
+    if (lon >= 30 && lon < 45 && lat > 0 && lat < 20) return 'Africa/Nairobi';
+    if (lon >= 45 && lon < 60 && lat > 0 && lat < 25) return 'Africa/Addis_Ababa';
+
+    // Middle East & Central Asia
+    if (lon >= 35 && lon < 50 && lat > 30 && lat < 45) return 'Asia/Tehran';
+    if (lon >= 50 && lon < 65 && lat > 25 && lat < 45) return 'Asia/Tehran';
+    if (lon >= 40 && lon <= 60 && lat > 15 && lat < 35) return 'Asia/Dubai';
+    if (lon >= 50 && lon < 75 && lat > 30 && lat < 45) return 'Asia/Tashkent';
+    if (lon >= 60 && lon < 80 && lat > 15 && lat < 40) return 'Asia/Karachi';
+
+    // South Asia
+    if (lon >= 70 && lon < 90 && lat > 5 && lat < 35) return 'Asia/Kolkata';
+    if (lon >= 85 && lon < 100 && lat > 20 && lat < 35) return 'Asia/Kathmandu';
+
+    // Southeast Asia
+    if (lon >= 95 && lon < 110 && lat > 5 && lat < 30) return 'Asia/Bangkok';
+    if (lon >= 95 && lon < 110 && lat < 5 && lat > -10) return 'Asia/Jakarta';
+    if (lon >= 110 && lon < 125 && lat > 0 && lat < 20) return 'Asia/Manila';
+
+    // East Asia
+    if (lon >= 105 && lon < 125 && lat > 20 && lat < 40) return 'Asia/Shanghai';
+    if (lon >= 120 && lon < 135 && lat > 30 && lat < 50) return 'Asia/Tokyo';
+    if (lon >= 125 && lon < 135 && lat > 30 && lat < 45) return 'Asia/Seoul';
+    if (lon >= 110 && lon < 125 && lat > -30 && lat < 0) return 'Asia/Manila';
+
+    // Southeast Asia & Pacific
+    if (lon >= 125 && lon < 145 && lat > -15 && lat < 5) return 'Australia/Darwin';
+    if (lon >= 145 && lon < 160 && lat > -30 && lat < -10) return 'Australia/Sydney';
+    if (lon >= 130 && lon < 145 && lat > -40 && lat < -20) return 'Australia/Melbourne';
+    if (lon >= 115 && lon < 135 && lat > -40 && lat < -20) return 'Australia/Perth';
+
+    // Pacific Islands
+    if (lon >= 160 && lon < 180) return 'Pacific/Auckland';
+    if (lon >= 175 && lon < 180) return 'Pacific/Tongatapu';
+    if (lon >= 170 && lon < 180 && lat < -30 && lat > -50) return 'Pacific/Auckland';
+
+    return 'UTC';
   }
 
   setupModalHandlers() {
@@ -200,7 +416,8 @@ class PanchangaWidgetFull {
       resultsEl.style.display = 'none';
       errorEl.style.display = 'none';
 
-      const tzOffset = this.calculator.getTimezoneOffsetFromLongitude(location.longitude, dateValue);
+      const ianaTimezone = this.getIANATimezone(location);
+      const tzOffset = this.getTimezoneOffsetFromIntl(ianaTimezone, dateValue);
       const adjustedDate = new Date(dateValue.getTime() - tzOffset * 60 * 60 * 1000);
 
       const panchanga = await this.calculator.calculateFullPanchanga(
@@ -214,6 +431,9 @@ class PanchangaWidgetFull {
       loadingEl.style.display = 'none';
       resultsEl.style.display = 'block';
       document.getElementById('panchanga-collapsed-view').style.display = 'block';
+
+      // Update subtitle with timezone and selected date
+      this.updateSubtitleWithTimezone(location, dateValue);
 
       // Save location
       if (document.getElementById('panchanga-save-location-checkbox').checked) {
@@ -230,8 +450,13 @@ class PanchangaWidgetFull {
   displayResults(panchanga, dateValue, location, tzOffset, adjustedDate) {
     const p = panchanga.panchanga;
 
-    // Header
-    document.getElementById('panchanga-result-date').textContent = `📅 ${this.calculator.formatDate(dateValue)}`;
+    // Header - Display the selected calendar date, not the timezone-adjusted UTC time
+    // dateValue is UTC midnight for the selected date, but we want to show the selected date
+    const year = dateValue.getUTCFullYear();
+    const month = String(dateValue.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(dateValue.getUTCDate()).padStart(2, '0');
+    const displayDate = `${year}-${month}-${day}`;
+    document.getElementById('panchanga-result-date').textContent = `📅 ${displayDate}`;
     document.getElementById('panchanga-result-location').textContent = `📍 ${location.name}`;
     document.getElementById('panchanga-result-ayanamsa').textContent = panchanga.ayanamsa.toFixed(2);
 
@@ -321,8 +546,10 @@ class PanchangaWidgetFull {
 
       if (dateParam && locationIdParam) {
         const [lat, lon] = locationIdParam.split(',').map(parseFloat);
+        // Reverse-geocode to get location name
+        const locationName = await this.locationManager.reverseGeocode(lat, lon);
         this.selectedLocation = {
-          name: `${lat.toFixed(4)}, ${lon.toFixed(4)}`,
+          name: locationName || `${lat.toFixed(4)}, ${lon.toFixed(4)}`,
           latitude: lat,
           longitude: lon
         };
