@@ -322,12 +322,19 @@ async function initSimplePanchangaWidget() {
       suggestionsDiv.style.display = 'block';
     });
 
-    // Select location
+    // Select location and update URL
     window.selectLocation = (name, lat, lon) => {
       selectedLocation = { name, latitude: lat, longitude: lon };
       locationInput.value = name;
       suggestionsDiv.style.display = 'none';
       calculateBtn.focus();
+
+      // Update URL with selected location
+      const url = new URL(window.location);
+      url.searchParams.set('location', name);
+      url.searchParams.set('locationid', `${lat.toFixed(4)},${lon.toFixed(4)}`);
+      window.history.pushState({ location: selectedLocation }, '', url);
+      console.log('[Widget] Updated URL with location:', name);
     };
 
     // Calculate button
@@ -355,6 +362,13 @@ async function initSimplePanchangaWidget() {
         locationInputState.style.display = 'none';
         loadingEl.style.display = 'block';
         resultsEl.style.display = 'none';
+
+        // Update URL with selected location
+        const url = new URL(window.location);
+        url.searchParams.set('location', selectedLocation.name);
+        url.searchParams.set('locationid', `${selectedLocation.latitude.toFixed(4)},${selectedLocation.longitude.toFixed(4)}`);
+        window.history.pushState({ location: selectedLocation }, '', url);
+        console.log('[Widget] Updated URL with location:', selectedLocation.name);
 
         // Save location to cache
         locationManager.saveLocationToStorage(selectedLocation);
@@ -583,6 +597,15 @@ async function initSimplePanchangaWidget() {
       collapsedView.style.display = 'none';
       locationInput.focus();
     };
+
+    // Handle browser back/forward navigation
+    window.addEventListener('popstate', (event) => {
+      if (event.state && event.state.location) {
+        selectedLocation = event.state.location;
+        console.log('[Widget] Loaded location from browser history:', selectedLocation);
+        calculateBtn.click();
+      }
+    });
 
     // Auto-load location from URL params or cache on page load
     const hasLocation = autoLoadLocation();
