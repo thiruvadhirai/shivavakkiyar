@@ -822,6 +822,29 @@ class PanchangaWidgetFull {
     const modalOverlay = document.getElementById('panchanga-modal-overlay');
     modalOverlay.classList.add('active');
     document.body.style.overflow = 'hidden';
+
+    // Pre-populate modal with location from URL or cache
+    if (this.effectiveLocation && !this.modalSelectedLocation) {
+      this.modalSelectedLocation = this.effectiveLocation;
+      const modalLocationInput = document.getElementById('panchanga-modal-location-input');
+      if (modalLocationInput) {
+        modalLocationInput.value = this.effectiveLocation.name;
+      }
+      console.log('[Modal] Pre-populated with location from URL/cache:', this.modalSelectedLocation);
+
+      // Trigger button state update
+      const updateCalculateButtonState = () => {
+        const modalDateInput = document.getElementById('panchanga-modal-date-input');
+        const modalCalculateBtn = document.getElementById('panchanga-modal-calculate-btn');
+        const hasLocation = this.modalSelectedLocation !== null;
+        const hasDate = modalDateInput.value !== '';
+        const isValid = hasLocation && hasDate;
+        modalCalculateBtn.disabled = !isValid;
+        modalCalculateBtn.style.opacity = isValid ? '1' : '0.5';
+        modalCalculateBtn.style.cursor = isValid ? 'pointer' : 'not-allowed';
+      };
+      updateCalculateButtonState();
+    }
   }
 
   closeModal() {
