@@ -589,22 +589,31 @@ class PanchangaWidgetFull {
   }
 
   async autoLoadAndCalculate() {
-    if (this.urlDate && this.urlLocationId) {
+    if (this.urlDate && this.selectedLocation) {
       // URL has both date and location - auto-calculate
+      console.log('[Widget] Auto-calculating from URL params');
       setTimeout(async () => {
         await this.calculate(this.today, this.selectedLocation);
       }, 500);
     } else if (this.urlDate && this.effectiveLocation) {
       // URL has date + cached location - auto-calculate
       this.selectedLocation = this.effectiveLocation;
-      document.getElementById('panchanga-location-input').value = this.effectiveLocation.name;
+      const locationInput = document.getElementById('panchanga-location-input');
+      if (locationInput) {
+        locationInput.value = this.effectiveLocation.name;
+      }
+      console.log('[Widget] Auto-calculating from URL date + cached location');
       setTimeout(async () => {
         await this.calculate(this.today, this.selectedLocation);
       }, 500);
     } else if (this.effectiveLocation && !this.urlDate) {
       // No URL params but have cached location - just load location
       this.selectedLocation = this.effectiveLocation;
-      document.getElementById('panchanga-location-input').value = this.effectiveLocation.name;
+      const locationInput = document.getElementById('panchanga-location-input');
+      if (locationInput) {
+        locationInput.value = this.effectiveLocation.name;
+      }
+      console.log('[Widget] Loaded cached location');
     }
   }
 
