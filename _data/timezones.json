@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated": "2026-06-13T06:28:48.813Z",
+  "generated": "2026-06-13T06:38:55.784Z",
   "testCases": [
     {
       "lat": 21.3099,
@@ -28,6 +28,11 @@
       "tz": "America/Los_Angeles"
     },
     {
+      "lat": 47.0379,
+      "lon": -122.9007,
+      "tz": "America/Los_Angeles"
+    },
+    {
       "lat": 34.0522,
       "lon": -118.2437,
       "tz": "America/Los_Angeles"
@@ -40,6 +45,11 @@
     {
       "lat": 33.4484,
       "lon": -112.0742,
+      "tz": "America/Phoenix"
+    },
+    {
+      "lat": 33.4255,
+      "lon": -111.94,
       "tz": "America/Phoenix"
     },
     {
@@ -190,6 +200,11 @@
     {
       "lat": 13.0827,
       "lon": 80.2707,
+      "tz": "Asia/Kolkata"
+    },
+    {
+      "lat": 11.1271,
+      "lon": 79.144,
       "tz": "Asia/Kolkata"
     },
     {

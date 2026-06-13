@@ -25,9 +25,11 @@ const testPoints = [
   { lat: 64.2008, lon: -141.0023, name: 'Juneau' },
   // North America West
   { lat: 47.6062, lon: -122.3321, name: 'Seattle' },
+  { lat: 47.0379, lon: -122.9007, name: 'Olympia' },
   { lat: 34.0522, lon: -118.2437, name: 'Los Angeles' },
   { lat: 39.7392, lon: -104.9903, name: 'Denver' },
   { lat: 33.4484, lon: -112.0742, name: 'Phoenix' },
+  { lat: 33.4255, lon: -111.9400, name: 'Tempe' },
   // North America Central
   { lat: 41.8781, lon: -87.6298, name: 'Chicago' },
   { lat: 35.0895, lon: -97.0752, name: 'Oklahoma City' },
@@ -68,6 +70,7 @@ const testPoints = [
   { lat: 28.7041, lon: 77.1025, name: 'Delhi' },
   { lat: 19.0760, lon: 72.8777, name: 'Mumbai' },
   { lat: 13.0827, lon: 80.2707, name: 'Chennai' },
+  { lat: 11.1271, lon: 79.1440, name: 'Karur' },
   { lat: 27.7172, lon: 85.3240, name: 'Kathmandu' },
   // Southeast Asia
   { lat: 13.7563, lon: 100.5018, name: 'Bangkok' },
