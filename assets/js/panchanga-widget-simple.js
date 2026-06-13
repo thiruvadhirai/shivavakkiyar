@@ -401,15 +401,15 @@ async function initSimplePanchangaWidget() {
         const tzOffset = getTimezoneOffsetFromIntl(ianaTimezone, now);
         const tzAbbr = getTimezoneAbbr(selectedLocation, now);
 
-        // Get local date in location's timezone using Intl API
-        const dateFormatter = new Intl.DateTimeFormat('en-CA', {
+        // Get local date in location's timezone using Intl API for display
+        const displayDateFormatter = new Intl.DateTimeFormat('en-CA', {
           timeZone: ianaTimezone,
           year: 'numeric',
           month: '2-digit',
           day: '2-digit'
         });
 
-        const localDate = dateFormatter.format(now);
+        const localDate = displayDateFormatter.format(now);
         const tzOffset_str = tzOffset >= 0 ? `UTC+${tzOffset}` : `UTC${tzOffset}`;
 
         const dateDisplayEl = document.getElementById('panchanga-date-display');
