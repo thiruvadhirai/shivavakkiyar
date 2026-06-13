@@ -1,7 +1,5 @@
-<!-- Load timezone data from geo-tz (via Jekyll _data) -->
-<script>
-  window.timezoneTestCases = {% if site.data.timezones.testCases %}{{ site.data.timezones.testCases | jsonify }}{% else %}null{% endif %};
-</script>
+<!-- Load timezone lookup (cached locally, no external APIs) -->
+<script src="/assets/js/timezone-lookup.js"></script>
 
 <!-- Panchanga Calculator Widget - Full Version -->
 <div class="panchanga-container" id="panchanga-full-widget">
@@ -39,8 +37,24 @@
       </div>
 
       <div class="panchanga-modal-body">
-        <div class="panchanga-location-group">
-          <label class="panchanga-location-label">📍 Location</label>
+        <!-- Warning Banner -->
+        <div style="background: #fff3cd; border: 1px solid #ffc107; padding: 12px; border-radius: 4px; margin-bottom: 15px; font-size: 13px; color: #856404;">
+          ⚠️ <strong>Accuracy Notice:</strong> Timezone accuracy depends on correct latitude/longitude entry. Double-check coordinates before calculating.
+        </div>
+
+        <!-- Tabs for Search vs Manual -->
+        <div style="display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 2px solid #e1e4e8;">
+          <button id="panchanga-tab-search" class="panchanga-tab-btn" data-tab="search" style="padding: 10px 15px; background: none; border: none; border-bottom: 2px solid #0366d6; cursor: pointer; font-weight: 600; color: #0366d6;">
+            🔍 Search
+          </button>
+          <button id="panchanga-tab-manual" class="panchanga-tab-btn" data-tab="manual" style="padding: 10px 15px; background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; color: #666;">
+            ✏️ Manual Entry
+          </button>
+        </div>
+
+        <!-- Search Tab -->
+        <div id="panchanga-search-tab" class="panchanga-location-group">
+          <label class="panchanga-location-label">📍 Search Location</label>
           <div class="panchanga-location-input-wrapper" style="position: relative;">
             <input
               type="text"
@@ -54,6 +68,43 @@
             <div id="panchanga-modal-location-suggestions" class="panchanga-location-suggestions"></div>
           </div>
           <div class="panchanga-modal-location-display" id="panchanga-modal-location-display" style="font-size: 12px; color: #666; margin-top: 8px;"></div>
+        </div>
+
+        <!-- Manual Entry Tab -->
+        <div id="panchanga-manual-tab" class="panchanga-location-group" style="display: none;">
+          <label class="panchanga-location-label">📍 Manual Location Entry</label>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+            <div>
+              <label style="font-size: 12px; color: #666;">Latitude</label>
+              <input type="number" id="panchanga-manual-lat" placeholder="e.g., 8.98" step="0.001" style="width: 100%; padding: 8px; border: 1px solid #d1d5da; border-radius: 4px;">
+            </div>
+            <div>
+              <label style="font-size: 12px; color: #666;">Longitude</label>
+              <input type="number" id="panchanga-manual-lon" placeholder="e.g., 37.85" step="0.001" style="width: 100%; padding: 8px; border: 1px solid #d1d5da; border-radius: 4px;">
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+            <div>
+              <label style="font-size: 12px; color: #666;">City</label>
+              <input type="text" id="panchanga-manual-city" placeholder="e.g., Ambo" style="width: 100%; padding: 8px; border: 1px solid #d1d5da; border-radius: 4px;">
+            </div>
+            <div>
+              <label style="font-size: 12px; color: #666;">State/Province</label>
+              <input type="text" id="panchanga-manual-state" placeholder="e.g., West Shewa" style="width: 100%; padding: 8px; border: 1px solid #d1d5da; border-radius: 4px;">
+            </div>
+          </div>
+          <div style="margin-bottom: 10px;">
+            <label style="font-size: 12px; color: #666;">Country</label>
+            <input type="text" id="panchanga-manual-country" placeholder="e.g., Ethiopia" style="width: 100%; padding: 8px; border: 1px solid #d1d5da; border-radius: 4px;">
+          </div>
+          <div style="margin-bottom: 10px;">
+            <label style="font-size: 12px; color: #666;">Timezone (Auto-detected)</label>
+            <input type="text" id="panchanga-manual-tz" placeholder="Africa/Addis_Ababa" style="width: 100%; padding: 8px; border: 1px solid #d1d5da; border-radius: 4px;" readonly style="background: #f6f8fa;">
+          </div>
+          <button id="panchanga-manual-entry-btn" class="panchanga-btn" style="width: 100%;">
+            ✓ Confirm Manual Entry
+          </button>
+          <div class="panchanga-modal-location-display" id="panchanga-manual-location-display" style="font-size: 12px; color: #666; margin-top: 8px;"></div>
         </div>
 
         <div class="panchanga-date-group">

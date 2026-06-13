@@ -39,8 +39,8 @@ class LocationManager {
   }
 
   /**
-   * Save location to localStorage
-   * @param {Object} location - Location object with name, latitude, longitude
+   * Save location to localStorage (enhanced with city, state, country, timezone)
+   * @param {Object} location - Location object with name, latitude, longitude, city, state, country, timezone
    */
   saveLocationToStorage(location) {
     try {
@@ -48,6 +48,10 @@ class LocationManager {
         name: location.name,
         latitude: location.latitude,
         longitude: location.longitude,
+        city: location.city || null,
+        state: location.state || null,
+        country: location.country || null,
+        timezone: location.timezone || null,
         timestamp: Date.now()
       };
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(locationData));
@@ -342,6 +346,48 @@ class LocationManager {
   getLocationString(location) {
     if (!location) return 'Auto-detect location';
     return `${location.name} (${location.latitude.toFixed(2)}, ${location.longitude.toFixed(2)})`;
+  }
+
+  /**
+   * Validate and create location from manual entry
+   * @param {Object} data - {lat, lon, city, state, country}
+   * @returns {Object|null} Validated location object or null if invalid
+   */
+  validateManualEntry(data) {
+    // Validate coordinates
+    const lat = parseFloat(data.lat);
+    const lon = parseFloat(data.lon);
+
+    if (isNaN(lat) || isNaN(lon)) {
+      console.error('Invalid coordinates:', data.lat, data.lon);
+      return null;
+    }
+
+    if (lat < -90 || lat > 90 || lon < -180 || lon > 180) {
+      console.error('Coordinates out of range:', lat, lon);
+      return null;
+    }
+
+    // Build location name from parts
+    const parts = [];
+    if (data.city) parts.push(data.city);
+    if (data.state) parts.push(data.state);
+    if (data.country) parts.push(data.country);
+
+    if (parts.length === 0) {
+      console.error('At least one location field required');
+      return null;
+    }
+
+    return {
+      name: parts.join(', '),
+      latitude: lat,
+      longitude: lon,
+      city: data.city || null,
+      state: data.state || null,
+      country: data.country || null,
+      timezone: data.timezone || null
+    };
   }
 }
 

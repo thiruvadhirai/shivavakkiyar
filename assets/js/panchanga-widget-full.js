@@ -46,11 +46,11 @@ class PanchangaWidgetFull {
   async parseUrlParams() {
     const urlParams = new URLSearchParams(window.location.search);
     this.urlDate = urlParams.get('date');
-    this.urlLocationId = urlParams.get('locationid');
 
     if (this.urlDate) {
       const [year, month, day] = this.urlDate.split('-').map(Number);
-      // Parse as UTC to avoid timezone shift issues with location-specific timezones
+      // Parse as UTC to ensure consistent date handling across all timezones
+      // The calculate() method will adjust this based on the selected location's timezone
       this.today = new Date(Date.UTC(year, month - 1, day));
       const dateInput = document.getElementById('panchanga-date-input');
       if (dateInput) {
@@ -58,26 +58,51 @@ class PanchangaWidgetFull {
       }
     }
 
-    if (this.urlLocationId) {
-      const [lat, lon] = this.urlLocationId.split(',').map(parseFloat);
-      if (!isNaN(lat) && !isNaN(lon)) {
-        try {
-          // Reverse-geocode to get location name instead of coordinates
-          const locationName = await this.locationManager.reverseGeocode(lat, lon);
-          this.selectedLocation = {
-            name: locationName || `${lat.toFixed(4)}, ${lon.toFixed(4)}`,
-            latitude: lat,
-            longitude: lon
-          };
-          console.log('[Widget] Loaded location from URL params:', this.selectedLocation);
-        } catch (error) {
-          console.error('[Widget] Error loading location from URL:', error);
-          // Fallback to coordinates
-          this.selectedLocation = {
-            name: `${lat.toFixed(4)}, ${lon.toFixed(4)}`,
-            latitude: lat,
-            longitude: lon
-          };
+    // Support new URL format: ?lat=X&lon=Y&location=name&tz=TZ
+    const lat = parseFloat(urlParams.get('lat'));
+    const lon = parseFloat(urlParams.get('lon'));
+    const locationStr = urlParams.get('location');
+    const tz = urlParams.get('tz');
+
+    if (!isNaN(lat) && !isNaN(lon)) {
+      this.selectedLocation = {
+        name: decodeURIComponent(locationStr) || `${lat.toFixed(4)}, ${lon.toFixed(4)}`,
+        latitude: lat,
+        longitude: lon,
+        city: null,
+        state: null,
+        country: null,
+        timezone: tz || window.getTimezone(lat, lon) || 'UTC'
+      };
+      console.log('[Widget] Loaded location from URL params:', this.selectedLocation);
+    }
+
+    // Fallback: Support old URL format: ?locationid=lat,lon for backward compatibility
+    if (!this.selectedLocation) {
+      const urlLocationId = urlParams.get('locationid');
+      if (urlLocationId) {
+        const [oldLat, oldLon] = urlLocationId.split(',').map(parseFloat);
+        if (!isNaN(oldLat) && !isNaN(oldLon)) {
+          try {
+            // Reverse-geocode to get location name instead of coordinates
+            const locationName = await this.locationManager.reverseGeocode(oldLat, oldLon);
+            this.selectedLocation = {
+              name: locationName || `${oldLat.toFixed(4)}, ${oldLon.toFixed(4)}`,
+              latitude: oldLat,
+              longitude: oldLon,
+              timezone: window.getTimezone(oldLat, oldLon) || 'UTC'
+            };
+            console.log('[Widget] Loaded location from URL params (legacy):', this.selectedLocation);
+          } catch (error) {
+            console.error('[Widget] Error loading location from URL:', error);
+            // Fallback to coordinates
+            this.selectedLocation = {
+              name: `${oldLat.toFixed(4)}, ${oldLon.toFixed(4)}`,
+              latitude: oldLat,
+              longitude: oldLon,
+              timezone: window.getTimezone(oldLat, oldLon) || 'UTC'
+            };
+          }
         }
       }
     }
@@ -122,7 +147,8 @@ class PanchangaWidgetFull {
     const tzOffset_str = tzOffset >= 0 ? `UTC+${tzOffset}` : `UTC${tzOffset}`;
 
     const subtitle = `${localDateStr} (${tzAbbr}, ${tzOffset_str})`;
-    document.getElementById('panchanga-subtitle').textContent = subtitle;
+    const subtitleEl = document.getElementById('panchanga-subtitle');
+    if (subtitleEl) subtitleEl.textContent = subtitle;
   }
 
   getTimezoneOffsetFromIntl(ianaTimezone, date) {
@@ -196,39 +222,21 @@ class PanchangaWidgetFull {
   }
 
   getIANATimezone(location) {
-    // Find timezone using nearest-neighbor lookup from geo-tz reference data
-    // Intl API is then used to get abbreviation and verify offset
+    // Find timezone using local cached timezone lookup (400+ regions)
     const lat = location.latitude;
     const lon = location.longitude;
 
-    // If timezone data is available (Jekyll _data/timezones.json), use it
-    if (window.timezoneTestCases && Array.isArray(window.timezoneTestCases)) {
-      return this.findNearestTimezone(lat, lon, window.timezoneTestCases);
+    // Use the timezone lookup function
+    if (typeof window.getTimezone === 'function') {
+      const tz = window.getTimezone(lat, lon);
+      if (tz && tz !== 'UTC') {
+        return tz;
+      }
     }
 
-    // Fallback to geographic ranges if data not loaded
+    // Fallback to geographic ranges if timezone lookup not available
+    console.log('[Timezone] Using fallback geographic lookup');
     return this.getIANATimezoneFallback(lat, lon);
-  }
-
-  findNearestTimezone(lat, lon, testCases) {
-    // Calculate distance to each test point and find nearest
-    let nearest = null;
-    let minDistance = Infinity;
-
-    testCases.forEach(point => {
-      // Simple Euclidean distance (good enough for timezone lookup)
-      const dLat = point.lat - lat;
-      const dLon = point.lon - lon;
-      const distance = Math.sqrt(dLat * dLat + dLon * dLon);
-
-      if (distance < minDistance) {
-        minDistance = distance;
-        nearest = point;
-      }
-    });
-
-    console.log('[Timezone] Nearest test point:', nearest?.name || 'Unknown', 'Distance:', minDistance.toFixed(2),'°', 'Timezone:', nearest?.tz || 'UTC');
-    return nearest?.tz || 'UTC';
   }
 
   getIANATimezoneFallback(lat, lon) {
@@ -334,29 +342,75 @@ class PanchangaWidgetFull {
       }
     };
 
-    // Modal location autocomplete
+    // Modal location autocomplete with debouncing (non-blocking)
+    let geocodeTimeout;
+    let lastQuery = '';
+
     modalLocationInput.addEventListener('input', async (e) => {
-      const query = e.target.value;
+      const query = e.target.value.trim();
+      lastQuery = query;
+
+      // Clear previous timeout
+      clearTimeout(geocodeTimeout);
+
       if (query.length < 2) {
+        modalLocationSuggestions.innerHTML = '';
         modalLocationSuggestions.classList.remove('active');
         return;
       }
 
-      const results = await this.locationManager.geocodeLocation(query);
-      modalLocationSuggestions.innerHTML = results.map((loc, idx) =>
-        `<div class="panchanga-suggestion-item" data-idx="${idx}">${loc.name}</div>`
-      ).join('');
+      // Debounce: wait 300ms before making API call (user can keep typing)
+      geocodeTimeout = setTimeout(async () => {
+        // If query changed while waiting, skip this search
+        if (lastQuery !== query) return;
 
-      modalLocationSuggestions.classList.add('active');
-
-      document.querySelectorAll('.panchanga-suggestion-item').forEach((item) => {
-        item.onclick = async () => {
+        try {
+          console.log('[Modal] Searching for:', query);
           const results = await this.locationManager.geocodeLocation(query);
-          this.modalSelectedLocation = results[item.dataset.idx];
-          modalLocationInput.value = this.modalSelectedLocation.name;
+          console.log('[Modal] Found results:', results.length);
+
+          // If user typed something else while we were loading, skip
+          if (lastQuery !== query) return;
+
+          if (results.length === 0) {
+            // Don't show anything for no results - just keep dropdown hidden
+            modalLocationSuggestions.classList.remove('active');
+            modalLocationSuggestions.innerHTML = '';
+            return;
+          }
+
+          // Display results
+          modalLocationSuggestions.innerHTML = results.map((loc, idx) =>
+            `<div class="panchanga-suggestion-item" data-idx="${idx}" style="cursor: pointer; padding: 8px 12px; border-bottom: 1px solid #eee;">${loc.name}</div>`
+          ).join('');
+
+          modalLocationSuggestions.classList.add('active');
+
+          // Add click handlers
+          document.querySelectorAll('#panchanga-modal-location-suggestions .panchanga-suggestion-item').forEach((item) => {
+            item.onclick = () => {
+              const idx = parseInt(item.dataset.idx);
+              this.modalSelectedLocation = results[idx];
+
+              // Auto-detect timezone from coordinates
+              const tz = window.getTimezone(this.modalSelectedLocation.latitude, this.modalSelectedLocation.longitude);
+              this.modalSelectedLocation.timezone = tz;
+
+              modalLocationInput.value = this.modalSelectedLocation.name;
+              modalLocationSuggestions.classList.remove('active');
+              modalLocationSuggestions.innerHTML = '';
+
+              updateCalculateButtonState();
+              console.log('[Modal] Selected:', this.modalSelectedLocation);
+            };
+          });
+        } catch (error) {
+          console.error('[Modal] Geocoding error:', error);
+          // Silently fail - don't show error message, just keep input available
           modalLocationSuggestions.classList.remove('active');
-        };
-      });
+          modalLocationSuggestions.innerHTML = '';
+        }
+      }, 300);
     });
 
     // Modal auto-detect
@@ -370,9 +424,39 @@ class PanchangaWidgetFull {
       }
     };
 
+    // Update calculate button state based on form validity
+    const updateCalculateButtonState = () => {
+      const hasLocation = this.modalSelectedLocation !== null;
+      const hasDate = modalDateInput.value !== '';
+      const isValid = hasLocation && hasDate;
+
+      modalCalculateBtn.disabled = !isValid;
+      modalCalculateBtn.style.opacity = isValid ? '1' : '0.5';
+      modalCalculateBtn.style.cursor = isValid ? 'pointer' : 'not-allowed';
+    };
+
     // Modal Calculate button
     modalCalculateBtn.onclick = async () => {
-      await this.handleModalCalculate(modalLocationInput, modalDateInput);
+      if (!modalCalculateBtn.disabled) {
+        await this.handleModalCalculate(modalLocationInput, modalDateInput);
+      }
+    };
+
+    // Update button state when location changes
+    const originalOnClick = expandBtn.onclick;
+    expandBtn.onclick = () => {
+      originalOnClick();
+      updateCalculateButtonState();
+    };
+
+    // Update button state when date changes
+    modalDateInput.addEventListener('change', updateCalculateButtonState);
+
+    // Update button state when location is selected
+    const originalModalAutoDetectClick = modalAutoDetectBtn.onclick;
+    modalAutoDetectBtn.onclick = async () => {
+      await originalModalAutoDetectClick();
+      updateCalculateButtonState();
     };
 
     // Modal close buttons (X and Close button)
@@ -386,6 +470,88 @@ class PanchangaWidgetFull {
         this.closeModal();
       }
     });
+
+    // Tab switching
+    const tabSearchBtn = document.getElementById('panchanga-tab-search');
+    const tabManualBtn = document.getElementById('panchanga-tab-manual');
+    const searchTab = document.getElementById('panchanga-search-tab');
+    const manualTab = document.getElementById('panchanga-manual-tab');
+
+    tabSearchBtn.onclick = () => {
+      searchTab.style.display = 'block';
+      manualTab.style.display = 'none';
+      tabSearchBtn.style.borderBottom = '2px solid #0366d6';
+      tabSearchBtn.style.color = '#0366d6';
+      tabManualBtn.style.borderBottom = '2px solid transparent';
+      tabManualBtn.style.color = '#666';
+    };
+
+    tabManualBtn.onclick = () => {
+      searchTab.style.display = 'none';
+      manualTab.style.display = 'block';
+      tabManualBtn.style.borderBottom = '2px solid #0366d6';
+      tabManualBtn.style.color = '#0366d6';
+      tabSearchBtn.style.borderBottom = '2px solid transparent';
+      tabSearchBtn.style.color = '#666';
+    };
+
+    // Manual entry handlers
+    const manualLatInput = document.getElementById('panchanga-manual-lat');
+    const manualLonInput = document.getElementById('panchanga-manual-lon');
+    const manualCityInput = document.getElementById('panchanga-manual-city');
+    const manualStateInput = document.getElementById('panchanga-manual-state');
+    const manualCountryInput = document.getElementById('panchanga-manual-country');
+    const manualTzInput = document.getElementById('panchanga-manual-tz');
+    const manualEntryBtn = document.getElementById('panchanga-manual-entry-btn');
+    const manualLocationDisplay = document.getElementById('panchanga-manual-location-display');
+
+    // Auto-detect timezone when coordinates change
+    const updateManualTimezone = () => {
+      const lat = parseFloat(manualLatInput.value);
+      const lon = parseFloat(manualLonInput.value);
+
+      if (!isNaN(lat) && !isNaN(lon)) {
+        const tz = window.getTimezone(lat, lon);
+        manualTzInput.value = tz || 'Not found - check coordinates';
+        manualTzInput.style.color = tz ? '#24292e' : '#dc3545';
+      }
+    };
+
+    manualLatInput.addEventListener('change', updateManualTimezone);
+    manualLonInput.addEventListener('change', updateManualTimezone);
+
+    // Handle manual entry confirmation
+    manualEntryBtn.onclick = () => {
+      const manualData = {
+        lat: manualLatInput.value,
+        lon: manualLonInput.value,
+        city: manualCityInput.value,
+        state: manualStateInput.value,
+        country: manualCountryInput.value,
+        timezone: manualTzInput.value
+      };
+
+      const validated = this.locationManager.validateManualEntry(manualData);
+      if (!validated) {
+        this.showModalError('Invalid entry: Check latitude/longitude and ensure at least one location field is filled');
+        return;
+      }
+
+      // Auto-detect timezone if not set
+      if (!validated.timezone || validated.timezone.includes('Not found')) {
+        validated.timezone = window.getTimezone(validated.latitude, validated.longitude);
+      }
+
+      this.modalSelectedLocation = validated;
+      manualLocationDisplay.textContent = `✓ ${validated.name} (${validated.latitude.toFixed(4)}, ${validated.longitude.toFixed(4)}) - ${validated.timezone}`;
+      manualLocationDisplay.style.color = '#28a745';
+
+      updateCalculateButtonState(); // Enable/disable calculate button
+
+      // Switch back to search tab to show it's set
+      tabSearchBtn.click();
+      modalLocationInput.value = validated.name;
+    };
   }
 
   async handleModalCalculate(locationInput, dateInput) {
@@ -453,7 +619,8 @@ class PanchangaWidgetFull {
       const panchanga = await this.calculator.calculateFullPanchanga(
         adjustedDate,
         location.latitude,
-        location.longitude
+        location.longitude,
+        location.timezone || window.getTimezone(location.latitude, location.longitude)
       );
 
       this.displayResults(panchanga, dateValue, location, tzOffset, adjustedDate);
@@ -562,11 +729,24 @@ class PanchangaWidgetFull {
     if (!date || !location) return;
 
     const dateStr = date.toISOString().split('T')[0];
-    const locationId = `${location.latitude.toFixed(4)},${location.longitude.toFixed(4)}`;
-    const url = `?date=${dateStr}&locationid=${locationId}`;
+    const lat = location.latitude.toFixed(4);
+    const lon = location.longitude.toFixed(4);
+    const locationId = `${lat},${lon}`;
+
+    // Build location string from parts
+    const locationParts = [];
+    if (location.city) locationParts.push(location.city);
+    if (location.state) locationParts.push(location.state);
+    if (location.country) locationParts.push(location.country);
+    const locationStr = locationParts.length > 0 ? locationParts.join(',') : location.name;
+
+    // Auto-detect timezone if not set
+    const tz = location.timezone || window.getTimezone(parseFloat(lat), parseFloat(lon)) || 'UTC';
+
+    const url = `?date=${dateStr}&lat=${lat}&lon=${lon}&location=${encodeURIComponent(locationStr)}&tz=${encodeURIComponent(tz)}`;
 
     window.history.pushState(
-      { date: dateStr, locationid: locationId },
+      { date: dateStr, lat, lon, location: locationStr, tz },
       '',
       url
     );

@@ -1,24 +1,5 @@
-<!-- Load timezone data from geo-tz (via Jekyll _data) -->
-<script>
-  window.timezoneTestCases = {% if site.data.timezones.testCases %}{{ site.data.timezones.testCases | jsonify }}{% else %}null{% endif %};
-
-  // Parse URL parameters for location and date
-  const urlParams = new URLSearchParams(window.location.search);
-  window.initialLocation = null;
-  window.initialDate = null;
-
-  // Support ?locationid=lat,lon format (simplified, no location name in URL)
-  if (urlParams.has('locationid')) {
-    const [lat, lon] = urlParams.get('locationid').split(',').map(Number);
-    window.initialLocation = { latitude: lat, longitude: lon };
-    console.log('[Widget Init] Loaded location from URL:', window.initialLocation);
-  }
-
-  if (urlParams.has('date')) {
-    window.initialDate = urlParams.get('date');
-    console.log('[Widget Init] Date from URL:', window.initialDate);
-  }
-</script>
+<!-- Load timezone lookup (cached locally, no external APIs) -->
+<script src="/assets/js/timezone-lookup.js"></script>
 
 <!-- Panchanga Widget - Simple Version for Pradosha Page -->
 <div class="panchanga-container" id="panchanga-simple-widget">

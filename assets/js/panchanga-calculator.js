@@ -359,8 +359,8 @@ class PanchangaCalculator {
    * @param {number} longitude
    * @returns {Object} {date: Date, timeIST: string}
    */
-  async getSunrise(date, latitude, longitude) {
-    this.log('getSunrise called with lat:', latitude, 'lon:', longitude);
+  async getSunrise(date, latitude, longitude, timezone = null) {
+    this.log('getSunrise called with lat:', latitude, 'lon:', longitude, 'tz:', timezone);
 
     try {
       // Use NOAACalculator for refraction-corrected sunrise
@@ -381,7 +381,10 @@ class PanchangaCalculator {
       });
 
       const sunriseDate = result.date;
-      const istTime = this.convertToIST(sunriseDate, longitude);
+      // Use provided timezone, or fall back to longitude-based lookup
+      const istTime = timezone
+        ? this.convertToTimezone(sunriseDate, timezone)
+        : this.convertToIST(sunriseDate, longitude);
 
       return {
         date: sunriseDate,
@@ -400,10 +403,11 @@ class PanchangaCalculator {
    * @param {Date} date
    * @param {number} latitude
    * @param {number} longitude
+   * @param {string} timezone - IANA timezone name (e.g., 'Africa/Addis_Ababa')
    * @returns {Object} {date: Date, timeIST: string}
    */
-  async getSunset(date, latitude, longitude) {
-    this.log('getSunset called with lat:', latitude, 'lon:', longitude);
+  async getSunset(date, latitude, longitude, timezone = null) {
+    this.log('getSunset called with lat:', latitude, 'lon:', longitude, 'tz:', timezone);
 
     try {
       // Use NOAACalculator for refraction-corrected sunset
@@ -424,7 +428,10 @@ class PanchangaCalculator {
       });
 
       const sunsetDate = result.date;
-      const istTime = this.convertToIST(sunsetDate, longitude);
+      // Use provided timezone, or fall back to longitude-based lookup
+      const istTime = timezone
+        ? this.convertToTimezone(sunsetDate, timezone)
+        : this.convertToIST(sunsetDate, longitude);
 
       return {
         date: sunsetDate,
@@ -749,11 +756,11 @@ class PanchangaCalculator {
    * @param {number} longitude
    * @returns {Promise<Object>} Complete panchanga object
    */
-  async calculateFullPanchanga(date, latitude, longitude) {
+  async calculateFullPanchanga(date, latitude, longitude, timezone = null) {
     const sunLon = await this.getSunLongitude(date, latitude, longitude);
     const moonLon = await this.getMoonLongitude(date, latitude, longitude);
-    const sunrise = await this.getSunrise(date, latitude, longitude);
-    let sunset = await this.getSunset(date, latitude, longitude);
+    const sunrise = await this.getSunrise(date, latitude, longitude, timezone);
+    let sunset = await this.getSunset(date, latitude, longitude, timezone);
 
     // Fix sunset date if it's on the wrong day (can happen with timezone conversions)
     // Sunset should always be after sunrise on the same local day
@@ -761,10 +768,13 @@ class PanchangaCalculator {
       this.log('Sunset date is before sunrise, adding 1 day to sunset');
       const correctedSunsetDate = new Date(sunset.date);
       correctedSunsetDate.setDate(correctedSunsetDate.getDate() + 1);
+      const correctedTime = timezone
+        ? this.convertToTimezone(correctedSunsetDate, timezone)
+        : this.convertToIST(correctedSunsetDate, longitude);
       sunset = {
         ...sunset,
         date: correctedSunsetDate,
-        timeIST: this.convertToIST(correctedSunsetDate, longitude)
+        timeIST: correctedTime
       };
     }
 
@@ -917,6 +927,28 @@ class PanchangaCalculator {
    * @param {number} longitude - Geographic longitude to determine timezone
    * @returns {string} Formatted time string HH:MM (local time)
    */
+  convertToTimezone(date, timezone) {
+    try {
+      // Use Intl API to format time in specified timezone
+      const formatter = new Intl.DateTimeFormat('en-US', {
+        timeZone: timezone,
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+      });
+
+      const parts = formatter.formatToParts(date);
+      const hour = parts.find(p => p.type === 'hour').value;
+      const minute = parts.find(p => p.type === 'minute').value;
+
+      return `${hour}:${minute}`;
+    } catch (e) {
+      this.logError('convertToTimezone failed for', timezone, ':', e.message);
+      // Fallback to longitude-based conversion
+      return this.convertToIST(date, 0);
+    }
+  }
+
   convertToIST(date, longitude) {
     // Get local timezone offset from longitude (accounting for DST on this date)
     const tzOffset = this.getTimezoneOffsetFromLongitude(longitude, date);

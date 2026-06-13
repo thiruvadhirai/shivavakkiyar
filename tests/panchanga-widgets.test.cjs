@@ -257,11 +257,17 @@ test('Full widget script contains timezone lookup logic', () => {
 });
 
 // Test 25: Simple widget includes geo-tz nearest-neighbor logic
-test('Simple widget script contains nearest-neighbor lookup logic', () => {
-  const filePath = path.join(__dirname, '..', 'assets', 'js', 'panchanga-widget-simple.js');
+test('Timezone lookup file contains 400+ regions with getTimezone', () => {
+  const filePath = path.join(__dirname, '..', 'assets', 'js', 'timezone-lookup.js');
   const content = fs.readFileSync(filePath, 'utf8');
-  assert.ok(content.includes('window.timezoneTestCases'), 'window.timezoneTestCases check not found');
-  assert.ok(content.includes('Math.sqrt'), 'Distance calculation not found');
+
+  assert.ok(content.includes('TIMEZONE_REGIONS'), 'TIMEZONE_REGIONS not found');
+  assert.ok(content.includes('window.getTimezone'), 'window.getTimezone function not found');
+  assert.ok(content.match(/tzid:\s*['"]Asia\/Dubai['"]/) !== null, 'Dubai timezone not found');
+  assert.ok(content.match(/tzid:\s*['"]America\/Los_Angeles['"]/) !== null, 'Los Angeles timezone not found');
+  assert.ok(content.match(/tzid:\s*['"]Europe\/London['"]/) !== null, 'London timezone not found');
+  assert.ok(content.match(/tzid:\s*['"]Australia\/Sydney['"]/) !== null, 'Sydney timezone not found');
+  assert.ok(content.match(/tzid:\s*['"]Asia\/Kamchatka['"]/) !== null, 'Kamchatka timezone not found');
 });
 
 // Summary

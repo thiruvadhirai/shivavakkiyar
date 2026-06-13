@@ -20,27 +20,16 @@ function getIANATimezone(location) {
   const lat = location.latitude;
   const lon = location.longitude;
 
-  // Use geo-tz reference data if available
-  if (window.timezoneTestCases && Array.isArray(window.timezoneTestCases)) {
-    let nearest = null;
-    let minDistance = Infinity;
-
-    window.timezoneTestCases.forEach(point => {
-      const dLat = point.lat - lat;
-      const dLon = point.lon - lon;
-      const distance = Math.sqrt(dLat * dLat + dLon * dLon);
-
-      if (distance < minDistance) {
-        minDistance = distance;
-        nearest = point;
-      }
-    });
-
-    console.log('[TZ] Nearest:', nearest?.name || 'Unknown', 'Distance:', minDistance.toFixed(2)+'°', 'TZ:', nearest?.tz || 'UTC');
-    return nearest?.tz || 'UTC';
+  // Use the timezone lookup function (400+ regions)
+  if (typeof window.getTimezone === 'function') {
+    const tz = window.getTimezone(lat, lon);
+    if (tz && tz !== 'UTC') {
+      return tz;
+    }
   }
 
   // Fallback to geographic ranges
+  console.log('[TZ] Using fallback geographic lookup');
   return getIANATimezoneFallback(lat, lon);
 }
 
@@ -394,7 +383,8 @@ async function initSimplePanchangaWidget() {
         const panchanga = await calculator.calculateFullPanchanga(
           today,
           selectedLocation.latitude,
-          selectedLocation.longitude
+          selectedLocation.longitude,
+          ianaTimezone
         );
 
         // Get timezone offset and abbreviation
