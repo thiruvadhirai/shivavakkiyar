@@ -52,19 +52,33 @@ class PanchangaWidgetFull {
       const [year, month, day] = this.urlDate.split('-').map(Number);
       // Parse as UTC to avoid timezone shift issues with location-specific timezones
       this.today = new Date(Date.UTC(year, month - 1, day));
-      document.getElementById('panchanga-date-input').valueAsDate = this.today;
+      const dateInput = document.getElementById('panchanga-date-input');
+      if (dateInput) {
+        dateInput.valueAsDate = this.today;
+      }
     }
 
     if (this.urlLocationId) {
       const [lat, lon] = this.urlLocationId.split(',').map(parseFloat);
       if (!isNaN(lat) && !isNaN(lon)) {
-        // Reverse-geocode to get location name instead of coordinates
-        const locationName = await this.locationManager.reverseGeocode(lat, lon);
-        this.selectedLocation = {
-          name: locationName || `${lat.toFixed(4)}, ${lon.toFixed(4)}`,
-          latitude: lat,
-          longitude: lon
-        };
+        try {
+          // Reverse-geocode to get location name instead of coordinates
+          const locationName = await this.locationManager.reverseGeocode(lat, lon);
+          this.selectedLocation = {
+            name: locationName || `${lat.toFixed(4)}, ${lon.toFixed(4)}`,
+            latitude: lat,
+            longitude: lon
+          };
+          console.log('[Widget] Loaded location from URL params:', this.selectedLocation);
+        } catch (error) {
+          console.error('[Widget] Error loading location from URL:', error);
+          // Fallback to coordinates
+          this.selectedLocation = {
+            name: `${lat.toFixed(4)}, ${lon.toFixed(4)}`,
+            latitude: lat,
+            longitude: lon
+          };
+        }
       }
     }
   }
@@ -73,9 +87,15 @@ class PanchangaWidgetFull {
     const savedLocation = this.locationManager.getStoredLocation();
     this.effectiveLocation = this.selectedLocation || savedLocation;
     if (this.effectiveLocation) {
-      document.getElementById('panchanga-location-input').value = this.effectiveLocation.name;
-      document.getElementById('panchanga-current-location').textContent =
-        `📍 ${this.effectiveLocation.name} (${this.effectiveLocation.latitude.toFixed(4)}, ${this.effectiveLocation.longitude.toFixed(4)})`;
+      const locationInput = document.getElementById('panchanga-location-input');
+      if (locationInput) {
+        locationInput.value = this.effectiveLocation.name;
+      }
+      const currentLocDisplay = document.getElementById('panchanga-current-location');
+      if (currentLocDisplay) {
+        currentLocDisplay.textContent =
+          `📍 ${this.effectiveLocation.name} (${this.effectiveLocation.latitude.toFixed(4)}, ${this.effectiveLocation.longitude.toFixed(4)})`;
+      }
       // Update subtitle with local date and timezone (use today's date initially)
       this.updateSubtitleWithTimezone(this.effectiveLocation, this.today);
     }
