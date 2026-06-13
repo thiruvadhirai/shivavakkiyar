@@ -241,14 +241,31 @@ async function initSimplePanchangaWidget() {
       };
     }
 
-    // Auto-load cached location on page load
-    const autoLoadCachedLocation = () => {
+    // Auto-load location from URL params or cache
+    const autoLoadLocation = () => {
+      // 1. Check URL parameters first (highest priority)
+      if (window.initialLocation) {
+        selectedLocation = window.initialLocation;
+        console.log('[Widget] Loaded location from URL params:', selectedLocation);
+        return true;
+      }
+
+      if (window.initialLocationName) {
+        locationInput.value = window.initialLocationName;
+        // Will geocode when calculateBtn is clicked
+        console.log('[Widget] Will geocode location from URL:', window.initialLocationName);
+        return true;
+      }
+
+      // 2. Fall back to cached location
       const storedLocation = locationManager.getStoredLocation();
       if (storedLocation) {
         selectedLocation = storedLocation;
-        // Automatically calculate for cached location
-        calculateBtn.click();
+        console.log('[Widget] Loaded location from cache:', selectedLocation);
+        return true;
       }
+
+      return false;
     };
 
     // Load cached locations and show suggestions
@@ -481,11 +498,16 @@ async function initSimplePanchangaWidget() {
         const pradoshaListCollapsedEl = document.getElementById('pradosha-next-list-collapsed');
 
         const pradoshaHTML = nextPradosha.slice(0, 3).map((pd) => {
-          // Adjust UTC date to local timezone: if sunset occurs at this UTC date, what's the actual local date?
-          const localDateAdjusted = new Date(pd.date.getTime() + tzOffset * 60 * 60 * 1000);
+          // pd.date is UTC sunset time - convert to location's timezone
+          // Example: UTC 2026-06-12 20:00 + Dubai (UTC+4) = 2026-06-13 00:00 Dubai local
+          const adjustedMs = pd.date.getTime() + (tzOffset * 60 * 60 * 1000);
+          const localDateAdjusted = new Date(adjustedMs);
           const localDateStr = localDateAdjusted.toISOString().split('T')[0];
+
+          console.log('[Pradosha] UTC date:', pd.date.toISOString(), 'TZ offset:', tzOffset, 'Local date:', localDateStr);
+
           return `
-          <li class="panchanga-pradosha-item" style="cursor: pointer;" onclick="window.location.href = '/panchangam/?date=${localDateStr}'; return false;">
+          <li class="panchanga-pradosha-item" style="cursor: pointer;" onclick="window.location.href = '/panchangam/?date=${localDateStr}&locationid=${selectedLocation.latitude.toFixed(4)},${selectedLocation.longitude.toFixed(4)}'; return false;">
             <div class="panchanga-pradosha-date">${localDateStr}</div>
             <div class="panchanga-pradosha-time">Tithi: ${pd.tithi.name} (${pd.tithi.phase?.toUpperCase?.() || ''})</div>
             <div class="panchanga-pradosha-time" style="margin-top: 3px;">Pradosha: ${calculator.formatTime(pd.pradoshaStart.getHours(), pd.pradoshaStart.getMinutes())} to ${calculator.formatTime(pd.pradoshaEnd.getHours(), pd.pradoshaEnd.getMinutes())}</div>
@@ -562,11 +584,15 @@ async function initSimplePanchangaWidget() {
       locationInput.focus();
     };
 
-    // Auto-load and calculate for cached location on page load
-    autoLoadCachedLocation();
+    // Auto-load location from URL params or cache on page load
+    const hasLocation = autoLoadLocation();
 
-    // If no cached location, show the "Select Location" button
-    if (!selectedLocation) {
+    if (hasLocation) {
+      // Automatically calculate with loaded location
+      console.log('[Widget] Auto-calculating with loaded location');
+      calculateBtn.click();
+    } else {
+      // No location found - show the "Select Location" button
       if (expandBtn) {
         expandBtn.style.display = 'block';
       }

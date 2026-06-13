@@ -1,6 +1,25 @@
 <!-- Load timezone data from geo-tz (via Jekyll _data) -->
 <script>
   window.timezoneTestCases = {% if site.data.timezones.testCases %}{{ site.data.timezones.testCases | jsonify }}{% else %}null{% endif %};
+
+  // Parse URL parameters for location and date
+  const urlParams = new URLSearchParams(window.location.search);
+  window.initialLocation = null;
+  window.initialDate = null;
+
+  // Support both ?location=Name and ?locationid=lat,lon formats
+  if (urlParams.has('locationid')) {
+    const [lat, lon] = urlParams.get('locationid').split(',').map(Number);
+    window.initialLocation = { latitude: lat, longitude: lon };
+  }
+
+  if (urlParams.has('location')) {
+    window.initialLocationName = urlParams.get('location');
+  }
+
+  if (urlParams.has('date')) {
+    window.initialDate = urlParams.get('date');
+  }
 </script>
 
 <!-- Panchanga Widget - Simple Version for Pradosha Page -->
