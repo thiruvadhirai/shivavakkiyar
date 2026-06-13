@@ -56,6 +56,15 @@ class PanchangaWidgetFull {
       if (dateInput) {
         dateInput.valueAsDate = this.today;
       }
+    } else {
+      // No date in URL: auto-set to today so calculate button is enabled
+      // User can change it in the modal if needed
+      this.today = new Date();
+      const dateInput = document.getElementById('panchanga-date-input');
+      if (dateInput) {
+        dateInput.valueAsDate = this.today;
+      }
+      console.log('[Widget] Auto-set date to today:', this.today.toISOString().split('T')[0]);
     }
 
     // Support new URL format: ?lat=X&lon=Y&location=name&tz=TZ
