@@ -4,6 +4,11 @@ remote_theme: pages-themes/cayman@v0.2.0
 markdown: kramdown
 permalink: /:basename/
 
+# Preserve single newlines as <br> so devotional verses (Namakam, Chamakam,
+# etc.) render line-by-line instead of collapsing into one paragraph.
+kramdown:
+  hard_wrap: true
+
 # Include files that should be processed
 include:
   - license.md
