@@ -13,6 +13,27 @@ class PanchangaWidgetFull {
     this.urlDate = null;
     this.urlLocationId = null;
     this.effectiveLocation = null;
+    this.nithyaYogaByNumber = null;
+  }
+
+  /**
+   * Load the Nithya Yoga descriptions (single source of truth: _data/nithya_yoga.json
+   * exposed at /assets/data/nithya-yoga.json). Builds a lookup keyed by yoga number.
+   * Non-fatal: if it fails, descriptions are simply omitted.
+   */
+  async loadNithyaYoga() {
+    try {
+      const response = await fetch('/assets/data/nithya-yoga.json');
+      if (!response.ok) throw new Error('HTTP ' + response.status);
+      const data = await response.json();
+      this.nithyaYogaByNumber = {};
+      for (const y of data) {
+        this.nithyaYogaByNumber[y.number] = y;
+      }
+    } catch (error) {
+      console.warn('[Panchanga] Could not load Nithya Yoga descriptions:', error.message);
+      this.nithyaYogaByNumber = null;
+    }
   }
 
   async init() {
@@ -21,6 +42,7 @@ class PanchangaWidgetFull {
       this.calculator = new PanchangaCalculator();
       this.locationManager = new LocationManager();
       await this.calculator.init();
+      await this.loadNithyaYoga();
 
       await this.parseUrlParams();
       this.restoreLocation();
@@ -688,12 +710,19 @@ class PanchangaWidgetFull {
     document.getElementById('result-nakshatra-next').textContent = p.nakshatra.nextNakshatra || '--';
     document.getElementById('result-nakshatra-next-tamil').textContent = p.nakshatra.nextNakshatraTamil || '--';
 
-    // Yoga
+    // Nithya Yoga
     document.getElementById('result-yoga-name').textContent = p.yoga.name;
     document.getElementById('result-yoga-tamil').textContent = p.yoga.tamil;
     document.getElementById('result-yoga-endtime').textContent = p.yoga.endTime || '--:--';
     document.getElementById('result-yoga-next').textContent = p.yoga.nextYoga || '--';
     document.getElementById('result-yoga-next-tamil').textContent = p.yoga.nextYogaTamil || '--';
+
+    // Show the description for only the currently-displayed Nithya Yoga
+    const yogaDescEl = document.getElementById('result-yoga-description');
+    if (yogaDescEl) {
+      const yogaInfo = this.nithyaYogaByNumber?.[p?.yoga?.number];
+      yogaDescEl.textContent = yogaInfo?.description || '';
+    }
 
     // Karana
     document.getElementById('result-karana-name').textContent = p.karana.name;

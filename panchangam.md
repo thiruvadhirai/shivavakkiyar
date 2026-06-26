@@ -26,10 +26,11 @@ Calculate the Hindu calendar (panchangam) for any date and location using the Dr
 - Each takes approximately one day to cross
 - Important for planning ceremonies and rituals
 
-### **Yoga** (Auspicious Combination)
-- Combination of Sun and Moon positions
-- 27 yogas create different energy patterns
-- Some are highly auspicious, others require caution
+### **Nithya Yoga** (Auspiciousness)
+- Derived from the **sum** of the Sun's and Moon's sidereal longitudes
+- There are **27 Nithya Yogas** in the daily cycle (this is the panchangam "yoga") — distinct from the 100+ planetary yogas of natal astrology
+- Each carries its own quality — some favourable, some to be avoided
+- See the [Nithya Yoga reference](/nithyayoga/) for all 27 and their meanings
 
 ### **Karana** (Half-Tithi)
 - 60 half-day periods in a lunar month

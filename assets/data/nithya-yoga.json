@@ -1,0 +1,5 @@
+---
+layout: null
+permalink: /assets/data/nithya-yoga.json
+---
+{{ site.data.nithya_yoga | jsonify }}

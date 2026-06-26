@@ -22,6 +22,8 @@ This sacred time is particularly devoted to the worship of Lord Shiva. Performin
 
 ## 📖 Texts for Pradosha Worship
 
+* [ஸங்கல்பம் - Sankalpam (begin the pooja here)](sankalpam.md)
+* [தீப & விநாயக பூஜை - Deepa & Vinayaga Pooja](deepa-vinayaga-pooja.md)
 * [ஶ்ரீ ருத்³ரம் நமகம் - Sri Rudram Namakam](namakkam.md)
 * [ஶ்ரீ ருத்³ரம் சமகம் - Sri Rudram Chamakam](chamakkam.md)
 * [சிவ புராணம் - Shiva Puranam](shivapuranam.md)
@@ -36,3 +38,7 @@ This sacred time is particularly devoted to the worship of Lord Shiva. Performin
 * [சிவ அஷ்டோத்திரம் - Shiva Ashtotharam](siva-astothram.md)
 * [Arathi](arathi.md)
 * [மந்த்ர புஷ்பம் - Mantra Pushpam](mantrapushpam.md)
+* [ப்ரார்த்தனா ஶ்லோகம் - Prarthana Slokam](prarthanaslokam.md)
+* [லிங்காஷ்டகம் - Lingashtakam](lingashtakam.md)
+* [போற்றித் திருத்தாண்டகம் - Potri Thiruthandagam](potrithiruthandagam.md)
+* [சிவபெருமான் 108 போற்றி - Shivaperuman 108 Pottri](shivaashothram.md)
