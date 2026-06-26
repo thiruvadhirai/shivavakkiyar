@@ -23,7 +23,7 @@ This sacred time is particularly devoted to the worship of Lord Shiva. Performin
 ## 📖 Texts for Pradosha Worship
 
 * [தீப & விநாயக பூஜை - Deepa & Vinayaga Pooja](deepa-vinayaga-pooja.md)
-* [ஸங்கல்பம் - Sankalpam (begin the pooja here)](sankalpam.md)
+* [ஸங்கல்பம் - Sankalpam (begin the pooja here)](/sankalpam/)
 * [ஶ்ரீ ருத்³ரம் நமகம் - Sri Rudram Namakam](namakkam.md)
 * [ஶ்ரீ ருத்³ரம் சமகம் - Sri Rudram Chamakam](chamakkam.md)
 * [சிவ புராணம் - Shiva Puranam](shivapuranam.md)
