@@ -1,10 +1,10 @@
 ---
 layout: default
-custom_heading: "தீப & விநாயக பூஜை - Deepa & Vinayaga Pooja"
-title: "Deepa & Vinayaga Pooja"
+custom_heading: "தீப பூஜை - Deepa Pooja"
+title: "Deepa Pooja"
 ---
 
-# தீப & விநாயக பூஜை - Deepa & Vinayaga Pooja
+# தீப பூஜை - Deepa Pooja
 
 The preliminary sequence of worship — purification, salutations, lighting of the
 lamp (*deepam*) and invocation of Vinayaka (Ganapati) — recited before the main pooja.
@@ -146,20 +146,3 @@ Each mantra is given in Tamil (grantha) script alongside its romanized translite
 
 *(light the lamp; place akshata on the head)*
 
----
-
-## ஆஸனம் - Asana
-
-| தமிழ் | Transliteration |
-|---|---|
-| ப்ருதி²வி த்வயா த்⁴ருதா லோகா தே³வி த்வம் விஷ்ணுனா த்⁴ருதா ।<br>த்வம் ச தா⁴ரய மாம் தே³வி பவித்ரம் குரு சாஸனம் ॥ | pṛthvi tvayā dhṛtā lokā devi tvaṃ viṣṇunā dhṛtā \|<br>tvaṃ ca dhāraya māṃ devi pavitraṃ kuru cāsanam \|\| |
-
----
-
-## விநாயக ஆவாஹனம் - Vinayaka (Ganapati) Invocation
-
-| தமிழ் | Transliteration |
-|---|---|
-| ஓம் தே³வீம் வாசம் அஜனயந்த தே³வா: தாம் விஶ்வரூபா: பஶவோ வத³ந்தி ।<br>ஸா நோ மந்த்³ரேஷம் ஊர்ஜம் து³ஹானா தே⁴னுர்வாக் அஸ்மான் உப ஸுஷ்டுதைது ॥ | Om devīṃ vācam ajanayanta devāḥ tāṃ viśvarūpāḥ paśavo vadanti \|<br>sā no mandreṣam ūrjaṃ duhānā dhenur-vāg asmān upa suṣṭutaitu \|\| |
-| ஓம் த்⁴ருவம் தே ராஜா வருணோ த்⁴ருவம் தே³வோ ப்³ருஹஸ்பதி: ।<br>த்⁴ருவம் த இந்த்³ரஶ்சாக்³னிஶ்ச ராஷ்ட்ரம் தா⁴ரயதாம் த்⁴ருவம் ॥ | Om dhruvaṃ te rājā varuṇo dhruvaṃ devo bṛhaspatiḥ \|<br>dhruvaṃ ta indraścāgniśca rāṣṭraṃ dhārayatāṃ dhruvam \|\| |
-| ஓம் க³ணானாம் த்வா க³ணபதிம் ஹவாமஹே கவிம் கவீனாம் உபமஶ்ரவஸ்தமம் ।<br>ஜ்யேஷ்ட²ராஜம் ப்³ரஹ்மணாம் ப்³ரஹ்மணஸ்பத ஆ ந: ஶ்ருண்வன்னூதிபி⁴: ஸீத³ ஸாத³னம் ॥ | Om gaṇānāṃ tvā gaṇapatiṃ havāmahe kaviṃ kavīnām upamaśravastamam \|<br>jyeṣṭharājaṃ brahmaṇāṃ brahmaṇaspata ā naḥ śṛṇvann-ūtibhiḥ sīda sādanam \|\| |
