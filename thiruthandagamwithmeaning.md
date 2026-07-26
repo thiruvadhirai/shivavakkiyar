@@ -1,3 +1,9 @@
+---
+layout: default
+custom_heading: "திருத்தாண்டகம் - Thiruthandagam with Meaning"
+title: "Thiruthandagam with Meaning"
+---
+
 094.நின்ற - திருத்தாண்டகம்
 
 திருத்தாண்டகம்

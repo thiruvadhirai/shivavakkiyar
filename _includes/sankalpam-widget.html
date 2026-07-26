@@ -1,0 +1,176 @@
+<style>
+  /* Colour coding for the Sankalpam's substitutable slots */
+  .sk-dyn {
+    background: #e7f1fb;
+    border-bottom: 2px solid #2b7cd3;
+    padding: 0 3px;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+  .sk-loc {
+    background: #fff5e0;
+    border-bottom: 2px solid #d98c00;
+    padding: 0 3px;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+  .sk-you {
+    background: #eaf7ec;
+    border-bottom: 2px solid #2a9d46;
+    padding: 0 3px;
+    border-radius: 3px;
+    font-style: italic;
+  }
+
+  .sk-legend {
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    padding: 14px 16px;
+    margin: 18px 0;
+    background: #fafbfc;
+    font-size: 14px;
+    line-height: 1.9;
+  }
+  .sk-legend strong { display: block; margin-bottom: 6px; }
+
+  .sk-picker {
+    border: 1px solid #e1e4e8;
+    border-left: 4px solid #2b7cd3;
+    border-radius: 6px;
+    padding: 16px;
+    margin: 18px 0;
+    background: #fff;
+  }
+  .sk-picker label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #24292e;
+    margin-bottom: 4px;
+  }
+  .sk-picker-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: flex-end;
+  }
+  .sk-picker input {
+    padding: 8px 10px;
+    border: 1px solid #d1d5da;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: inherit;
+  }
+  .sk-picker button {
+    padding: 9px 16px;
+    border: 0;
+    border-radius: 4px;
+    background: #2b7cd3;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .sk-picker button:hover { background: #1f5fa8; }
+  .sk-fixed-loc {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #e1e4e8;
+    font-size: 13px;
+    color: #586069;
+  }
+  #sankalpam-status { margin-top: 10px; font-size: 13px; }
+
+  @media (max-width: 520px) {
+    .sk-picker-row { flex-direction: column; align-items: stretch; }
+    .sk-picker input, .sk-picker button { width: 100%; box-sizing: border-box; }
+  }
+</style>
+
+<div class="sk-picker">
+  <div class="sk-picker-row">
+    <div>
+      <label for="sankalpam-date">Date of worship</label>
+      <input type="date" id="sankalpam-date">
+    </div>
+    <div>
+      <label for="sankalpam-time">Time of worship</label>
+      <input type="time" id="sankalpam-time">
+    </div>
+    <div>
+      <button type="button" id="sankalpam-now-btn">Use current time</button>
+    </div>
+  </div>
+
+  <div class="sk-fixed-loc">
+    📍 Calculated for <strong>Olympia, Thurston County, Washington</strong>
+    (47.0451°N, 122.8950°W · America/Los_Angeles) — this page's fixed location.
+    Everything in <span class="sk-loc">amber</span> below must be changed if you
+    are worshipping elsewhere.
+  </div>
+
+  <div id="sankalpam-status"></div>
+</div>
+
+<h2 id="panchangam-for-this-sankalpam">📅 Panchangam for this Sankalpam</h2>
+
+<p><strong>Moment:</strong> <span class="sk-dyn" data-sk="datetime">—</span></p>
+
+<table style="width:100%">
+<thead>
+<tr>
+  <th style="text-align:left">Element</th>
+  <th style="text-align:left">Value at the chosen moment</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>Samvatsara (year)</td>
+    <td><span class="sk-dyn" data-sk="samvatsara" data-lang="en">—</span> —
+        <span class="sk-dyn" data-sk="samvatsara" data-lang="ta">—</span></td></tr>
+<tr><td>Ayana</td>
+    <td><span class="sk-dyn" data-sk="ayana" data-lang="en">—</span> —
+        <span class="sk-dyn" data-sk="ayana" data-lang="ta">—</span></td></tr>
+<tr><td>Ritu (season)</td>
+    <td><span class="sk-dyn" data-sk="ritu" data-lang="en">—</span>
+        (<span data-sk="rituEnglish">—</span>) —
+        <span class="sk-dyn" data-sk="ritu" data-lang="ta">—</span></td></tr>
+<tr><td>Masa (Tamil solar month)</td>
+    <td><span class="sk-dyn" data-sk="masa" data-lang="en">—</span> —
+        <span class="sk-dyn" data-sk="masa" data-lang="ta">—</span>
+        <small>(<span data-sk="masaRasi">—</span> rasi)</small></td></tr>
+<tr><td>Paksha</td>
+    <td><span class="sk-dyn" data-sk="paksha" data-lang="en">—</span></td></tr>
+<tr><td>Tithi (lunar day)</td>
+    <td><span class="sk-dyn" data-sk="tithi" data-lang="en">—</span> —
+        <span data-sk="tithiTamil">—</span></td></tr>
+<tr><td>Vaara (weekday)</td>
+    <td><span class="sk-dyn" data-sk="vaara" data-lang="en">—</span> —
+        <span class="sk-dyn" data-sk="vaara" data-lang="ta">—</span></td></tr>
+<tr><td>Nakshatra (star)</td>
+    <td><span class="sk-dyn" data-sk="nakshatra" data-lang="en">—</span> —
+        <span data-sk="nakshatraTamil">—</span></td></tr>
+<tr><td>Yoga</td>
+    <td><span class="sk-dyn" data-sk="yoga" data-lang="en">—</span> —
+        <span class="sk-dyn" data-sk="yoga" data-lang="ta">—</span></td></tr>
+<tr><td>Karana</td>
+    <td><span class="sk-dyn" data-sk="karana" data-lang="en">—</span> —
+        <span class="sk-dyn" data-sk="karana" data-lang="ta">—</span></td></tr>
+<tr><td>Punya kala</td>
+    <td><span class="sk-dyn" data-sk="punyakala" data-lang="en">—</span> —
+        <span class="sk-dyn" data-sk="punyakala" data-lang="ta">—</span><br>
+        <small><span data-sk="punyakalaNote">—</span></small></td></tr>
+<tr><td>Sunrise</td><td><span data-sk="sunrise">—</span></td></tr>
+<tr><td>Sunset</td><td><span data-sk="sunset">—</span></td></tr>
+<tr><td>Ayanamsa (Drik)</td><td><span data-sk="ayanamsa">—</span></td></tr>
+</tbody>
+</table>
+
+<p style="font-size:13px; color:#586069;">
+  Computed with <strong>Astronomy Engine</strong> (NASA JPL ephemeris) and
+  <strong>Drik Ayanamsa</strong> for the precession correction; sunrise and
+  sunset carry the NOAA atmospheric-refraction correction. Solar (sauramana)
+  reckoning, matching the ஸௌரமானேன declared in the text below.
+  See the <a href="/panchangam/">Panchangam Calculator</a> for any other place.
+</p>
+
+<script src="/assets/js/sankalpam-widget.js"></script>

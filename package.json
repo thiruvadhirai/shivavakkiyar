@@ -6,7 +6,7 @@
   "scripts": {
     "build:timezones": "node scripts/generate-timezone-data.js",
     "test": "npm run test:unit && npm run test:integration && npm run test:e2e-validation",
-    "test:unit": "node tests/panchanga-widgets.test.cjs && node tests/panchanga-calculator-integration.test.cjs",
+    "test:unit": "node tests/panchanga-widgets.test.cjs && node tests/sankalpam-calendar.test.cjs && node tests/panchanga-calculator-integration.test.cjs",
     "test:integration": "node tests/panchanga-calculator-integration.test.cjs",
     "test:e2e-validation": "node tests/panchanga-e2e-drik-panchang-comparison.cjs && node tests/panchanga-e2e-365day-pradosha-validation.cjs",
     "test:e2e": "playwright test tests/e2e.spec.js tests/e2e/",

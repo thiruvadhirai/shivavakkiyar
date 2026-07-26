@@ -57,13 +57,14 @@ form and is used here as the dhyāna. (Full hymn: [நந்தி³கேஶ்
 
 # இந்த்³ரலிங்கே³ஶ்வர ஸஹித நந்தி³ அபி⁴ஷேக உபசாரா: - Indralingeśvara-sahita-Nandi Abhiṣeka Upacāras
 
-*Each offering opens with a verse of the Puruṣa Sūkta.*
+*Each offering opens with a verse of the Puruṣa Sūkta, followed by the upacāra ślokaḥ.*
 
 ## 6. ஆவாஹநம் - Āvāhana (Invocation)
 
 | தமிழ் | Transliteration |
 |---|---|
 | ஸஹஸ்ரஶீர்ஷா புருஷ: ஸஹஸ்ராக்ஷ: ஸஹஸ்ரபாத் ।<br>ஸ பூ⁴மிம் விஶ்வதோ வ்ருத்வா அத்யதிஷ்ட²த்³த³ஶாங்கு³லம் ॥ | sahasraśīrṣā puruṣaḥ sahasrākṣaḥ sahasrapāt \|<br>sa bhūmiṃ viśvato vṛtvā atyatiṣṭhad daśāṅgulam \|\| |
+| ஸாங்க³ம் ஸாயுத⁴ம் ஸஶக்திகம் பத்நீபுத்ரபரிவாரஸமேதம் ॥ | sāṅgaṃ sāyudhaṃ saśaktikaṃ patnīputraparivārasametam \|\| |
 | ஶ்ரீ இந்த்³ரலிங்கே³ஶ்வரஸஹித நந்தி³தே³வதாயை நம: । ஆவாஹயாமி பூஜயாமி ॥ | śrī indralingeśvarasahita nandidevatāyai namaḥ \| āvāhayāmi pūjayāmi \|\| |
 
 ## 7. ஆஸநம் - Āsana (Seat)
@@ -71,6 +72,7 @@ form and is used here as the dhyāna. (Full hymn: [நந்தி³கேஶ்
 | தமிழ் | Transliteration |
 |---|---|
 | புருஷ ஏவேத³க்³ம் ஸர்வம் யத்³பூ⁴தம் யச்ச ப⁴வ்யம் ।<br>உதாம்ருதத்வஸ்யேஶாநோ யத³ந்நேநாதிரோஹதி ॥ | puruṣa evedaṃ sarvaṃ yad bhūtaṃ yacca bhavyam \|<br>utāmṛtatvasyeśāno yad annenātirohati \|\| |
+| கல்பத்³ருமமூலே மணிவேதி³மத்⁴யே ஸிம்ஹாஸநம் ஸ்வர்ணமயம் ஸுரத்நம் ।<br>விசித்ரவஸ்த்ராவ்ருதம் அம்பி³காபதே க்³ருஹாண கௌ³ரீக³ங்கா³ஸமந்வித: ॥ | kalpadrumamūle maṇivedimadhye siṃhāsanaṃ svarṇamayaṃ suratnam \|<br>vicitravastrāvṛtam ambikāpate gṛhāṇa gaurīgaṅgāsamanvitaḥ \|\| |
 | ஶ்ரீ இந்த்³ரலிங்கே³ஶ்வரஸஹித நந்தி³தே³வதாயை நம: । நவரத்நகசிதம் ஹேமஸிம்ஹாஸநம் ஸமர்பயாமி ॥ | śrī indralingeśvarasahita nandidevatāyai namaḥ \| navaratnakacitaṃ hemasiṃhāsanaṃ samarpayāmi \|\| |
 
 ## 8. பாத்³யம் - Pādya (Water for the Feet)
@@ -78,6 +80,7 @@ form and is used here as the dhyāna. (Full hymn: [நந்தி³கேஶ்
 | தமிழ் | Transliteration |
 |---|---|
 | ஏதாவாநஸ்ய மஹிமா அதோ ஜ்யாயாக்³ம்ஶ்ச பூருஷ: ।<br>பாதோ³ऽஸ்ய விஶ்வா பூ⁴தாநி த்ரிபாத³ஸ்யாம்ருதம் தி³வி ॥ | etāvānasya mahimā ato jyāyāṃśca pūruṣaḥ \|<br>pādo'sya viśvā bhūtāni tripādasyāmṛtaṃ divi \|\| |
+| ஶ்ரீஶம்போ⁴ ஸர்வதே³வாநாம் அதி⁴க ஸர்வகாமத³ ।<br>பாத்³யம் க்³ருஹாண தே³வேஶ மம ஸௌக்²யம் விவர்த⁴ய ॥ | śrīśambho sarvadevānām adhika sarvakāmada \|<br>pādyaṃ gṛhāṇa deveśa mama saukhyaṃ vivardhaya \|\| |
 | ஶ்ரீ இந்த்³ரலிங்கே³ஶ்வரஸஹித நந்தி³தே³வதாயை நம: । பாத³யோ: பாத்³யம் ஸமர்பயாமி ॥ | śrī indralingeśvarasahita nandidevatāyai namaḥ \| pādayoḥ pādyaṃ samarpayāmi \|\| |
 
 ## 9. அர்க்⁴யம் - Arghya (Water of Welcome)
@@ -85,7 +88,7 @@ form and is used here as the dhyāna. (Full hymn: [நந்தி³கேஶ்
 | தமிழ் | Transliteration |
 |---|---|
 | த்ரிபாதூ³ர்த்⁴வ உதை³த்புருஷ: பாதோ³ऽஸ்யேஹாப⁴வத்புந: ।<br>ததோ விஷ்வங்வ்யக்ராமத்ஸாஶநாநஶநே அபி⁴ ॥ | tripādūrdhva udaitpuruṣaḥ pādo'syehābhavatpunaḥ \|<br>tato viṣvaṅ vyakrāmat sāśanānaśane abhi \|\| |
-| க³ங்கா³ஜலஸமாயுக்தம் ஸுவர்ணகலஶே ஸ்தி²தம் ।<br>அர்க்⁴யம் க்³ருஹாண ப⁴க³வந் கலரூப நமோऽஸ்து தே ॥ | gaṅgājalasamāyuktaṃ suvarṇakalaśe sthitam \|<br>arghyaṃ gṛhāṇa bhagavan kalarūpa namo'stu te \|\| |
+| க³ங்கா³ஜலஸமந்விதம் ஸுவர்ணகலஶே ஸ்தி²தம் ।<br>அர்க்⁴யம் க்³ருஹாண ப⁴க³வந் கலரூப நமோऽஸ்து தே ॥ | gaṅgājalasamanvitaṃ suvarṇakalaśe sthitam \|<br>arghyaṃ gṛhāṇa bhagavan kalarūpa namo'stu te \|\| |
 | ஶ்ரீ இந்த்³ரலிங்கே³ஶ்வரஸஹித நந்தி³தே³வதாயை நம: । ஹஸ்தயோ: அர்க்⁴யம் ஸமர்பயாமி ॥ | śrī indralingeśvarasahita nandidevatāyai namaḥ \| hastayoḥ arghyaṃ samarpayāmi \|\| |
 
 ## 10. ஆசமநீயம் - Ācamanīya (Water for Sipping)
@@ -93,11 +96,18 @@ form and is used here as the dhyāna. (Full hymn: [நந்தி³கேஶ்
 | தமிழ் | Transliteration |
 |---|---|
 | தஸ்மாத்³விராட³ஜாயத விராஜோ அதி⁴ பூருஷ: ।<br>ஸ ஜாதோ அத்யரிச்யத பஶ்சாத்³பூ⁴மிமதோ² புர: ॥ | tasmādvirāḍajāyata virājo adhi pūruṣaḥ \|<br>sa jāto atyaricyata paścādbhūmimatho puraḥ \|\| |
+| மந்தா³கிந்யாஸ்து யத்³வாரி ஸர்வபாபஹரம் ஶுப⁴ம் ।<br>ததி³த³ம் கல்பிதம் தே³வ ஸம்யக்³ ஆசம்யதாம் விபோ⁴ ॥ | mandākinyās tu yad vāri sarvapāpaharaṃ śubham \|<br>tad idaṃ kalpitaṃ deva samyag ācamyatāṃ vibho \|\| |
 | ஶ்ரீ இந்த்³ரலிங்கே³ஶ்வரஸஹித நந்தி³தே³வதாயை நம: । ஆசமநீயம் ஸமர்பயாமி ॥ | śrī indralingeśvarasahita nandidevatāyai namaḥ \| ācamanīyaṃ samarpayāmi \|\| |
 
 ## 11. ஸ்நாநம் - Snāna (Sacred Bath / Abhiṣeka)
 
-### 19.1 ஶிவ பஞ்சாம்ருத ஸ்னானாபி⁴ஷேகம் - Śiva Pañcāmṛta Snānābhiṣeka
+| தமிழ் | Transliteration |
+|---|---|
+| யத்புருஷேண ஹவிஷா தே³வா யஜ்ஞமதந்வத ।<br>வஸந்தோ அஸ்யாஸீதா³ஜ்யம் க்³ரீஷ்ம இத்⁴ம: ஶரத்³த⁴வி: ॥ | yatpuruṣeṇa haviṣā devā yajñamatanvata \|<br>vasanto asyāsīdājyaṃ grīṣma idhmaḥ śaraddhaviḥ \|\| |
+| ஸுக³ந்தி⁴தைலஸம்யுக்தம் ஸுக³ந்த⁴ம் ஆமலகீ ஜலம் ।<br>தே³ஹஸௌந்த³ர்யபீ³ஜம் ச க்³ருஹாண த்வம் ஹரப்ரியே ॥ | sugandhitailasaṃyuktaṃ sugandham āmalakī jalam \|<br>dehasaundaryabījaṃ ca gṛhāṇa tvaṃ hara-priye \|\| |
+| ஓம் ஶ்ரீ இந்த்³ரலிங்கே³ஶ்வரஸஹித நந்தி³தே³வதாயை நம: । ஸ்நாநம் ஸமர்பயாமி, அபி⁴ஷேகம் ஆரபே⁴ ॥ | Om śrī indralingeśvarasahita nandidevatāyai namaḥ \| snānaṃ samarpayāmi, abhiṣekam ārabhe \|\| |
+
+### ஶிவ பஞ்சாம்ருத ஸ்னானாபி⁴ஷேகம் - Śiva Pañcāmṛta Snānābhiṣeka
 
 *Perform each round from "vāmadevāya namaḥ – snānam" through the nirmālya-visarjana.*
 
@@ -233,13 +243,6 @@ form and is used here as the dhyāna. (Full hymn: [நந்தி³கேஶ்
 |---|---|
 | காண்டா॑³த்காண்டா³த்ப்ர॒ரோஹ॑ந்தி பரு॑ஷ: பருஷ॒: பரி॑ ।<br>ஏ॒வானோ॑ தூ³ர்வே॒ ப்ரத॑னு ஸ॒ஹஸ்ரே॑ண ஶ॒தேன॑ ச ॥ | kāṇḍāt kāṇḍāt prarohanti paruṣaḥ paruṣaḥ pari \|<br>evā no dūrve pratanu sahasreṇa śatena ca \|\| |
 | ஶ்ரீ ப⁴வானீஶங்கராஸ்வாமினே நம: । தூ³ர்வோத³கேன ஸ்னபயாமி । | śrī bhavānīśaṅkarāsvāmine namaḥ \| dūrvodakena snapayāmi \| |
-
-### 19.2 மஹாஸ்நானம் - Mahāsnāna (Abhiṣeka with the Puruṣa Sūkta verse)
-
-| தமிழ் | Transliteration |
-|---|---|
-| யத்புருஷேண ஹவிஷா தே³வா யஜ்ஞமதந்வத ।<br>வஸந்தோ அஸ்யாஸீதா³ஜ்யம் க்³ரீஷ்ம இத்⁴ம: ஶரத்³த⁴வி: ॥ | yatpuruṣeṇa haviṣā devā yajñamatanvata \|<br>vasanto asyāsīdājyaṃ grīṣma idhmaḥ śaraddhaviḥ \|\| |
-| ஓம் ஶ்ரீ இந்த்³ரலிங்கே³ஶ்வரஸஹித நந்தி³தே³வதாயை நம: । ஸ்நாநம் ஸமர்பயாமி, அபி⁴ஷேகம் ஆரபே⁴ ॥ | Om śrī indralingeśvarasahita nandidevatāyai namaḥ \| snānaṃ samarpayāmi, abhiṣekam ārabhe \|\| |
 
 ---
 

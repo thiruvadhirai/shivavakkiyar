@@ -1,3 +1,9 @@
+---
+layout: default
+custom_heading: "ஆரதி - Arathi"
+title: "Arathi"
+---
+
 # ஆரதி
 
 தென்னாடுடைய சிவனே போற்றி  

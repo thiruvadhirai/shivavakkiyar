@@ -1,3 +1,9 @@
+---
+layout: default
+custom_heading: "நின்ற திருத்தாண்டகம் - Nindra Thiruthandagam"
+title: "Nindra Thiruthandagam"
+---
+
 # திருத்தாண்டகம்
 
 ## நின்ற - திருத்தாண்டகம்

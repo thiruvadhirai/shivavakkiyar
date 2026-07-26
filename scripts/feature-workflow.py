@@ -90,11 +90,13 @@ class WorkflowManager:
 
     def branch_exists(self, branch_name):
         """Check if branch exists."""
-        result = self.run_command(
+        # show-ref --quiet prints nothing either way, so the exit code is the
+        # only signal — run_command returns None for both cases.
+        result = subprocess.run(
             f"git show-ref --quiet refs/heads/{branch_name}",
-            check=False
+            shell=True
         )
-        return result is None or result == ""
+        return result.returncode == 0
 
     def cmd_start(self, feature_name):
         """Start a feature branch."""

@@ -1,3 +1,9 @@
+---
+layout: default
+custom_heading: "Stotram"
+title: "Stotram"
+---
+
 # Stotram (Stotra) — Detailed Explanation
 
 ## What is a Stotram?

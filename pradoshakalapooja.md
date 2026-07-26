@@ -47,5 +47,6 @@ This sacred time is particularly devoted to the worship of Lord Shiva. Performin
 * [சிவபெருமான் 108 போற்றி - Shivaperuman 108 Pottri](sivaashothram.md)
 * [சிவ அஷ்டோத்திரம் - Shiva Ashtotharam](siva-astothram.md)
 * [Arathi](arathi.md)
+* [தூ⁴ப தீ³ப நைவேத்³யம் - Dhoopa Deepa Naivedyam](pooja-doopam-deepam-neivethiyam-neerajanam.md)
 * [மந்த்ர புஷ்பம் - Mantra Pushpam](mantrapushpam.md)
 * [ப்ரார்த்தனா ஶ்லோகம் - Prarthana Slokam](prarthanaslokam.md)

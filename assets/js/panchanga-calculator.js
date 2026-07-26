@@ -18,6 +18,9 @@ class PanchangaCalculator {
     // = 34 arcminutes (atmospheric refraction) + 16 arcminutes (solar disk radius)
     this.STANDARD_REFRACTION = 0.833; // degrees
 
+    // Pradosha kalam spans sunset ± 90 minutes on Trayodashi
+    this.PRADOSHA_WINDOW_MS = 90 * 60 * 1000;
+
     this.initialized = false;
     this.astronomy = null;
 
@@ -726,8 +729,8 @@ class PanchangaCalculator {
           sunset: sunset,
           rahuKalam: rahuKalam,
           // Pradosha time: 1.5 hours before and after sunset
-          pradoshaStart: new Date(sunset.date.getTime() - 90 * 60 * 1000),
-          pradoshaEnd: new Date(sunset.date.getTime() + 90 * 60 * 1000),
+          pradoshaStart: new Date(sunset.date.getTime() - this.PRADOSHA_WINDOW_MS),
+          pradoshaEnd: new Date(sunset.date.getTime() + this.PRADOSHA_WINDOW_MS),
           isPradoshaToday: daysSearched === 0
         };
 
@@ -759,8 +762,13 @@ class PanchangaCalculator {
   async calculateFullPanchanga(date, latitude, longitude, timezone = null) {
     const sunLon = await this.getSunLongitude(date, latitude, longitude);
     const moonLon = await this.getMoonLongitude(date, latitude, longitude);
-    const sunrise = await this.getSunrise(date, latitude, longitude, timezone);
-    let sunset = await this.getSunset(date, latitude, longitude, timezone);
+    // Anchor sun times to the start of the worshipper's own civil day, not to
+    // the moment itself — see getLocalDayStart(). Without a timezone we cannot
+    // know the local day, so the original behaviour stands.
+    const dayAnchor = timezone ? this.getLocalDayStart(date, timezone) : date;
+
+    const sunrise = await this.getSunrise(dayAnchor, latitude, longitude, timezone);
+    let sunset = await this.getSunset(dayAnchor, latitude, longitude, timezone);
 
     // Fix sunset date if it's on the wrong day (can happen with timezone conversions)
     // Sunset should always be after sunrise on the same local day
@@ -822,6 +830,10 @@ class PanchangaCalculator {
       }
     };
 
+    // Additive: samvatsara/ayana/ritu/masa/vaara plus the declined sankalpa
+    // forms. Existing consumers are untouched.
+    result.calendar = this.buildSankalpamCalendar(date, result, timezone);
+
     this.log('calculateFullPanchanga result structure:', {
       panchanga_keys: Object.keys(result.panchanga),
       times_keys: Object.keys(result.times),
@@ -833,6 +845,290 @@ class PanchangaCalculator {
     });
 
     return result;
+  }
+
+  // ==================== CALENDAR ELEMENTS ====================
+  // Samvatsara, ayana, ritu, masa and vaara — needed by the Sankalpam, which
+  // states the full position in cosmic time. Solar (sauramana) reckoning
+  // throughout, keyed off the sun's sidereal longitude.
+
+  /**
+   * Wall-clock parts for an instant in a named timezone, including the weekday.
+   * Weekday MUST come from the target zone: an evening in Los Angeles is the
+   * next day in UTC, and reading it off the raw Date gives the wrong vaara.
+   *
+   * @param {Date} date
+   * @param {string} timezone - IANA name; falls back to the host zone
+   * @returns {Object} {year, month, day, hour, minute, weekday: 0-6}
+   */
+  getZonedParts(date, timezone = null) {
+    const options = {
+      hour12: false,
+      weekday: 'short',
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', second: '2-digit',
+    };
+    if (timezone) options.timeZone = timezone;
+
+    const WEEKDAYS = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+    const parts = { weekday: 0 };
+
+    for (const part of new Intl.DateTimeFormat('en-US', options).formatToParts(date)) {
+      if (part.type === 'weekday') {
+        parts.weekday = WEEKDAYS[part.value] ?? 0;
+      } else if (part.type !== 'literal') {
+        parts[part.type] = parseInt(part.value, 10);
+      }
+    }
+    if (parts.hour === 24) parts.hour = 0;
+    return parts;
+  }
+
+  /**
+   * Offset of a zone from UTC, in hours, at a given instant.
+   * @param {Date} date
+   * @param {string} timezone - IANA name
+   */
+  getZoneOffsetHours(date, timezone) {
+    const p = this.getZonedParts(date, timezone);
+    const asUTC = Date.UTC(p.year, p.month - 1, p.day, p.hour, p.minute, p.second);
+    return (asUTC - date.getTime()) / 3600000;
+  }
+
+  /**
+   * The instant at which the local civil day containing `date` begins in `timezone`.
+   *
+   * Sunrise/sunset come from SearchRiseSet, which returns the NEXT event after
+   * the instant it is given. Handing it the moment of worship is wrong twice
+   * over: an evening in the Americas has already rolled into the next UTC day,
+   * and searching forward from an evening finds TOMORROW's sunrise. That in turn
+   * trips the "sunset before sunrise" correction below, pushing sunset a further
+   * day out — so the pair end up ~24h late while their displayed clock times
+   * still look plausible, silently breaking every window comparison (pradosha,
+   * rahu kalam, abhijit).
+   *
+   * Searching from the start of the worshipper's own day yields that day's
+   * sunrise and that day's sunset, in the right order, in any zone.
+   *
+   * @param {Date} date
+   * @param {string} timezone - IANA name
+   * @returns {Date}
+   */
+  getLocalDayStart(date, timezone) {
+    const p = this.getZonedParts(date, timezone);
+    const naive = Date.UTC(p.year, p.month - 1, p.day, 0, 0, 0);
+    // Resolve twice so a day containing a DST transition still lands correctly
+    let instant = naive - this.getZoneOffsetHours(new Date(naive), timezone) * 3600000;
+    instant = naive - this.getZoneOffsetHours(new Date(instant), timezone) * 3600000;
+    return new Date(instant);
+  }
+
+  /**
+   * Tamil solar month from the sun's sidereal longitude.
+   * @param {number} siderealSunLon - degrees (ayanamsa already applied)
+   */
+  getTamilMonth(siderealSunLon) {
+    const lon = this.normalizeDegrees(siderealSunLon);
+    const index = Math.floor(lon / 30) % 12;
+    return { index, ...PanchangaLanguages.TAMIL_MONTH[index] };
+  }
+
+  /**
+   * Ritu — two solar months each, beginning with Vasanta at Chithirai.
+   * @param {number} monthIndex - 0-11 from getTamilMonth()
+   */
+  getRitu(monthIndex) {
+    const index = Math.floor((((monthIndex % 12) + 12) % 12) / 2);
+    return { index, ...PanchangaLanguages.RITU[index] };
+  }
+
+  /**
+   * Ayana. Uttarayana runs from Makara Sankranti (sidereal 270°) to Karka
+   * Sankranti (90°); Dakshinayana covers the other half.
+   * @param {number} siderealSunLon - degrees
+   */
+  getAyana(siderealSunLon) {
+    const lon = this.normalizeDegrees(siderealSunLon);
+    return (lon >= 270 || lon < 90)
+      ? PanchangaLanguages.AYANA.uttarayana
+      : PanchangaLanguages.AYANA.dakshinayana;
+  }
+
+  /**
+   * Samvatsara. The Tamil year turns at Mesha Sankranti (sun reaching sidereal
+   * 0°, mid-April), so a date before that still belongs to the previous year.
+   *
+   * @param {Date} date
+   * @param {number} siderealSunLon - degrees
+   * @param {string} timezone - IANA name of the place of worship
+   */
+  getSamvatsara(date, siderealSunLon, timezone = null) {
+    const lon = this.normalizeDegrees(siderealSunLon);
+    const parts = this.getZonedParts(date, timezone);
+
+    // Before Mesha Sankranti the sun is still in Makara..Meena (>= 270°) while
+    // the civil month is Jan-Apr. Those dates belong to the preceding Tamil year.
+    const beforeTamilNewYear = lon >= 270 && parts.month <= 4;
+    const tamilYear = parts.year - (beforeTamilNewYear ? 1 : 0);
+
+    const offset = tamilYear - PanchangaLanguages.SAMVATSARA_EPOCH_YEAR;
+    const index = ((offset % 60) + 60) % 60;
+
+    return { index, tamilYear, ...PanchangaLanguages.SAMVATSARA[index] };
+  }
+
+  /**
+   * Vaara (weekday) in sankalpa form.
+   *
+   * The Hindu day runs sunrise-to-sunrise, so a moment after midnight but
+   * before sunrise still belongs to the previous weekday. The rollback is only
+   * applied when the supplied sunrise falls on the SAME civil day as the
+   * moment, in the location's own zone — comparing against a sunrise from a
+   * neighbouring day would silently shift the weekday.
+   *
+   * @param {Date} date
+   * @param {string} timezone - IANA name of the place of worship
+   * @param {Date} [sunrise] - sunrise instant, if known
+   */
+  getVaara(date, timezone = null, sunrise = null) {
+    const parts = this.getZonedParts(date, timezone);
+    let index = parts.weekday;
+
+    if (sunrise instanceof Date && !isNaN(sunrise)) {
+      const s = this.getZonedParts(sunrise, timezone);
+      const sameCivilDay =
+        s.year === parts.year && s.month === parts.month && s.day === parts.day;
+      if (sameCivilDay && date.getTime() < sunrise.getTime()) {
+        index = (index + 6) % 7;
+      }
+    }
+
+    return { index, ...PanchangaLanguages.VAARA[index] };
+  }
+
+  /** Tithi in the locative, from the 1-30 tithi number. */
+  getTithiLocative(tithiNumber) {
+    const n = ((Math.round(tithiNumber) - 1) % 30 + 30) % 30 + 1;
+    if (n === 30) return PanchangaLanguages.TITHI_LOCATIVE[30];
+    return PanchangaLanguages.TITHI_LOCATIVE[n <= 15 ? n : n - 15];
+  }
+
+  /** Paksha in the locative, from tithi.phase. */
+  getPakshaLocative(phase) {
+    return PanchangaLanguages.PAKSHA_LOCATIVE[phase]
+      || PanchangaLanguages.PAKSHA_LOCATIVE.shukla;
+  }
+
+  /** Nakshatra stem for "X நக்ஷத்ரே", honouring NAKSHATRA_SANKALPA_STYLE. */
+  getNakshatraSankalpa(number) {
+    const n = ((Math.round(number) - 1) % 27 + 27) % 27 + 1;
+    const entry = PanchangaLanguages.NAKSHATRA_SANKALPA[n];
+    const useSanskrit = PanchangaLanguages.NAKSHATRA_SANKALPA_STYLE === 'sanskrit';
+    return {
+      tamil: useSanskrit ? entry.sanskrit : entry.tamil,
+      iast: useSanskrit ? entry.iast : entry.iastTamil,
+    };
+  }
+
+  /**
+   * Punya kala — the sanctified period named just before "…pūjāṃ kariṣye".
+   *
+   * Pradosha is claimed ONLY when the moment genuinely falls in it: Trayodashi
+   * (tithi 13 or 28) with the moment inside sunset ±90 minutes, the same window
+   * findNextPradosha() uses. Any other moment names its own tithi's punya kala,
+   * so the text never claims a Pradosha worship that is not happening.
+   *
+   * @param {Date} date - the moment of worship
+   * @param {Object} panchanga - result of calculateFullPanchanga()
+   * @returns {Object} {tamil, iast, english, isPradosha}
+   */
+  getPunyaKala(date, panchanga) {
+    const tithiNumber = panchanga?.panchanga?.tithi?.number;
+    const sunset = panchanga?.times?.sunset?.date;
+
+    const isTrayodashi = tithiNumber === 13 || tithiNumber === 28;
+    const withinPradoshaWindow =
+      sunset instanceof Date && !isNaN(sunset) &&
+      Math.abs(date.getTime() - sunset.getTime()) <= this.PRADOSHA_WINDOW_MS;
+
+    if (isTrayodashi && withinPradoshaWindow) {
+      const p = PanchangaLanguages.PUNYAKALA_PRADOSHA;
+      return {
+        ...p,
+        isPradosha: true,
+        // Only Pradosha carries "puṇya"; other periods are simply "<tithi> kāle"
+        phraseTamil: `${p.tamil} புண்ய காலே`,
+        phraseIast: `${p.iast} puṇya kāle`,
+        phraseEnglish: `${p.english} punya kala`,
+      };
+    }
+
+    const n = ((Math.round(tithiNumber ?? 1) - 1) % 30 + 30) % 30 + 1;
+    const key = n === 30 ? 30 : (n <= 15 ? n : n - 15);
+    const t = PanchangaLanguages.TITHI_PUNYAKALA[key];
+    return {
+      ...t,
+      isPradosha: false,
+      phraseTamil: `${t.tamil} காலே`,
+      phraseIast: `${t.iast} kāle`,
+      phraseEnglish: `${t.english} kala`,
+    };
+  }
+
+  /** Yoga stem for "X யோகே³". */
+  getYogaSankalpa(number) {
+    const n = ((Math.round(number) - 1) % 27 + 27) % 27 + 1;
+    return PanchangaLanguages.YOGA_SANKALPA[n];
+  }
+
+  /** Karana stem for "X கரணே". */
+  getKaranaSankalpa(number) {
+    const n = ((Math.round(number) - 1) % 11 + 11) % 11 + 1;
+    return PanchangaLanguages.KARANA_SANKALPA[n];
+  }
+
+  /**
+   * Assemble every calendar element a Sankalpam states, from an already
+   * computed panchanga.
+   *
+   * @param {Date} date - the moment of worship
+   * @param {Object} panchanga - result of calculateFullPanchanga()
+   * @param {string} timezone - IANA name of the place of worship
+   */
+  buildSankalpamCalendar(date, panchanga, timezone = null) {
+    const siderealSunLon = panchanga?.celestial?.sunLongitude ?? 0;
+    const p = panchanga?.panchanga || {};
+    const month = this.getTamilMonth(siderealSunLon);
+    const sunrise = panchanga?.times?.sunrise?.date || null;
+
+    return {
+      samvatsara: this.getSamvatsara(date, siderealSunLon, timezone),
+      ayana: this.getAyana(siderealSunLon),
+      ritu: this.getRitu(month.index),
+      masa: month,
+      paksha: this.getPakshaLocative(p.tithi?.phase),
+      tithi: {
+        ...this.getTithiLocative(p.tithi?.number ?? 1),
+        name: p.tithi?.name || '',
+        tamilName: p.tithi?.tamil || '',
+        number: p.tithi?.number,
+      },
+      vaara: this.getVaara(date, timezone, sunrise),
+      nakshatra: {
+        ...this.getNakshatraSankalpa(p.nakshatra?.number ?? 1),
+        name: p.nakshatra?.name || '',
+        tamilName: p.nakshatra?.tamil || '',
+      },
+      yoga: {
+        ...this.getYogaSankalpa(p.yoga?.number ?? 1),
+        name: p.yoga?.name || '',
+      },
+      karana: {
+        ...this.getKaranaSankalpa(p.karana?.number ?? 1),
+        name: p.karana?.name || '',
+      },
+      punyaKala: this.getPunyaKala(date, panchanga),
+    };
   }
 
   // ==================== NAME & DATA LOOKUPS ====================

@@ -1,3 +1,9 @@
+---
+layout: default
+custom_heading: "Sanskrit Chanting Forms"
+title: "Sanskrit Chanting Forms"
+---
+
 # Differences Between Sanskrit Chanting Forms
 
 Here's a breakdown of these related but distinct spiritual practices:

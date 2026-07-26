@@ -1,3 +1,9 @@
+---
+layout: default
+custom_heading: "License"
+title: "License"
+---
+
 # License
 
 ## Creative Commons Zero v1.0 Universal (CC0 1.0)

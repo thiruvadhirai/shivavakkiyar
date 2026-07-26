@@ -153,6 +153,278 @@ class PanchangaLanguages {
     krishna: { name: 'Krishna', tamil: 'தேய்பிறை' },
   };
 
+  // ==================== CALENDAR ELEMENTS ====================
+  // Used by the Sankalpam, which states the full position in cosmic time.
+
+  /**
+   * Samvatsara — the 60-year Prabhava cycle.
+   * Anchor: the Tamil year beginning April 1987 is Prabhava (index 0).
+   */
+  static SAMVATSARA = [
+    { name: 'Prabhava', tamil: 'ப்ரப⁴வ', iast: 'prabhava' },
+    { name: 'Vibhava', tamil: 'விப⁴வ', iast: 'vibhava' },
+    { name: 'Shukla', tamil: 'ஶுக்ல', iast: 'śukla' },
+    { name: 'Pramoduta', tamil: 'ப்ரமோது³த', iast: 'pramoduta' },
+    { name: 'Prajotpatti', tamil: 'ப்ரஜோத்பத்தி', iast: 'prajotpatti' },
+    { name: 'Angirasa', tamil: 'ஆங்கீ³ரஸ', iast: 'āṅgīrasa' },
+    { name: 'Shrimukha', tamil: 'ஶ்ரீமுக²', iast: 'śrīmukha' },
+    { name: 'Bhava', tamil: 'பா⁴வ', iast: 'bhāva' },
+    { name: 'Yuva', tamil: 'யுவ', iast: 'yuva' },
+    { name: 'Dhatri', tamil: 'தா⁴த்ரு', iast: 'dhātṛ' },
+    { name: 'Ishvara', tamil: 'ஈஶ்வர', iast: 'īśvara' },
+    { name: 'Bahudhanya', tamil: 'ப³ஹுதா⁴ந்ய', iast: 'bahudhānya' },
+    { name: 'Pramathi', tamil: 'ப்ரமாதீ²', iast: 'pramāthī' },
+    { name: 'Vikrama', tamil: 'விக்ரம', iast: 'vikrama' },
+    { name: 'Vrisha', tamil: 'வ்ருஷ', iast: 'vṛṣa' },
+    { name: 'Chitrabhanu', tamil: 'சித்ரபா⁴னு', iast: 'citrabhānu' },
+    { name: 'Subhanu', tamil: 'ஸுபா⁴னு', iast: 'subhānu' },
+    { name: 'Tarana', tamil: 'தாரண', iast: 'tāraṇa' },
+    { name: 'Parthiva', tamil: 'பார்தி²வ', iast: 'pārthiva' },
+    { name: 'Vyaya', tamil: 'வ்யய', iast: 'vyaya' },
+    { name: 'Sarvajit', tamil: 'ஸர்வஜித்', iast: 'sarvajit' },
+    { name: 'Sarvadhari', tamil: 'ஸர்வதா⁴ரி', iast: 'sarvadhāri' },
+    { name: 'Virodhi', tamil: 'விரோதி⁴', iast: 'virodhi' },
+    { name: 'Vikriti', tamil: 'விக்ருதி', iast: 'vikṛti' },
+    { name: 'Khara', tamil: 'க²ர', iast: 'khara' },
+    { name: 'Nandana', tamil: 'நந்த³ன', iast: 'nandana' },
+    { name: 'Vijaya', tamil: 'விஜய', iast: 'vijaya' },
+    { name: 'Jaya', tamil: 'ஜய', iast: 'jaya' },
+    { name: 'Manmatha', tamil: 'மன்மத²', iast: 'manmatha' },
+    { name: 'Durmukhi', tamil: 'து³ர்முகீ²', iast: 'durmukhī' },
+    { name: 'Hevilambi', tamil: 'ஹேவிளம்பி³', iast: 'hevilambi' },
+    { name: 'Vilambi', tamil: 'விளம்பி³', iast: 'vilambi' },
+    { name: 'Vikari', tamil: 'விகாரி', iast: 'vikāri' },
+    { name: 'Sharvari', tamil: 'ஶார்வரி', iast: 'śārvari' },
+    { name: 'Plava', tamil: 'ப்லவ', iast: 'plava' },
+    { name: 'Shubhakrit', tamil: 'ஶுப⁴க்ருத்', iast: 'śubhakṛt' },
+    { name: 'Shobhakrit', tamil: 'ஶோப⁴க்ருத்', iast: 'śobhakṛt' },
+    { name: 'Krodhi', tamil: 'க்ரோதி⁴', iast: 'krodhi' },
+    { name: 'Vishvavasu', tamil: 'விஶ்வாவஸு', iast: 'viśvāvasu' },
+    { name: 'Parabhava', tamil: 'பராப⁴வ', iast: 'parābhava' },
+    { name: 'Plavanga', tamil: 'ப்லவங்க³', iast: 'plavaṅga' },
+    { name: 'Kilaka', tamil: 'கீலக', iast: 'kīlaka' },
+    { name: 'Saumya', tamil: 'ஸௌம்ய', iast: 'saumya' },
+    { name: 'Sadharana', tamil: 'ஸாதா⁴ரண', iast: 'sādhāraṇa' },
+    { name: 'Virodhikrit', tamil: 'விரோத⁴க்ருத்', iast: 'virodhakṛt' },
+    { name: 'Paridhavi', tamil: 'பரிதா⁴வி', iast: 'paridhāvi' },
+    { name: 'Pramadicha', tamil: 'ப்ரமாதீ³ச', iast: 'pramādīca' },
+    { name: 'Ananda', tamil: 'ஆனந்த³', iast: 'ānanda' },
+    { name: 'Rakshasa', tamil: 'ராக்ஷஸ', iast: 'rākṣasa' },
+    { name: 'Nala', tamil: 'நள', iast: 'naḷa' },
+    { name: 'Pingala', tamil: 'பிங்க³ள', iast: 'piṅgaḷa' },
+    { name: 'Kalayukti', tamil: 'காளயுக்தி', iast: 'kāḷayukti' },
+    { name: 'Siddharthi', tamil: 'ஸித்³தா⁴ர்தி²', iast: 'siddhārthi' },
+    { name: 'Raudri', tamil: 'ரௌத்³ரி', iast: 'raudri' },
+    { name: 'Durmati', tamil: 'து³ர்மதி', iast: 'durmati' },
+    { name: 'Dundubhi', tamil: 'து³ந்து³பி⁴', iast: 'dundubhi' },
+    { name: 'Rudhirodgari', tamil: 'ருதி⁴ரோத்³கா³ரி', iast: 'rudhirodgāri' },
+    { name: 'Raktakshi', tamil: 'ரக்தாக்ஷி', iast: 'raktākṣi' },
+    { name: 'Krodhana', tamil: 'க்ரோத⁴ன', iast: 'krodhana' },
+    { name: 'Akshaya', tamil: 'அக்ஷய', iast: 'akṣaya' },
+  ];
+
+  /** Gregorian year whose Tamil new year begins samvatsara index 0 (Prabhava). */
+  static SAMVATSARA_EPOCH_YEAR = 1987;
+
+  /**
+   * Tamil solar months, from Mesha (sidereal 0°).
+   * Index i covers sidereal longitude [i*30, (i+1)*30).
+   */
+  static TAMIL_MONTH = [
+    { name: 'Chithirai', tamil: 'சித்திரை', iast: 'cittirai', rasi: 'Mesha' },
+    { name: 'Vaikasi', tamil: 'வைகாசி', iast: 'vaikāsi', rasi: 'Rishabha' },
+    { name: 'Aani', tamil: 'ஆனி', iast: 'āni', rasi: 'Mithuna' },
+    { name: 'Aadi', tamil: 'ஆடி', iast: 'āḍi', rasi: 'Kataka' },
+    { name: 'Aavani', tamil: 'ஆவணி', iast: 'āvaṇi', rasi: 'Simha' },
+    { name: 'Purattasi', tamil: 'புரட்டாசி', iast: 'puraṭṭāsi', rasi: 'Kanya' },
+    { name: 'Aippasi', tamil: 'ஐப்பசி', iast: 'aippasi', rasi: 'Tula' },
+    { name: 'Karthigai', tamil: 'கார்த்திகை', iast: 'kārttikai', rasi: 'Vrischika' },
+    { name: 'Margazhi', tamil: 'மார்கழி', iast: 'mārkaḻi', rasi: 'Dhanus' },
+    { name: 'Thai', tamil: 'தை', iast: 'tai', rasi: 'Makara' },
+    { name: 'Maasi', tamil: 'மாசி', iast: 'māsi', rasi: 'Kumbha' },
+    { name: 'Panguni', tamil: 'பங்குனி', iast: 'paṅkuni', rasi: 'Meena' },
+  ];
+
+  /** Six ritus, two solar months each, from Chithirai. */
+  static RITU = [
+    { name: 'Vasanta', tamil: 'வஸந்த', iast: 'vasanta', english: 'spring' },
+    { name: 'Greeshma', tamil: 'க்³ரீஷ்ம', iast: 'grīṣma', english: 'summer' },
+    { name: 'Varsha', tamil: 'வர்ஷ', iast: 'varṣa', english: 'monsoon' },
+    { name: 'Sharad', tamil: 'ஶரத்³', iast: 'śarad', english: 'autumn' },
+    { name: 'Hemanta', tamil: 'ஹேமந்த', iast: 'hemanta', english: 'pre-winter' },
+    { name: 'Shishira', tamil: 'ஶிஶிர', iast: 'śiśira', english: 'winter' },
+  ];
+
+  /** Ayana, in the locative form the sankalpa uses. */
+  static AYANA = {
+    uttarayana: { name: 'Uttarayana', tamil: 'உத்தராயணே', iast: 'uttarāyaṇe' },
+    dakshinayana: { name: 'Dakshinayana', tamil: 'த³க்ஷிணாயநே', iast: 'dakṣiṇāyane' },
+  };
+
+  /**
+   * Weekday in sankalpa form, indexed 0 = Sunday.
+   * The parenthetical is the planetary alternative: "ப்⁴ருகு³ வாஸரே (ஶுக்ரவாஸரே)".
+   */
+  static VAARA = [
+    { english: 'Sunday', tamil: 'பா⁴னு வாஸரே', alt: 'ரவிவாஸரே', iast: 'bhānu vāsare', iastAlt: 'ravi-vāsare' },
+    { english: 'Monday', tamil: 'இந்து³ வாஸரே', alt: 'ஸோமவாஸரே', iast: 'indu vāsare', iastAlt: 'soma-vāsare' },
+    { english: 'Tuesday', tamil: 'பௌ⁴ம வாஸரே', alt: 'மங்க³ளவாஸரே', iast: 'bhauma vāsare', iastAlt: 'maṅgaḷa-vāsare' },
+    { english: 'Wednesday', tamil: 'ஸௌம்ய வாஸரே', alt: 'பு³த⁴வாஸரே', iast: 'saumya vāsare', iastAlt: 'budha-vāsare' },
+    { english: 'Thursday', tamil: 'கு³ரு வாஸரே', alt: 'ப்³ருஹஸ்பதிவாஸரே', iast: 'guru vāsare', iastAlt: 'bṛhaspati-vāsare' },
+    { english: 'Friday', tamil: 'ப்⁴ருகு³ வாஸரே', alt: 'ஶுக்ரவாஸரே', iast: 'bhṛgu vāsare', iastAlt: 'śukra-vāsare' },
+    { english: 'Saturday', tamil: 'ஸ்தி²ர வாஸரே', alt: 'ஶநிவாஸரே', iast: 'sthira vāsare', iastAlt: 'śani-vāsare' },
+  ];
+
+  // ==================== SANKALPA DECLENSIONS ====================
+  // The recited text needs declined forms: "trayodaśyāṃ śubha tithau",
+  // not the nominative "Trayodashi" the display widgets show.
+
+  /** Tithi in the LOCATIVE. Keyed 1-15 within a paksha; 30 is Amavasya. */
+  static TITHI_LOCATIVE = {
+    1: { tamil: 'ப்ரத²மாயாம்', iast: 'prathamāyāṃ' },
+    2: { tamil: 'த்³விதீயாயாம்', iast: 'dvitīyāyāṃ' },
+    3: { tamil: 'த்ருதீயாயாம்', iast: 'tṛtīyāyāṃ' },
+    4: { tamil: 'சதுர்த்²யாம்', iast: 'caturthyāṃ' },
+    5: { tamil: 'பஞ்சம்யாம்', iast: 'pañcamyāṃ' },
+    6: { tamil: 'ஷஷ்ட்²யாம்', iast: 'ṣaṣṭhyāṃ' },
+    7: { tamil: 'ஸப்தம்யாம்', iast: 'saptamyāṃ' },
+    8: { tamil: 'அஷ்டம்யாம்', iast: 'aṣṭamyāṃ' },
+    9: { tamil: 'நவம்யாம்', iast: 'navamyāṃ' },
+    10: { tamil: 'த³ஶம்யாம்', iast: 'daśamyāṃ' },
+    11: { tamil: 'ஏகாத³ஶ்யாம்', iast: 'ekādaśyāṃ' },
+    12: { tamil: 'த்³வாத³ஶ்யாம்', iast: 'dvādaśyāṃ' },
+    13: { tamil: 'த்ரயோத³ஶ்யாம்', iast: 'trayodaśyāṃ' },
+    14: { tamil: 'சதுர்த³ஶ்யாம்', iast: 'caturdaśyāṃ' },
+    15: { tamil: 'பௌர்ணமாஸ்யாம்', iast: 'paurṇamāsyāṃ' },
+    30: { tamil: 'அமாவாஸ்யாயாம்', iast: 'amāvāsyāyāṃ' },
+  };
+
+  /**
+   * Punya kala — the sanctified period named just before "…pūjāṃ kariṣye".
+   *
+   * Pradosha is a special case: it is not simply "the Trayodashi period" but
+   * the twilight around sunset ON Trayodashi. When the chosen moment falls in
+   * that window, PUNYAKALA_PRADOSHA is used; otherwise the tithi names its own
+   * punya kala. Keyed 1-15 within a paksha; 30 is Amavasya.
+   */
+  static PUNYAKALA_PRADOSHA = {
+    tamil: 'ப்ரதோ³ஷ', iast: 'pradoṣa', english: 'Pradosha',
+  };
+
+  static TITHI_PUNYAKALA = {
+    1: { tamil: 'ப்ரத²மா', iast: 'prathamā', english: 'Prathama' },
+    2: { tamil: 'த்³விதீயா', iast: 'dvitīyā', english: 'Dwitiya' },
+    3: { tamil: 'த்ருதீயா', iast: 'tṛtīyā', english: 'Tritiya' },
+    4: { tamil: 'சதுர்தீ²', iast: 'caturthī', english: 'Chaturthi' },
+    5: { tamil: 'பஞ்சமீ', iast: 'pañcamī', english: 'Panchami' },
+    6: { tamil: 'ஷஷ்டீ', iast: 'ṣaṣṭhī', english: 'Shashthi' },
+    7: { tamil: 'ஸப்தமீ', iast: 'saptamī', english: 'Saptami' },
+    8: { tamil: 'அஷ்டமீ', iast: 'aṣṭamī', english: 'Ashtami' },
+    9: { tamil: 'நவமீ', iast: 'navamī', english: 'Navami' },
+    10: { tamil: 'த³ஶமீ', iast: 'daśamī', english: 'Dasami' },
+    11: { tamil: 'ஏகாத³ஶீ', iast: 'ekādaśī', english: 'Ekadashi' },
+    12: { tamil: 'த்³வாத³ஶீ', iast: 'dvādaśī', english: 'Dwadashi' },
+    13: { tamil: 'த்ரயோத³ஶீ', iast: 'trayodaśī', english: 'Trayodashi' },
+    14: { tamil: 'சதுர்த³ஶீ', iast: 'caturdaśī', english: 'Chaturdashi' },
+    15: { tamil: 'பௌர்ணமாஸீ', iast: 'paurṇamāsī', english: 'Purnima' },
+    30: { tamil: 'அமாவாஸ்யா', iast: 'amāvāsyā', english: 'Amavasya' },
+  };
+
+  /** Paksha in the locative: "ஶுக்ல பக்ஷே". */
+  static PAKSHA_LOCATIVE = {
+    shukla: { tamil: 'ஶுக்ல பக்ஷே', iast: 'śukla pakṣe', english: 'Shukla (waxing)' },
+    krishna: { tamil: 'க்ருஷ்ண பக்ஷே', iast: 'kṛṣṇa pakṣe', english: 'Krishna (waning)' },
+  };
+
+  /**
+   * Nakshatra stem for "X நக்ஷத்ரே".
+   * `tamil` follows the Tamil star names this site uses and which the Sankalpam
+   * page carries today (அனுஷ நக்ஷத்ரே); `sanskrit` is the Sanskrit stem
+   * (அனுராதா⁴ நக்ஷத்ரே), which some paddhatis prefer.
+   */
+  static NAKSHATRA_SANKALPA = {
+    1: { tamil: 'அஸ்வினி', sanskrit: 'அஶ்வினீ', iast: 'aśvinī', iastTamil: 'asvini' },
+    2: { tamil: 'ப⁴ரணி', sanskrit: 'ப⁴ரணீ', iast: 'bharaṇī', iastTamil: 'bharaṇi' },
+    3: { tamil: 'கார்த்திகை', sanskrit: 'க்ருத்திகா', iast: 'kṛttikā', iastTamil: 'kārttikai' },
+    4: { tamil: 'ரோஹிணி', sanskrit: 'ரோஹிணீ', iast: 'rohiṇī', iastTamil: 'rohiṇi' },
+    5: { tamil: 'ம்ருக³ஶீர்ஷ', sanskrit: 'ம்ருக³ஶீர்ஷ', iast: 'mṛgaśīrṣa', iastTamil: 'mṛgaśīrṣa' },
+    6: { tamil: 'திரு ஆதிரை', sanskrit: 'ஆர்த்³ரா', iast: 'ārdrā', iastTamil: 'tiru ātirai' },
+    7: { tamil: 'புனர்பூச', sanskrit: 'புனர்வஸு', iast: 'punarvasu', iastTamil: 'punarpūca' },
+    8: { tamil: 'பூச', sanskrit: 'புஷ்ய', iast: 'puṣya', iastTamil: 'pūca' },
+    9: { tamil: 'ஆயில்ய', sanskrit: 'ஆஶ்லேஷா', iast: 'āśleṣā', iastTamil: 'āyilya' },
+    10: { tamil: 'மக', sanskrit: 'மகா⁴', iast: 'maghā', iastTamil: 'maka' },
+    11: { tamil: 'பூர', sanskrit: 'பூர்வப²ல்கு³னீ', iast: 'pūrvaphalgunī', iastTamil: 'pūra' },
+    12: { tamil: 'உத்தர', sanskrit: 'உத்தரப²ல்கு³னீ', iast: 'uttaraphalgunī', iastTamil: 'uttara' },
+    13: { tamil: 'ஹஸ்த', sanskrit: 'ஹஸ்த', iast: 'hasta', iastTamil: 'hasta' },
+    14: { tamil: 'சித்திரை', sanskrit: 'சித்ரா', iast: 'citrā', iastTamil: 'cittirai' },
+    15: { tamil: 'ஸ்வாதி', sanskrit: 'ஸ்வாதீ', iast: 'svātī', iastTamil: 'svāti' },
+    16: { tamil: 'விசாக', sanskrit: 'விஶாகா²', iast: 'viśākhā', iastTamil: 'vicāka' },
+    17: { tamil: 'அனுஷ', sanskrit: 'அனுராதா⁴', iast: 'anurādhā', iastTamil: 'anuṣa' },
+    18: { tamil: 'கேட்டை', sanskrit: 'ஜ்யேஷ்டா²', iast: 'jyeṣṭhā', iastTamil: 'kēṭṭai' },
+    19: { tamil: 'மூல', sanskrit: 'மூல', iast: 'mūla', iastTamil: 'mūla' },
+    20: { tamil: 'பூராட', sanskrit: 'பூர்வாஷாடா⁴', iast: 'pūrvāṣāḍhā', iastTamil: 'pūrāṭa' },
+    21: { tamil: 'உத்திராட', sanskrit: 'உத்தராஷாடா⁴', iast: 'uttarāṣāḍhā', iastTamil: 'uttirāṭa' },
+    22: { tamil: 'திரு ஓண', sanskrit: 'ஶ்ரவண', iast: 'śravaṇa', iastTamil: 'tiru ōṇa' },
+    23: { tamil: 'அவிட்ட', sanskrit: 'த⁴னிஷ்டா²', iast: 'dhaniṣṭhā', iastTamil: 'aviṭṭa' },
+    24: { tamil: 'சதய', sanskrit: 'ஶதபி⁴ஷக்', iast: 'śatabhiṣak', iastTamil: 'cataya' },
+    25: { tamil: 'பூரட்டாதி', sanskrit: 'பூர்வபா⁴த்³ரபதா³', iast: 'pūrvabhādrapadā', iastTamil: 'pūraṭṭāti' },
+    26: { tamil: 'உத்திரட்டாதி', sanskrit: 'உத்தரபா⁴த்³ரபதா³', iast: 'uttarabhādrapadā', iastTamil: 'uttiraṭṭāti' },
+    27: { tamil: 'ரேவதி', sanskrit: 'ரேவதீ', iast: 'revatī', iastTamil: 'rēvati' },
+  };
+
+  /**
+   * Which nakshatra naming the Sankalpam uses.
+   * 'tamil'    → அனுஷ நக்ஷத்ரே   (preserves the page's existing wording)
+   * 'sanskrit' → அனுராதா⁴ நக்ஷத்ரே
+   */
+  static NAKSHATRA_SANKALPA_STYLE = 'tamil';
+
+  /** Yoga stem for "X யோகே³". */
+  static YOGA_SANKALPA = {
+    1: { tamil: 'விஷ்கம்ப⁴', iast: 'viṣkambha' },
+    2: { tamil: 'ப்ரீதி', iast: 'prīti' },
+    3: { tamil: 'ஆயுஷ்மத்', iast: 'āyuṣmat' },
+    4: { tamil: 'ஸௌபா⁴க்³ய', iast: 'saubhāgya' },
+    5: { tamil: 'ஶோப⁴ன', iast: 'śobhana' },
+    6: { tamil: 'அதிக³ண்ட³', iast: 'atigaṇḍa' },
+    7: { tamil: 'ஸுகர்ம', iast: 'sukarma' },
+    8: { tamil: 'த்⁴ருதி', iast: 'dhṛti' },
+    9: { tamil: 'ஶூல', iast: 'śūla' },
+    10: { tamil: 'க³ண்ட³', iast: 'gaṇḍa' },
+    11: { tamil: 'வ்ருத்³தி⁴', iast: 'vṛddhi' },
+    12: { tamil: 'த்⁴ருவ', iast: 'dhruva' },
+    13: { tamil: 'வ்யாகா⁴த', iast: 'vyāghāta' },
+    14: { tamil: 'ஹர்ஷண', iast: 'harṣaṇa' },
+    15: { tamil: 'வஜ்ர', iast: 'vajra' },
+    16: { tamil: 'ஸித்³தி⁴', iast: 'siddhi' },
+    17: { tamil: 'வ்யதீபாத', iast: 'vyatīpāta' },
+    18: { tamil: 'வரீயஸ்', iast: 'varīyas' },
+    19: { tamil: 'பரிக⁴', iast: 'parigha' },
+    20: { tamil: 'ஶிவ', iast: 'śiva' },
+    21: { tamil: 'ஸித்³த⁴', iast: 'siddha' },
+    22: { tamil: 'ஸாத்⁴ய', iast: 'sādhya' },
+    23: { tamil: 'ஶுப⁴', iast: 'śubha' },
+    24: { tamil: 'ஶுக்ல', iast: 'śukla' },
+    25: { tamil: 'ப்³ரஹ்ம', iast: 'brahma' },
+    26: { tamil: 'ஐந்த்³ர', iast: 'aindra' },
+    27: { tamil: 'வைத்⁴ருதி', iast: 'vaidhṛti' },
+  };
+
+  /** Karana stem for "X கரணே". */
+  static KARANA_SANKALPA = {
+    1: { tamil: 'ப³வ', iast: 'bava' },
+    2: { tamil: 'பா³லவ', iast: 'bālava' },
+    3: { tamil: 'கௌலவ', iast: 'kaulava' },
+    4: { tamil: 'தைதில', iast: 'taitila' },
+    5: { tamil: 'க³ர', iast: 'gara' },
+    6: { tamil: 'வணிஜ', iast: 'vaṇija' },
+    7: { tamil: 'விஷ்டி', iast: 'viṣṭi' },
+    8: { tamil: 'ஶகுனி', iast: 'śakuni' },
+    9: { tamil: 'சதுஷ்பாத³', iast: 'catuṣpāda' },
+    10: { tamil: 'நாக³', iast: 'nāga' },
+    11: { tamil: 'கிம்ஸ்துக்⁴ன', iast: 'kiṃstughna' },
+  };
+
   /**
    * Get name by language
    * @param {Object} item - Item with name and language fields

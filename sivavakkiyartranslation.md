@@ -1,3 +1,9 @@
+---
+layout: default
+custom_heading: "சிவவாக்கியம் - Shivavakkiyam Translation"
+title: "Shivavakkiyam Translation"
+---
+
 # Shivakkiyam in Tamil, Transliteration, Translation
 
 | Tamil | Translation | Transliteration |

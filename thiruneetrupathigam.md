@@ -1,3 +1,9 @@
+---
+layout: default
+custom_heading: "திருநீற்றுப் பதிகம் - Thiruneetru Pathigam"
+title: "Thiruneetru Pathigam"
+---
+
 # திருநீற்றுப் பதிகம்
 
 ## சுந்தரமூர்த்தி நாயனார் அருளிய பாடல்கள்
