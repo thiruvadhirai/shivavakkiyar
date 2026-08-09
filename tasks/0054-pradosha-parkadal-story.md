@@ -1,13 +1,13 @@
 ---
 id: 0054
 title: Add Parkadal/Neelakantha story to Pradosha Kala pooja page
-status: in-progress
+status: done
 impact: Low
 priority: 070
 complexity: "0.5 hours"
 assignee: Claude
 created: 2026-08-09
-completed: (pending)
+completed: 2026-08-09
 raci:
   responsible: Claude
   accountable: Vairam

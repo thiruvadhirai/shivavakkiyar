@@ -1,13 +1,13 @@
 ---
 id: 0055
 title: "Fix: E2E test container Playwright browser revision mismatch"
-status: in-progress
+status: done
 impact: High
 priority: 020
 complexity: "0.5 hours"
 assignee: Claude
 created: 2026-08-09
-completed: (pending)
+completed: 2026-08-09
 raci:
   responsible: Claude
   accountable: Vairam
