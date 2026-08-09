@@ -9,8 +9,12 @@ RUN apk add --no-cache \
 # Set working directory
 WORKDIR /srv/jekyll
 
-# Install Jekyll and bundler directly (not from Gemfile due to sass-embedded issues on Alpine)
-RUN gem install jekyll bundler webrick
+# Install exact gem versions from the lockfile (must match what's bind-mounted
+# from the host at runtime, or Bundler refuses to boot Jekyll with a
+# Bundler::GemNotFound error) — Gemfile.lock already pins musl-platform builds
+RUN gem install bundler
+COPY Gemfile Gemfile.lock ./
+RUN bundle install
 
 ENV LISTEN_DIRS=/srv/jekyll/_posts:/srv/jekyll/_includes:/srv/jekyll/assets:/srv/jekyll/panchangam.md
 

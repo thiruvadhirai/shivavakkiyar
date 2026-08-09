@@ -12,9 +12,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     firefox-esr \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy and install dependencies
-COPY package.json* ./
-RUN npm install @playwright/test@latest playwright@latest
+# Copy and install exact dependency versions (must match what's bind-mounted
+# from the host at runtime, or the baked-in browser revision won't match the
+# @playwright/test version actually used to launch it)
+COPY package.json package-lock.json ./
+RUN npm ci
 
 # Install minimal system dependencies for browsers
 RUN apt-get update && apt-get install -y --no-install-recommends \
