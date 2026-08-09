@@ -12,6 +12,19 @@ Pradosha Kalam is an auspicious time period of 1½ hours before and after sunset
 
 This sacred time is particularly devoted to the worship of Lord Shiva. Performing puja, chanting mantras, and meditation during Pradosha Kalam is believed to bring spiritual benefits and divine blessings.
 
+<details>
+<summary>🌊 Why this time is sacred — the story of Parkadal and Shiva's blue throat</summary>
+
+During the Samudra Manthan — the churning of **Parkadal**, the Ocean of Milk — the Devas and Asuras churned the ocean together in search of Amrita, the nectar of immortality. Before the nectar emerged, the churning released **Halahala**, a poison so deadly it threatened to destroy all of creation.
+
+To save the universe, Lord Shiva drank the poison himself. Goddess Parvati, alarmed, held his throat shut so the poison could neither be swallowed nor spat out — it remained held in his throat, turning it a deep blue. This is why Shiva is known as **Neelakantha** (நீலகண்டர்), "the blue-throated one."
+
+This act of self-sacrifice took place at twilight (sandhya kalam), on the Triyodashi (13th) tithi. Overjoyed that creation had been saved, the Devas gathered before Kailasa to celebrate, and Shiva performed his **Ananda Tandavam** — the dance of bliss — in that same twilight hour.
+
+Pradosha Kalam commemorates this moment. The 1½ hours surrounding sunset on Triyodashi is regarded as the very time Shiva saved the universe, which is why worship, puja, and meditation during this window are believed to carry especially powerful blessings.
+
+</details>
+
 ---
 
 ## 📅 Calculate Your Pradosha Times
